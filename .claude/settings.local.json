@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python *)",
+      "Bash(python3 *)",
+      "Bash(curl -s http://localhost:8000/api/teams)",
+      "Bash(curl -s http://localhost:8000/api/predict/France/Spain)",
+      "Bash(curl -s http://localhost:8000/api/standings)",
+      "Bash(curl -s http://localhost:8000/api/matches)",
+      "Bash(curl -s http://localhost:8000/charts/wealth)",
+      "Bash(curl -s http://localhost:8000/charts/age/France)",
+      "Bash(curl -s http://localhost:8000/charts/heatmap)",
+      "Bash(curl -s http://localhost:8000/charts/elo)",
+      "Bash(curl -s http://localhost:8000/charts/scatter)",
+      "Bash(curl -s http://localhost:8000/charts/upsets)",
+      "Bash(curl -s http://localhost:8000/charts/league/Spain)",
+      "Bash(curl -s \"http://localhost:8000/api/montecarlo?n=1000\")",
+      "Bash(curl -s http://localhost:8000/api/h2h/France/Brazil)",
+      "Bash(curl -s http://localhost:8000/api/squads/France)",
+      "Bash(curl -s http://localhost:8000/charts/fbref)",
+      "Bash(curl -s http://localhost:8000/health)"
+    ]
+  }
+}

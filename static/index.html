@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WC 2026 Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <!-- ─── Navigation ──────────────────────────────────────────────────────── -->
+  <nav>
+    <div class="nav-inner container">
+      <a href="#overview" class="nav-logo">WC26</a>
+      <a href="#overview" class="nav-link">Overview</a>
+      <a href="#history"  class="nav-link">History</a>
+      <a href="#focus-chart" class="nav-link" style="color: var(--trophy-gold); font-weight: 700;">★ Focus Chart</a>
+      <a href="#teams"    class="nav-link">Teams</a>
+      <a href="#predict"  class="nav-link">Predict</a>
+      <a href="#live"     class="nav-link">Live</a>
+      <span class="nav-live">● LIVE</span>
+    </div>
+  </nav>
+
+  <!-- ─── Overview ────────────────────────────────────────────────────────── -->
+  <section id="overview">
+
+    <!-- Hero -->
+    <div class="hero">
+      <!-- SVG pitch watermark -->
+      <svg class="hero-pitch" viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Outer boundary -->
+        <rect x="60" y="30" width="1080" height="340" stroke="white" stroke-width="1.5" fill="none"/>
+        <!-- Center line -->
+        <line x1="600" y1="30" x2="600" y2="370" stroke="white" stroke-width="1.5"/>
+        <!-- Center circle -->
+        <circle cx="600" cy="200" r="60" stroke="white" stroke-width="1.5" fill="none"/>
+        <!-- Center spot -->
+        <circle cx="600" cy="200" r="3" fill="white"/>
+        <!-- Left penalty area -->
+        <rect x="60" y="110" width="130" height="180" stroke="white" stroke-width="1.5" fill="none"/>
+        <!-- Left goal area -->
+        <rect x="60" y="152" width="46" height="96" stroke="white" stroke-width="1.5" fill="none"/>
+        <!-- Left penalty spot -->
+        <circle cx="166" cy="200" r="3" fill="white"/>
+        <!-- Left penalty arc -->
+        <path d="M 190 145 A 60 60 0 0 1 190 255" stroke="white" stroke-width="1.5" fill="none"/>
+        <!-- Right penalty area -->
+        <rect x="1010" y="110" width="130" height="180" stroke="white" stroke-width="1.5" fill="none"/>
+        <!-- Right goal area -->
+        <rect x="1094" y="152" width="46" height="96" stroke="white" stroke-width="1.5" fill="none"/>
+        <!-- Right penalty spot -->
+        <circle cx="1034" cy="200" r="3" fill="white"/>
+        <!-- Right penalty arc -->
+        <path d="M 1010 145 A 60 60 0 0 0 1010 255" stroke="white" stroke-width="1.5" fill="none"/>
+        <!-- Left goal -->
+        <rect x="30" y="168" width="30" height="64" stroke="white" stroke-width="1.5" fill="none"/>
+        <!-- Right goal -->
+        <rect x="1140" y="168" width="30" height="64" stroke="white" stroke-width="1.5" fill="none"/>
+        <!-- Corner arcs -->
+        <path d="M 60 44 A 14 14 0 0 1 74 30" stroke="white" stroke-width="1.5" fill="none"/>
+        <path d="M 1126 30 A 14 14 0 0 1 1140 44" stroke="white" stroke-width="1.5" fill="none"/>
+        <path d="M 60 356 A 14 14 0 0 0 74 370" stroke="white" stroke-width="1.5" fill="none"/>
+        <path d="M 1126 370 A 14 14 0 0 0 1140 356" stroke="white" stroke-width="1.5" fill="none"/>
+      </svg>
+
+      <div class="container" style="position:relative; z-index:1;">
+        <p class="hero-eyebrow">FIFA WORLD CUP 2026 · ANALYTICS DASHBOARD</p>
+        <h1 class="hero-title">48 NATIONS. ONE TROPHY.</h1>
+        <p class="hero-sub">June 11 – July 19, 2026 · USA, Canada &amp; Mexico · 104 Matches</p>
+
+        <div class="grid-4" style="margin-top: var(--sp-xl);">
+          <div class="stat-block" id="stat-goals">
+            <span class="stat-number">—</span>
+            <div class="stat-label">Goals Scored</div>
+          </div>
+          <div class="stat-block" id="stat-teams">
+            <span class="stat-number">—</span>
+            <div class="stat-label">Teams Remaining</div>
+          </div>
+          <div class="stat-block" id="stat-matches">
+            <span class="stat-number">—</span>
+            <div class="stat-label">Matches Played</div>
+          </div>
+          <div class="stat-block" id="stat-xg">
+            <span class="stat-number">—</span>
+            <div class="stat-label">Avg xG / Match</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Group Standings -->
+    <div class="section container">
+      <div class="section-header">
+        <div class="section-eyebrow">GROUP STAGE</div>
+        <h2 class="section-title">Current Standings</h2>
+      </div>
+
+      <div class="groups-grid" id="groups-container">
+        <!-- Placeholder for Group A — replaced by main.js -->
+        <div class="card">
+          <div style="font-family: var(--font-display); font-size: 22px; color: var(--pitch-night); margin-bottom: var(--sp-sm);">Group A</div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Team</th>
+                <th style="text-align:center;">P</th>
+                <th style="text-align:center;">GD</th>
+                <th style="text-align:center;">Pts</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background: var(--pitch-mist); border-left: 3px solid var(--data-teal);">
+                <td>France</td>
+                <td style="text-align:center; font-family:var(--font-data);">1</td>
+                <td style="text-align:center; font-family:var(--font-data);">+1</td>
+                <td style="text-align:center; font-family:var(--font-data); font-weight:700;">3</td>
+              </tr>
+              <tr style="background: var(--pitch-mist); border-left: 3px solid var(--data-teal);">
+                <td>Colombia</td>
+                <td style="text-align:center; font-family:var(--font-data);">1</td>
+                <td style="text-align:center; font-family:var(--font-data);">+1</td>
+                <td style="text-align:center; font-family:var(--font-data); font-weight:700;">3</td>
+              </tr>
+              <tr>
+                <td>X</td>
+                <td style="text-align:center; font-family:var(--font-data);">1</td>
+                <td style="text-align:center; font-family:var(--font-data);">−1</td>
+                <td style="text-align:center; font-family:var(--font-data); font-weight:700;">0</td>
+              </tr>
+              <tr style="opacity:0.5;">
+                <td>Y</td>
+                <td style="text-align:center; font-family:var(--font-data);">1</td>
+                <td style="text-align:center; font-family:var(--font-data);">−1</td>
+                <td style="text-align:center; font-family:var(--font-data); font-weight:700;">0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- JS will inject groups B–L here -->
+      </div>
+
+      <!-- Last Results strip -->
+      <div style="margin-top: var(--sp-lg); overflow-x: auto; white-space: nowrap; padding-bottom: var(--sp-sm);">
+        <div style="display: inline-flex; gap: var(--sp-sm);" id="results-strip">
+          <span class="badge badge-green" style="font-size:12px; padding:6px 12px; border-radius: var(--radius);">FRA 2–1 ARG · Group A</span>
+          <span class="badge badge-green" style="font-size:12px; padding:6px 12px; border-radius: var(--radius);">BRA 3–0 MEX · Group B</span>
+          <span class="badge badge-green" style="font-size:12px; padding:6px 12px; border-radius: var(--radius);">ESP 1–1 GER · Group C</span>
+          <span class="badge badge-green" style="font-size:12px; padding:6px 12px; border-radius: var(--radius);">ENG 2–0 JPN · Group D</span>
+          <span class="badge badge-green" style="font-size:12px; padding:6px 12px; border-radius: var(--radius);">POR 1–0 USA · Group E</span>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ─── History ──────────────────────────────────────────────────────────── -->
+  <section id="history" class="section section-alt">
+    <div class="container">
+
+      <div class="section-header">
+        <div class="section-eyebrow">1930 – 2026</div>
+        <h2 class="section-title">World Cup History</h2>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:var(--sp-md);">
+
+        <!-- Participation heatmap -->
+        <div class="card">
+          <div class="section-eyebrow">Performance across all editions</div>
+          <div id="chart-heatmap" class="chart-container" style="min-height:600px; border:none; border-radius:0;"></div>
+        </div>
+
+        <!-- Elo history with multi-selector -->
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:var(--sp-sm); flex-wrap:wrap; margin-bottom:var(--sp-sm);">
+            <span style="font-family:var(--font-display); font-size:20px; color:var(--pitch-night);">Elo History</span>
+            <select id="elo-selector" multiple size="5" style="appearance:none; font-family:var(--font-body); font-size:12px; border:1px solid var(--border); border-radius:var(--radius); padding:var(--sp-xs) var(--sp-sm); min-width:160px; cursor:pointer;">
+              <!-- populated by JS -->
+            </select>
+          </div>
+          <div id="chart-elo" class="chart-container" style="min-height:280px;"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       FOCUS CHART — The Credibility Gap
+       Project focus chart scored on the PSL IASD rubric.
+       One message, position encoding, interactive, honest axes.
+  ════════════════════════════════════════════════════════════════ -->
+  <section id="focus-chart" style="background: var(--pitch-night); padding: var(--sp-xl) 0; position: relative; overflow: hidden;">
+
+    <!-- Pitch watermark -->
+    <svg class="hero-pitch" style="opacity: 0.04;" viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="60" y="30" width="1080" height="440" fill="none" stroke="white" stroke-width="2"/>
+      <line x1="600" y1="30" x2="600" y2="470" stroke="white" stroke-width="1.5"/>
+      <circle cx="600" cy="250" r="80" fill="none" stroke="white" stroke-width="1.5"/>
+      <circle cx="600" cy="250" r="4" fill="white"/>
+      <rect x="60" y="155" width="130" height="190" fill="none" stroke="white" stroke-width="1.5"/>
+      <rect x="1010" y="155" width="130" height="190" fill="none" stroke="white" stroke-width="1.5"/>
+      <rect x="60" y="205" width="55" height="90" fill="none" stroke="white" stroke-width="1.5"/>
+      <rect x="1085" y="205" width="55" height="90" fill="none" stroke="white" stroke-width="1.5"/>
+    </svg>
+
+    <div class="container" style="position: relative; z-index: 1;">
+
+      <!-- Section header -->
+      <div style="margin-bottom: var(--sp-lg);">
+        <div style="
+          display: inline-block;
+          background: var(--trophy-gold);
+          color: var(--pitch-night);
+          font-size: 10px;
+          font-weight: 800;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          padding: 3px 10px;
+          border-radius: 3px;
+          margin-bottom: var(--sp-sm);
+          font-family: var(--font-body);
+        ">★ Focus Chart</div>
+        <h2 style="
+          font-family: var(--font-display);
+          font-size: 52px;
+          color: white;
+          margin: 0 0 var(--sp-sm);
+          line-height: 1;
+          letter-spacing: 0.01em;
+        ">The Credibility Gap</h2>
+        <p style="
+          font-size: 14px;
+          color: rgba(255,255,255,0.6);
+          max-width: 680px;
+          line-height: 1.7;
+          margin: 0;
+          font-family: var(--font-body);
+        ">
+          Where does our Elo model disagree with the market?
+          Every team's pre-tournament win probability — computed from 125 years of Elo ratings —
+          plotted against what bookmakers imply after removing their margin (vig).
+          Teams far from the diagonal are where the interesting story lives.
+        </p>
+      </div>
+
+      <!-- Chart card -->
+      <div style="
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        padding: var(--sp-lg) var(--sp-lg) var(--sp-md);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        max-width: 860px;
+      ">
+        <!-- Chart container -->
+        <div id="chart-credibility" style="
+          width: 100%;
+          min-height: 500px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--muted);
+          font-family: var(--font-body);
+          font-size: 13px;
+        ">Loading chart…</div>
+
+        <!-- Interaction hint -->
+        <div style="
+          display: flex;
+          align-items: center;
+          gap: var(--sp-sm);
+          margin-top: var(--sp-sm);
+          padding-top: var(--sp-sm);
+          border-top: 1px solid var(--border);
+        ">
+          <span style="font-size: 16px;">👆</span>
+          <span style="font-size: 12px; color: var(--muted); font-family: var(--font-body);">
+            Click any team to highlight it and open its profile in the Team Explorer above.
+            Double-click to reset. Hover for full details.
+          </span>
+          <span id="credibility-selected-team" style="
+            margin-left: auto;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--pitch-night);
+            font-family: var(--font-data);
+            display: none;
+          "></span>
+        </div>
+      </div>
+
+      <!-- Key insight callout cards (computed dynamically by JS) -->
+      <div id="credibility-insights" style="
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--sp-md);
+        margin-top: var(--sp-lg);
+        max-width: 860px;
+      ">
+        <!-- Populated by JS after chart loads -->
+      </div>
+
+      <!-- Methodology note -->
+      <div style="
+        margin-top: var(--sp-lg);
+        max-width: 860px;
+        padding: var(--sp-md);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: var(--radius);
+      ">
+        <div style="
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: var(--trophy-gold);
+          margin-bottom: var(--sp-sm);
+          font-family: var(--font-body);
+        ">Methodology &amp; Limitations</div>
+        <p style="
+          font-size: 12px;
+          color: rgba(255,255,255,0.5);
+          line-height: 1.7;
+          margin: 0;
+          font-family: var(--font-body);
+        ">
+          <strong style="color:rgba(255,255,255,0.75)">Elo probabilities</strong>
+          are computed via softmax over pre-tournament Elo ratings (source: eloratings.net).
+          This captures relative historical strength but does not account for current injuries,
+          recent form, or manager tactics.
+          <strong style="color:rgba(255,255,255,0.75)">Bookmaker probabilities</strong>
+          are derived from American opening odds (CBS Sports / Oddspedia) and normalized
+          to remove the overround (vig), so both axes sum to 100%. Odds frozen at tournament start.
+          The diagonal represents perfect agreement between the two models.
+          Divergence ≥ ±1pp is highlighted. <em>Neither model constitutes betting advice.</em>
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── Teams ───────────────────────────────────────────────────────────── -->
+  <section id="teams" class="section section-alt">
+    <div class="container">
+
+      <div class="section-header">
+        <div class="section-eyebrow">TEAM ANALYSIS</div>
+        <h2 class="section-title">Team DNA Explorer</h2>
+        <p class="team-section-subtitle">Select any of the 48 nations to explore their squad, tactical profile, and historical record</p>
+      </div>
+
+      <div class="teams-layout">
+
+        <!-- ── Left Panel ─────────────────────────────────────── -->
+        <div style="display:flex; flex-direction:column; gap:var(--sp-md);">
+
+          <select class="team-select" id="team-selector">
+            <option value="">Select a team...</option>
+          </select>
+
+          <div class="card" id="team-profile-card">
+            <div style="text-align:center; padding-bottom:var(--sp-md); border-bottom:1px solid var(--border); margin-bottom:var(--sp-md);">
+              <div id="team-flag" style="font-size:48px; line-height:1; margin-bottom:var(--sp-sm);">⚽</div>
+              <div id="team-name" style="font-family:var(--font-display); font-size:36px; color:var(--pitch-night); line-height:1;">Select a Team</div>
+            </div>
+
+            <div style="display:flex; gap:var(--sp-sm); margin-bottom:var(--sp-md);">
+              <span class="badge badge-green" id="badge-confederation">—</span>
+              <span class="badge badge-teal"  id="badge-group">—</span>
+            </div>
+
+            <div class="stats-grid">
+              <div class="stat-cell">
+                <div class="stat-cell-label">FIFA Rank</div>
+                <div class="stat-cell-value font-data" id="stat-fifa-rank">—</div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat-cell-label">Elo Rating</div>
+                <div class="stat-cell-value font-data" id="stat-elo">—</div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat-cell-label">Squad Value</div>
+                <div class="stat-cell-value font-data" id="stat-value">—</div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat-cell-label">WC Titles</div>
+                <div class="stat-cell-value font-data" id="stat-titles">—</div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat-cell-label">Coach</div>
+                <div class="stat-cell-value" id="stat-coach" style="font-size:13px;">—</div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat-cell-label">Avg Age</div>
+                <div class="stat-cell-value font-data" id="stat-avg-age">—</div>
+              </div>
+            </div>
+
+            <div style="margin-top:var(--sp-md); padding-top:var(--sp-md); border-top:1px solid var(--border);">
+              <div style="font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:var(--sp-sm);">WC Record</div>
+              <div style="display:flex; gap:var(--sp-md);">
+                <div style="text-align:center;">
+                  <div class="font-data" id="record-w" style="font-size:22px; font-weight:700; color:var(--data-teal);">—</div>
+                  <div style="font-size:10px; color:var(--muted);">W</div>
+                </div>
+                <div style="text-align:center;">
+                  <div class="font-data" id="record-d" style="font-size:22px; font-weight:700; color:var(--muted);">—</div>
+                  <div style="font-size:10px; color:var(--muted);">D</div>
+                </div>
+                <div style="text-align:center;">
+                  <div class="font-data" id="record-l" style="font-size:22px; font-weight:700; color:var(--red-card);">—</div>
+                  <div style="font-size:10px; color:var(--muted);">L</div>
+                </div>
+                <div style="text-align:center; margin-left:auto;">
+                  <div class="font-data" id="record-goals" style="font-size:22px; font-weight:700; color:var(--pitch-night);">—</div>
+                  <div style="font-size:10px; color:var(--muted);">Goals</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── Right Panel: 2×2 chart grid ──────────────────────── -->
+        <div class="charts-grid">
+
+          <!-- Top-left: D3 Radar -->
+          <div id="chart-radar" class="chart-container" style="min-height:300px; color:var(--muted); font-size:13px; display:flex; align-items:center; justify-content:center;">
+            Loading DNA radar...
+          </div>
+
+          <!-- Top-right: Age pyramid -->
+          <div id="chart-age" class="chart-container" style="min-height:300px;"></div>
+
+          <!-- Full-width: Club distribution -->
+          <div id="chart-league" class="chart-container" style="min-height:260px; grid-column: 1 / -1;"></div>
+
+          <!-- Full-width: Squad table -->
+          <div class="card" style="min-height:260px; grid-column: 1 / -1;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:var(--sp-xs);">
+              <span style="font-family:var(--font-display); font-size:18px;">Squad — 26 Players</span>
+              <div style="display:flex; gap:var(--sp-xs);">
+                <button class="filter-btn active" data-pos="all" onclick="filterSquad(this)">All</button>
+                <button class="filter-btn" data-pos="GK"  onclick="filterSquad(this)">GK</button>
+                <button class="filter-btn" data-pos="DEF" onclick="filterSquad(this)">DEF</button>
+                <button class="filter-btn" data-pos="MID" onclick="filterSquad(this)">MID</button>
+                <button class="filter-btn" data-pos="FWD" onclick="filterSquad(this)">FWD</button>
+              </div>
+            </div>
+            <div style="max-height:320px; overflow-y:auto; overflow-x:auto;">
+              <table class="data-table" id="squad-table">
+                <thead>
+                  <tr>
+                    <th style="position:sticky; top:0; background:var(--surface); z-index:1;">#</th>
+                    <th style="position:sticky; top:0; background:var(--surface); z-index:1;">Player</th>
+                    <th style="position:sticky; top:0; background:var(--surface); z-index:1;">Pos</th>
+                    <th style="position:sticky; top:0; background:var(--surface); z-index:1;">Age</th>
+                    <th style="position:sticky; top:0; background:var(--surface); z-index:1;">Club</th>
+                    <th style="position:sticky; top:0; background:var(--surface); z-index:1;">Caps</th>
+                    <th style="position:sticky; top:0; background:var(--surface); z-index:1;">Goals</th>
+                  </tr>
+                </thead>
+                <tbody id="squad-tbody">
+                  <!-- populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Predict ─────────────────────────────────────────────────────────── -->
+  <section id="predict" class="section section-alt" style="position:relative; overflow:hidden;">
+
+    <!-- Pitch watermark (3% opacity on light bg) -->
+    <svg aria-hidden="true" viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg"
+         style="position:absolute; inset:0; width:100%; height:100%; opacity:0.03; pointer-events:none; color:var(--pitch-night);">
+      <rect x="60" y="30" width="1080" height="340" stroke="currentColor" stroke-width="2" fill="none"/>
+      <line x1="600" y1="30" x2="600" y2="370" stroke="currentColor" stroke-width="2"/>
+      <circle cx="600" cy="200" r="60" stroke="currentColor" stroke-width="2" fill="none"/>
+      <circle cx="600" cy="200" r="3" fill="currentColor"/>
+      <rect x="60" y="110" width="130" height="180" stroke="currentColor" stroke-width="2" fill="none"/>
+      <rect x="60" y="152" width="46" height="96" stroke="currentColor" stroke-width="2" fill="none"/>
+      <circle cx="166" cy="200" r="3" fill="currentColor"/>
+      <path d="M 190 145 A 60 60 0 0 1 190 255" stroke="currentColor" stroke-width="2" fill="none"/>
+      <rect x="1010" y="110" width="130" height="180" stroke="currentColor" stroke-width="2" fill="none"/>
+      <rect x="1094" y="152" width="46" height="96" stroke="currentColor" stroke-width="2" fill="none"/>
+      <circle cx="1034" cy="200" r="3" fill="currentColor"/>
+      <path d="M 1010 145 A 60 60 0 0 0 1010 255" stroke="currentColor" stroke-width="2" fill="none"/>
+      <rect x="30" y="168" width="30" height="64" stroke="currentColor" stroke-width="2" fill="none"/>
+      <rect x="1140" y="168" width="30" height="64" stroke="currentColor" stroke-width="2" fill="none"/>
+      <path d="M 60 44 A 14 14 0 0 1 74 30" stroke="currentColor" stroke-width="2" fill="none"/>
+      <path d="M 1126 30 A 14 14 0 0 1 1140 44" stroke="currentColor" stroke-width="2" fill="none"/>
+      <path d="M 60 356 A 14 14 0 0 0 74 370" stroke="currentColor" stroke-width="2" fill="none"/>
+      <path d="M 1126 370 A 14 14 0 0 0 1140 356" stroke="currentColor" stroke-width="2" fill="none"/>
+    </svg>
+
+    <div class="container" style="position:relative; z-index:1;">
+
+      <div class="section-header">
+        <div class="section-eyebrow">POWERED BY ELO + MONTE CARLO</div>
+        <h2 class="section-title">Who Will Win?</h2>
+      </div>
+
+      <!-- Part 1 — Team selectors -->
+      <div class="h2h-selectors">
+
+        <div class="card">
+          <select class="team-select" id="h2h-team-a">
+            <option value="">Select Team A…</option>
+          </select>
+          <div style="text-align:center; margin-top:var(--sp-md);">
+            <div id="h2h-flag-a" style="font-size:48px; line-height:1; margin-bottom:var(--sp-sm);">🏳️</div>
+            <div id="h2h-name-a" style="font-family:var(--font-display); font-size:28px; color:var(--pitch-night); line-height:1;">Team A</div>
+            <span class="badge badge-green" id="h2h-conf-a" style="margin-top:var(--sp-xs);">—</span>
+          </div>
+        </div>
+
+        <div class="vs-divider" style="font-size:64px;">VS</div>
+
+        <div class="card">
+          <select class="team-select" id="h2h-team-b">
+            <option value="">Select Team B…</option>
+          </select>
+          <div style="text-align:center; margin-top:var(--sp-md);">
+            <div id="h2h-flag-b" style="font-size:48px; line-height:1; margin-bottom:var(--sp-sm);">🏳️</div>
+            <div id="h2h-name-b" style="font-family:var(--font-display); font-size:28px; color:var(--pitch-night); line-height:1;">Team B</div>
+            <span class="badge badge-green" id="h2h-conf-b" style="margin-top:var(--sp-xs);">—</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Win probability bar -->
+      <div class="card" style="margin-top:var(--sp-md);">
+        <div class="prob-bar" id="h2h-prob-bar">
+          <div class="prob-bar-a"    id="prob-a"    style="flex:1"></div>
+          <div class="prob-bar-draw" id="prob-draw" style="flex:0.25"></div>
+          <div class="prob-bar-b"    id="prob-b"    style="flex:1"></div>
+        </div>
+        <div class="prob-labels">
+          <span id="prob-label-a"    style="color:var(--pitch-night);font-weight:700">—%</span>
+          <span id="prob-label-draw" style="color:var(--muted)">Draw —%</span>
+          <span id="prob-label-b"    style="color:var(--red-card);font-weight:700">—%</span>
+        </div>
+        <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px;margin-bottom:0;">
+          Based on Elo ratings · Bookmaker line shown below
+        </p>
+      </div>
+
+      <!-- Part 2 — Side-by-side metrics (8 stats) -->
+      <div class="card" style="margin-top:var(--sp-md);">
+        <div class="h2h-metrics">
+          <div class="metric-row">
+            <span class="metric-val font-data" id="metric-a-elo">—</span>
+            <span class="metric-name">Elo Rating</span>
+            <span class="metric-val font-data" id="metric-b-elo">—</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-val font-data" id="metric-a-rank">—</span>
+            <span class="metric-name">FIFA Rank</span>
+            <span class="metric-val font-data" id="metric-b-rank">—</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-val font-data" id="metric-a-value">—</span>
+            <span class="metric-name">Squad Value (€M)</span>
+            <span class="metric-val font-data" id="metric-b-value">—</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-val font-data" id="metric-a-titles">—</span>
+            <span class="metric-name">WC Titles</span>
+            <span class="metric-val font-data" id="metric-b-titles">—</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-val font-data" id="metric-a-age">—</span>
+            <span class="metric-name">Avg Age</span>
+            <span class="metric-val font-data" id="metric-b-age">—</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-val font-data" id="metric-a-h2hwins">—</span>
+            <span class="metric-name">H2H Wins</span>
+            <span class="metric-val font-data" id="metric-b-h2hwins">—</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-val" id="metric-a-last">—</span>
+            <span class="metric-name">Last Meeting</span>
+            <span class="metric-val" id="metric-b-last">—</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-val font-data" id="metric-a-bookie">—</span>
+            <span class="metric-name">Win Prob (Bookie)</span>
+            <span class="metric-val font-data" id="metric-b-bookie">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part 3 — H2H historical timeline -->
+      <div style="margin-top:var(--sp-md);">
+        <div id="chart-h2h" class="chart-container" style="display:flex; align-items:center; justify-content:center;">
+          <p style="color:var(--muted); font-size:13px; padding:var(--sp-xl); text-align:center; margin:0;">
+            Select two teams above to see their World Cup history
+          </p>
+        </div>
+      </div>
+
+      <!-- Row 2 — Monte Carlo full width -->
+      <div style="margin-top:var(--sp-md);">
+        <div id="chart-montecarlo" class="chart-container" style="min-height:400px;"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── Live Tracker ─────────────────────────────────────────────────────── -->
+  <section id="live" style="background:var(--pitch-night); color:white; padding:var(--sp-xl) 0;">
+    <div class="container">
+
+      <!-- LIVE strip -->
+      <div style="display:flex; align-items:center; gap:var(--sp-md); padding-bottom:var(--sp-lg); border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:var(--sp-lg);">
+        <span style="font-family:var(--font-data); font-size:13px; color:var(--red-card); font-weight:700;">🔴 LIVE</span>
+        <span style="font-size:13px; color:rgba(255,255,255,0.5);">Last updated: <span id="last-updated">—</span></span>
+        <button id="btn-refresh" style="border:1px solid rgba(255,255,255,0.4); color:white; background:transparent; padding:6px 16px; border-radius:var(--radius); cursor:pointer; font-size:12px; font-weight:600; margin-left:auto;">Refresh</button>
+      </div>
+
+      <!-- 3-column grid -->
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:var(--sp-md); align-items:start;">
+
+        <!-- Col 1: Results -->
+        <div>
+          <div style="font-family:var(--font-display); font-size:22px; margin-bottom:var(--sp-md);">Results</div>
+          <div id="live-results">
+            <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:var(--radius); padding:var(--sp-md); margin-bottom:var(--sp-sm);">
+              <div style="font-family:var(--font-display); font-size:20px; letter-spacing:0.05em; margin-bottom:4px;">🏳️ TBD  —–—  TBD 🏳️</div>
+              <div style="font-size:11px; color:rgba(255,255,255,0.4);">Group — · —</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Col 2: Top Scorers -->
+        <div>
+          <div style="font-family:var(--font-display); font-size:22px; margin-bottom:var(--sp-md);">Top Scorers</div>
+          <div id="live-scorers">
+            <table class="data-table" style="color:rgba(255,255,255,0.9); background:transparent;">
+              <thead>
+                <tr>
+                  <th style="color:rgba(255,255,255,0.5); background:transparent;">#</th>
+                  <th style="color:rgba(255,255,255,0.5); background:transparent;">Player</th>
+                  <th style="color:rgba(255,255,255,0.5); background:transparent;">Team</th>
+                  <th style="color:rgba(255,255,255,0.5); background:transparent; text-align:center;">G</th>
+                  <th style="color:rgba(255,255,255,0.5); background:transparent; text-align:center;">A</th>
+                  <th style="color:rgba(255,255,255,0.5); background:transparent; text-align:center;">xG</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="6" style="text-align:center; color:rgba(255,255,255,0.3); padding:var(--sp-lg); background:transparent;">No data yet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Col 3: Team Stats (FBRef) -->
+        <div>
+          <div style="font-family:var(--font-display); font-size:22px; margin-bottom:var(--sp-md);">Team Stats</div>
+          <div id="chart-fbref" class="chart-container" style="min-height:400px;"></div>
+        </div>
+
+      </div>
+
+      <!-- Full-width: Performance vs Expectation -->
+      <div style="margin-top:var(--sp-lg); padding-top:var(--sp-lg); border-top:1px solid rgba(255,255,255,0.1);">
+        <div style="font-family:var(--font-display); font-size:22px; margin-bottom:4px;">Performance vs Expectation</div>
+        <p style="font-size:13px; color:rgba(255,255,255,0.5); margin-bottom:var(--sp-md); margin-top:0;">Actual points vs Elo-predicted points for each team</p>
+        <div id="chart-performance" class="chart-container" style="min-height:280px;"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── Footer ──────────────────────────────────────────────────────────── -->
+  <footer style="background:var(--pitch-night); padding:32px 0; border-top:1px solid rgba(255,255,255,0.08);">
+    <div class="container" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:var(--sp-md);">
+      <div style="font-family:var(--font-display); font-size:24px; color:var(--trophy-gold);">WC26 Analytics</div>
+      <div style="font-size:11px; color:rgba(255,255,255,0.5); text-align:center; max-width:500px; line-height:1.6;">
+        Data sources: openfootball · FBRef · Transfermarkt · eloratings.net · Fjelstul WC Database · Kaggle
+      </div>
+      <div style="font-size:11px; color:rgba(255,255,255,0.5);">Paris Dauphine IASD · 2026</div>
+    </div>
+    <div class="container" style="text-align:center; padding-top:16px; border-top:1px solid rgba(255,255,255,0.06); margin-top:16px;">
+      <span style="font-size:11px; color:rgba(255,255,255,0.3);">Made with Python + D3 · FastAPI · Altair · Vega-Lite</span>
+    </div>
+  </footer>
+
+  <!-- ─── CDN scripts ──────────────────────────────────────────────────────── -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="/static/js/radar.js"></script>
+  <script src="/static/js/bracket.js"></script>
+  <script src="/static/main.js"></script>
+</body>
+</html>

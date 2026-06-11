@@ -1,0 +1,1042 @@
+[
+  {
+    "date": "2026-06-11",
+    "stage": "group",
+    "group": "A",
+    "home": "Mexico",
+    "away": "South Africa",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-11",
+    "stage": "group",
+    "group": "A",
+    "home": "South Korea",
+    "away": "Czech Republic",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-18",
+    "stage": "group",
+    "group": "A",
+    "home": "Czech Republic",
+    "away": "South Africa",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-18",
+    "stage": "group",
+    "group": "A",
+    "home": "Mexico",
+    "away": "South Korea",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-24",
+    "stage": "group",
+    "group": "A",
+    "home": "Czech Republic",
+    "away": "Mexico",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-24",
+    "stage": "group",
+    "group": "A",
+    "home": "South Africa",
+    "away": "South Korea",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-12",
+    "stage": "group",
+    "group": "B",
+    "home": "Canada",
+    "away": "Bosnia & Herzegovina",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-13",
+    "stage": "group",
+    "group": "B",
+    "home": "Qatar",
+    "away": "Switzerland",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-18",
+    "stage": "group",
+    "group": "B",
+    "home": "Switzerland",
+    "away": "Bosnia & Herzegovina",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-18",
+    "stage": "group",
+    "group": "B",
+    "home": "Canada",
+    "away": "Qatar",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-24",
+    "stage": "group",
+    "group": "B",
+    "home": "Switzerland",
+    "away": "Canada",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-24",
+    "stage": "group",
+    "group": "B",
+    "home": "Bosnia & Herzegovina",
+    "away": "Qatar",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-13",
+    "stage": "group",
+    "group": "C",
+    "home": "Brazil",
+    "away": "Morocco",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-13",
+    "stage": "group",
+    "group": "C",
+    "home": "Haiti",
+    "away": "Scotland",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-19",
+    "stage": "group",
+    "group": "C",
+    "home": "Scotland",
+    "away": "Morocco",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-19",
+    "stage": "group",
+    "group": "C",
+    "home": "Brazil",
+    "away": "Haiti",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-24",
+    "stage": "group",
+    "group": "C",
+    "home": "Scotland",
+    "away": "Brazil",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-24",
+    "stage": "group",
+    "group": "C",
+    "home": "Morocco",
+    "away": "Haiti",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-12",
+    "stage": "group",
+    "group": "D",
+    "home": "USA",
+    "away": "Paraguay",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-13",
+    "stage": "group",
+    "group": "D",
+    "home": "Australia",
+    "away": "Turkey",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-19",
+    "stage": "group",
+    "group": "D",
+    "home": "USA",
+    "away": "Australia",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-19",
+    "stage": "group",
+    "group": "D",
+    "home": "Turkey",
+    "away": "Paraguay",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-25",
+    "stage": "group",
+    "group": "D",
+    "home": "Turkey",
+    "away": "USA",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-25",
+    "stage": "group",
+    "group": "D",
+    "home": "Paraguay",
+    "away": "Australia",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-14",
+    "stage": "group",
+    "group": "E",
+    "home": "Germany",
+    "away": "Cura\u00e7ao",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-14",
+    "stage": "group",
+    "group": "E",
+    "home": "Ivory Coast",
+    "away": "Ecuador",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-20",
+    "stage": "group",
+    "group": "E",
+    "home": "Germany",
+    "away": "Ivory Coast",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-20",
+    "stage": "group",
+    "group": "E",
+    "home": "Ecuador",
+    "away": "Cura\u00e7ao",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-25",
+    "stage": "group",
+    "group": "E",
+    "home": "Cura\u00e7ao",
+    "away": "Ivory Coast",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-25",
+    "stage": "group",
+    "group": "E",
+    "home": "Ecuador",
+    "away": "Germany",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-14",
+    "stage": "group",
+    "group": "F",
+    "home": "Netherlands",
+    "away": "Japan",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-14",
+    "stage": "group",
+    "group": "F",
+    "home": "Sweden",
+    "away": "Tunisia",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-20",
+    "stage": "group",
+    "group": "F",
+    "home": "Netherlands",
+    "away": "Sweden",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-20",
+    "stage": "group",
+    "group": "F",
+    "home": "Tunisia",
+    "away": "Japan",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-25",
+    "stage": "group",
+    "group": "F",
+    "home": "Japan",
+    "away": "Sweden",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-25",
+    "stage": "group",
+    "group": "F",
+    "home": "Tunisia",
+    "away": "Netherlands",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-15",
+    "stage": "group",
+    "group": "G",
+    "home": "Belgium",
+    "away": "Egypt",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-15",
+    "stage": "group",
+    "group": "G",
+    "home": "Iran",
+    "away": "New Zealand",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-21",
+    "stage": "group",
+    "group": "G",
+    "home": "Belgium",
+    "away": "Iran",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-21",
+    "stage": "group",
+    "group": "G",
+    "home": "New Zealand",
+    "away": "Egypt",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-26",
+    "stage": "group",
+    "group": "G",
+    "home": "Egypt",
+    "away": "Iran",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-26",
+    "stage": "group",
+    "group": "G",
+    "home": "New Zealand",
+    "away": "Belgium",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-15",
+    "stage": "group",
+    "group": "H",
+    "home": "Spain",
+    "away": "Cape Verde",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-15",
+    "stage": "group",
+    "group": "H",
+    "home": "Saudi Arabia",
+    "away": "Uruguay",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-21",
+    "stage": "group",
+    "group": "H",
+    "home": "Spain",
+    "away": "Saudi Arabia",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-21",
+    "stage": "group",
+    "group": "H",
+    "home": "Uruguay",
+    "away": "Cape Verde",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-26",
+    "stage": "group",
+    "group": "H",
+    "home": "Cape Verde",
+    "away": "Saudi Arabia",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-26",
+    "stage": "group",
+    "group": "H",
+    "home": "Uruguay",
+    "away": "Spain",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-16",
+    "stage": "group",
+    "group": "I",
+    "home": "France",
+    "away": "Senegal",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-16",
+    "stage": "group",
+    "group": "I",
+    "home": "Iraq",
+    "away": "Norway",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-22",
+    "stage": "group",
+    "group": "I",
+    "home": "France",
+    "away": "Iraq",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-22",
+    "stage": "group",
+    "group": "I",
+    "home": "Norway",
+    "away": "Senegal",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-26",
+    "stage": "group",
+    "group": "I",
+    "home": "Norway",
+    "away": "France",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-26",
+    "stage": "group",
+    "group": "I",
+    "home": "Senegal",
+    "away": "Iraq",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-16",
+    "stage": "group",
+    "group": "J",
+    "home": "Argentina",
+    "away": "Algeria",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-16",
+    "stage": "group",
+    "group": "J",
+    "home": "Austria",
+    "away": "Jordan",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-22",
+    "stage": "group",
+    "group": "J",
+    "home": "Argentina",
+    "away": "Austria",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-22",
+    "stage": "group",
+    "group": "J",
+    "home": "Jordan",
+    "away": "Algeria",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-27",
+    "stage": "group",
+    "group": "J",
+    "home": "Algeria",
+    "away": "Austria",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-27",
+    "stage": "group",
+    "group": "J",
+    "home": "Jordan",
+    "away": "Argentina",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-17",
+    "stage": "group",
+    "group": "K",
+    "home": "Portugal",
+    "away": "DR Congo",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-17",
+    "stage": "group",
+    "group": "K",
+    "home": "Uzbekistan",
+    "away": "Colombia",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-23",
+    "stage": "group",
+    "group": "K",
+    "home": "Portugal",
+    "away": "Uzbekistan",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-23",
+    "stage": "group",
+    "group": "K",
+    "home": "Colombia",
+    "away": "DR Congo",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-27",
+    "stage": "group",
+    "group": "K",
+    "home": "Colombia",
+    "away": "Portugal",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-27",
+    "stage": "group",
+    "group": "K",
+    "home": "DR Congo",
+    "away": "Uzbekistan",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-17",
+    "stage": "group",
+    "group": "L",
+    "home": "England",
+    "away": "Croatia",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-17",
+    "stage": "group",
+    "group": "L",
+    "home": "Ghana",
+    "away": "Panama",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-23",
+    "stage": "group",
+    "group": "L",
+    "home": "England",
+    "away": "Ghana",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-23",
+    "stage": "group",
+    "group": "L",
+    "home": "Panama",
+    "away": "Croatia",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-27",
+    "stage": "group",
+    "group": "L",
+    "home": "Panama",
+    "away": "England",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-27",
+    "stage": "group",
+    "group": "L",
+    "home": "Croatia",
+    "away": "Ghana",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-28",
+    "stage": "round-of-32",
+    "group": null,
+    "home": "2A",
+    "away": "2B",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-29",
+    "stage": "round-of-32",
+    "group": null,
+    "home": "1E",
+    "away": "3A/B/C/D/F",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-29",
+    "stage": "round-of-32",
+    "group": null,
+    "home": "1F",
+    "away": "2C",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-29",
+    "stage": "round-of-32",
+    "group": null,
+    "home": "1C",
+    "away": "2F",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-30",
+    "stage": "round-of-32",
+    "group": null,
+    "home": "1I",
+    "away": "3C/D/F/G/H",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-30",
+    "stage": "round-of-32",
+    "group": null,
+    "home": "2E",
+    "away": "2I",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-06-30",
+    "stage": "round-of-32",
+    "group": null,
+    "home": "1A",
+    "away": "3C/E/F/H/I",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-01",
+    "stage": "round-of-32",
+    "group": null,
+    "home": "1L",
+    "away": "3E/H/I/J/K",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-01",
+    "stage": "round-of-32",
+    "group": null,
+    "home": "1D",
+    "away": "3B/E/F/I/J",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-01",
+    "stage": "round-of-32",
+    "group": null,
+    "home": "1G",
+    "away": "3A/E/H/I/J",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-02",
+    "stage": "round-of-32",
+    "group": null,
+    "home": "2K",
+    "away": "2L",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-02",
+    "stage": "round-of-32",
+    "group": null,
+    "home": "1H",
+    "away": "2J",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-02",
+    "stage": "round-of-32",
+    "group": null,
+    "home": "1B",
+    "away": "3E/F/G/I/J",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-03",
+    "stage": "round-of-32",
+    "group": null,
+    "home": "1J",
+    "away": "2H",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-03",
+    "stage": "round-of-32",
+    "group": null,
+    "home": "1K",
+    "away": "3D/E/I/J/L",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-03",
+    "stage": "round-of-32",
+    "group": null,
+    "home": "2D",
+    "away": "2G",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-04",
+    "stage": "round-of-16",
+    "group": null,
+    "home": "W74",
+    "away": "W77",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-04",
+    "stage": "round-of-16",
+    "group": null,
+    "home": "W73",
+    "away": "W75",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-05",
+    "stage": "round-of-16",
+    "group": null,
+    "home": "W76",
+    "away": "W78",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-05",
+    "stage": "round-of-16",
+    "group": null,
+    "home": "W79",
+    "away": "W80",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-06",
+    "stage": "round-of-16",
+    "group": null,
+    "home": "W83",
+    "away": "W84",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-06",
+    "stage": "round-of-16",
+    "group": null,
+    "home": "W81",
+    "away": "W82",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-07",
+    "stage": "round-of-16",
+    "group": null,
+    "home": "W86",
+    "away": "W88",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-07",
+    "stage": "round-of-16",
+    "group": null,
+    "home": "W85",
+    "away": "W87",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-09",
+    "stage": "QF",
+    "group": null,
+    "home": "W89",
+    "away": "W90",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-10",
+    "stage": "QF",
+    "group": null,
+    "home": "W93",
+    "away": "W94",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-11",
+    "stage": "QF",
+    "group": null,
+    "home": "W91",
+    "away": "W92",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-11",
+    "stage": "QF",
+    "group": null,
+    "home": "W95",
+    "away": "W96",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-14",
+    "stage": "SF",
+    "group": null,
+    "home": "W97",
+    "away": "W98",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-15",
+    "stage": "SF",
+    "group": null,
+    "home": "W99",
+    "away": "W100",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-18",
+    "stage": "3rd",
+    "group": null,
+    "home": "L101",
+    "away": "L102",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  },
+  {
+    "date": "2026-07-19",
+    "stage": "final",
+    "group": null,
+    "home": "W101",
+    "away": "W102",
+    "score_h": null,
+    "score_a": null,
+    "played": false
+  }
+]

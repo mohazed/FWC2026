@@ -1,0 +1,737 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700&display=swap');
+
+/* ─── Design Tokens ─────────────────────────────────────────────────────────── */
+
+:root {
+  /* Colors */
+  --pitch-night: #0D2818;
+  --chalk-white: #F5F3EF;
+  --trophy-gold: #D4A017;
+  --red-card:    #C42B2B;
+  --slate:       #374151;
+  --surface:     #FFFFFF;
+  --pitch-mist:  #E8F0EB;
+  --data-teal:   #0F766E;
+  --border:      #E2E8E4;
+  --muted:       #9CA3AF;
+
+  /* Typography */
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body:    'Inter', sans-serif;
+  --font-data:    'Space Mono', monospace;
+
+  /* Spacing */
+  --sp-xs: 4px;
+  --sp-sm: 8px;
+  --sp-md: 16px;
+  --sp-lg: 24px;
+  --sp-xl: 40px;
+
+  /* Borders */
+  --radius:    6px;
+  --radius-lg: 12px;
+  --shadow:    0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+}
+
+/* ─── Reset & Base ───────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding-top: 56px;
+  background: var(--chalk-white);
+  font-family: var(--font-body);
+  color: var(--slate);
+  line-height: 1.5;
+}
+
+/* ─── Layout ─────────────────────────────────────────────────────────────────── */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--sp-lg);
+}
+
+.section {
+  padding: var(--sp-xl) 0;
+}
+
+.section-alt {
+  background: var(--pitch-mist);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-lg);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-md);
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-md);
+}
+
+/* ─── Navigation ─────────────────────────────────────────────────────────────── */
+
+@keyframes live-pulse {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: var(--pitch-night);
+  z-index: 100;
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  padding: var(--sp-sm) var(--sp-lg);
+  gap: var(--sp-lg);
+}
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--trophy-gold);
+  text-decoration: none;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 6px 4px;
+}
+
+.nav-link:hover {
+  color: white;
+}
+
+.nav-live {
+  background: var(--red-card);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  animation: live-pulse 1.5s infinite;
+}
+
+/* ─── Cards ──────────────────────────────────────────────────────────────────── */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-lg);
+  box-shadow: var(--shadow);
+}
+
+.card-sm {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-md);
+  box-shadow: var(--shadow);
+}
+
+.stat-block {
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--sp-md) var(--sp-lg);
+}
+
+.stat-number {
+  font-family: var(--font-display);
+  font-size: 42px;
+  color: var(--pitch-night);
+  line-height: 1;
+  display: block;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+}
+
+/* ─── Badges ─────────────────────────────────────────────────────────────────── */
+
+.badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.badge-green {
+  background: var(--pitch-mist);
+  color: var(--pitch-night);
+}
+
+.badge-gold {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.badge-red {
+  background: #FEE2E2;
+  color: var(--red-card);
+}
+
+.badge-teal {
+  background: #CCFBF1;
+  color: #0F766E;
+}
+
+.badge-conf-UEFA {
+  background: #E8F0EB;
+  color: var(--pitch-night);
+}
+
+.badge-conf-CONMEBOL {
+  background: #E0F2FE;
+  color: #0369A1;
+}
+
+.badge-conf-CAF {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.badge-conf-AFC {
+  background: #F3E8FF;
+  color: #6B2E7E;
+}
+
+.badge-conf-CONCACAF {
+  background: #FFE4E6;
+  color: var(--red-card);
+}
+
+/* ─── Tables ─────────────────────────────────────────────────────────────────── */
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.data-table th {
+  background: var(--pitch-night);
+  color: white;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: var(--sp-sm) var(--sp-md);
+  text-align: left;
+}
+
+.data-table td {
+  padding: var(--sp-sm) var(--sp-md);
+  border-bottom: 1px solid var(--border);
+}
+
+.data-table tr:nth-child(even) {
+  background: var(--pitch-mist);
+}
+
+.data-table tr:hover {
+  background: #E8F0EB;
+}
+
+/* Standings tables: uniform row heights so all groups align across the grid */
+.standings-table {
+  table-layout: fixed;
+}
+
+/* Identical column widths across every group table */
+.standings-table th:nth-child(1),
+.standings-table td:nth-child(1) { width: 64%; }
+.standings-table th:nth-child(2),
+.standings-table td:nth-child(2) { width: 12%; }
+.standings-table th:nth-child(3),
+.standings-table td:nth-child(3) { width: 12%; }
+.standings-table th:nth-child(4),
+.standings-table td:nth-child(4) { width: 12%; }
+
+/* Tight horizontal padding on the numeric columns frees room for team names */
+.standings-table th:nth-child(n+2),
+.standings-table td:nth-child(n+2) {
+  padding-left: var(--sp-xs);
+  padding-right: var(--sp-xs);
+}
+
+.standings-table td {
+  height: 48px;
+  vertical-align: middle;
+  padding-top: var(--sp-xs);
+  padding-bottom: var(--sp-xs);
+}
+
+/* Team name cell: keep the <td> a real table cell so table-layout:fixed honors
+   its width; do the flag+name flex layout on an inner wrapper instead. */
+.standings-table td.team-cell {
+  overflow: hidden;
+}
+
+.standings-table .team-cell-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  min-width: 0;
+}
+
+.standings-table .team-flag {
+  flex: 0 0 auto;
+  line-height: 1;
+}
+
+.standings-table .team-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ─── Charts ─────────────────────────────────────────────────────────────────── */
+
+.chart-container {
+  width: 100%;
+  min-height: 300px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.chart-container.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.chart-error {
+  color: var(--red-card);
+  font-size: 12px;
+  padding: var(--sp-md);
+  text-align: center;
+}
+
+/* ─── Hero ───────────────────────────────────────────────────────────────────── */
+
+.hero {
+  background: var(--pitch-night);
+  color: white;
+  padding: 100px 0 var(--sp-xl);
+  position: relative;
+  overflow: hidden;
+  min-height: 380px;
+}
+
+.hero-pitch {
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  font-size: 11px;
+  color: var(--trophy-gold);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: var(--sp-sm);
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: 72px;
+  line-height: 1;
+  color: white;
+  margin: 0 0 var(--sp-md);
+}
+
+.hero-sub {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+}
+
+/* ─── Section Headers ────────────────────────────────────────────────────────── */
+
+.section-header {
+  margin-bottom: var(--sp-lg);
+}
+
+.section-eyebrow {
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 4px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 36px;
+  color: var(--pitch-night);
+  margin: 0;
+}
+
+/* ─── Probability Bar ────────────────────────────────────────────────────────── */
+
+.prob-bar {
+  display: flex;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  gap: 2px;
+}
+
+.prob-bar-a {
+  background: var(--pitch-night);
+}
+
+.prob-bar-draw {
+  background: var(--muted);
+}
+
+.prob-bar-b {
+  background: var(--red-card);
+}
+
+.prob-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-data);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* ─── Team Selector ──────────────────────────────────────────────────────────── */
+
+.team-select {
+  appearance: none;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--sp-sm) var(--sp-md);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  width: 100%;
+  cursor: pointer;
+}
+
+.team-select:focus {
+  outline: none;
+  border-color: var(--pitch-night);
+}
+
+/* ─── VS Divider ─────────────────────────────────────────────────────────────── */
+
+.vs-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 48px;
+  color: var(--muted);
+}
+
+/* ─── Groups Grid ────────────────────────────────────────────────────────────── */
+
+.groups-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-md);
+}
+
+@media (max-width: 1024px) {
+  .groups-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ─── Teams Section ──────────────────────────────────────────────────────────── */
+
+.teams-layout {
+  display: grid;
+  grid-template-columns: 35% 1fr;
+  gap: var(--sp-lg);
+  align-items: start;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-md);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-sm);
+}
+
+.stat-cell {
+  background: var(--pitch-mist);
+  border-radius: var(--radius);
+  padding: var(--sp-sm) var(--sp-md);
+}
+
+.stat-cell-label {
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.stat-cell-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--pitch-night);
+  margin-top: 2px;
+}
+
+.font-data {
+  font-family: var(--font-data);
+}
+
+.filter-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 4px 10px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--slate);
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+  background: var(--pitch-night);
+  color: white;
+  border-color: var(--pitch-night);
+}
+
+.team-section-subtitle {
+  font-size: 14px;
+  color: var(--muted);
+  margin: var(--sp-xs) 0 0;
+}
+
+@media (max-width: 1024px) {
+  .teams-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── H2H Section ───────────────────────────────────────────────────────────── */
+
+.h2h-selectors {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--sp-md);
+  align-items: center;
+}
+
+.h2h-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metric-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: var(--sp-sm) var(--sp-md);
+  border-radius: var(--radius);
+}
+
+.metric-row:nth-child(odd) {
+  background: var(--pitch-mist);
+}
+
+.metric-val {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--pitch-night);
+}
+
+.metric-row > span:last-child {
+  text-align: right;
+}
+
+.metric-name {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-align: center;
+  padding: 0 var(--sp-md);
+  white-space: nowrap;
+}
+
+/* ─── History Section ────────────────────────────────────────────────────────── */
+
+.history-layout {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: var(--sp-lg);
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .h2h-selectors {
+    grid-template-columns: 1fr;
+  }
+
+  .history-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Nav Active State ───────────────────────────────────────────────────────── */
+
+.nav-link-active {
+  color: white !important;
+}
+
+/* ─── Skeleton Shimmer ───────────────────────────────────────────────────────── */
+
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+
+.skeleton-shimmer {
+  width: 100%;
+  min-height: 300px;
+  background: linear-gradient(
+    90deg,
+    var(--border) 25%,
+    var(--pitch-mist) 50%,
+    var(--border) 75%
+  );
+  background-size: 600px 100%;
+  animation: shimmer 1.6s infinite linear;
+  border-radius: var(--radius);
+}
+
+/* ─── Focus Chart Section ────────────────────────────────────────────────────── */
+
+#focus-chart {
+  scroll-margin-top: 56px; /* nav height */
+}
+
+#credibility-insights .card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+#credibility-selected-team {
+  background: var(--pitch-mist);
+  color: var(--pitch-night);
+  padding: 3px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  font-size: 12px;
+}
+
+/* ─── Mobile ─────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .groups-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-title {
+    font-size: 48px;
+  }
+
+  .stat-number {
+    font-size: 28px;
+  }
+
+  nav {
+    flex-wrap: wrap;
+  }
+
+  /* Live section 3-col → stack */
+  #live .container > div[style*="grid-template-columns:1fr 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Predict row 2: side-by-side → stack */
+  #predict [style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* H2H selectors on mobile */
+  .h2h-selectors {
+    grid-template-columns: 1fr !important;
+  }
+
+  .vs-divider {
+    font-size: 32px;
+  }
+
+  .section-title {
+    font-size: 28px;
+  }
+
+  .nav-inner {
+    gap: var(--sp-sm);
+    font-size: 12px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+}
