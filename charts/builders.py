@@ -593,9 +593,9 @@ def build_credibility_gap() -> dict:
     df["divergence"] = (df["elo_prob"] - df["bookmaker_prob"]).round(2)
     df["divergence_abs"] = df["divergence"].abs()
     threshold = df["divergence_abs"].nlargest(6).min()
-    # Only label the clearest outliers to avoid an unreadable cloud of 48 names.
-    df["show_label"] = df["divergence_abs"] >= threshold
-    df["label"] = df.apply(lambda r: r["name"] if r["show_label"] else "", axis=1)
+    # Label every team so each dot is identifiable.
+    df["show_label"] = True
+    df["label"] = df["name"]
     df["market_view"] = df["divergence"].apply(
         lambda d: f"Model +{d:.1f}pp vs market" if d > 0 else f"Market +{abs(d):.1f}pp vs model"
     )
