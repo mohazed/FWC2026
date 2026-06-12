@@ -617,6 +617,14 @@ nav {
   white-space: nowrap;
 }
 
+/* ─── Heatmap scroll container ───────────────────────────────────────────────── */
+
+.heatmap-scroll {
+  max-height: 520px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
 /* ─── History Section ────────────────────────────────────────────────────────── */
 
 .history-layout {

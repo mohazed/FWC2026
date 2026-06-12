@@ -165,9 +165,9 @@ def chart_performance():
 # ── Chart endpoints ───────────────────────────────────────────────────────────
 
 @app.get("/charts/heatmap")
-def chart_heatmap():
+def chart_heatmap(confederation: str = None):
     try:
-        return JSONResponse(build_heatmap())
+        return JSONResponse(build_heatmap(confederation))
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=500)
 

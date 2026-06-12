@@ -171,8 +171,22 @@
 
         <!-- Participation heatmap -->
         <div class="card">
-          <div class="section-eyebrow">Performance across all editions</div>
-          <div id="chart-heatmap" class="chart-container" style="min-height:600px; border:none; border-radius:0;"></div>
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:var(--sp-sm); margin-bottom:var(--sp-md);">
+            <div>
+              <div class="section-eyebrow">Performance across all editions · 2026 qualified nations only</div>
+            </div>
+            <div style="display:flex; gap:var(--sp-xs); flex-wrap:wrap;" id="heatmap-filters">
+              <button class="filter-btn active" data-conf="all"      onclick="filterHeatmap(this)">All</button>
+              <button class="filter-btn"        data-conf="UEFA"     onclick="filterHeatmap(this)">UEFA</button>
+              <button class="filter-btn"        data-conf="CONMEBOL" onclick="filterHeatmap(this)">CONMEBOL</button>
+              <button class="filter-btn"        data-conf="CAF"      onclick="filterHeatmap(this)">CAF</button>
+              <button class="filter-btn"        data-conf="AFC"      onclick="filterHeatmap(this)">AFC</button>
+              <button class="filter-btn"        data-conf="CONCACAF" onclick="filterHeatmap(this)">CONCACAF</button>
+            </div>
+          </div>
+          <div class="heatmap-scroll">
+            <div id="chart-heatmap" class="chart-container" style="min-height:400px; border:none; border-radius:0;"></div>
+          </div>
         </div>
 
         <!-- Elo history with multi-selector -->

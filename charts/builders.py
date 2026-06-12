@@ -42,11 +42,12 @@ def _load(filename):
 
 # ── 1. Historical heatmap ─────────────────────────────────────────────────────
 
-def build_heatmap() -> dict:
+def build_heatmap(confederation: str = None) -> dict:
     history = _load("matches_history.json")
     teams_data = _load("master_teams.json")
 
     qualified_teams = {t["name"] for t in teams_data}
+    team_confederation = {t["name"]: t.get("confederation", "") for t in teams_data}
 
     NAME_NORM = {
         "West Germany": "Germany",
@@ -99,7 +100,8 @@ def build_heatmap() -> dict:
             else:
                 records[key]["d"] += 1
 
-        if "final" in stage_raw and "third" not in stage_raw:
+        # Exact match prevents "semi-final" / "quarter-final" from triggering winner logic
+        if stage_raw in ("final", "finals"):
             winner = home if sh > sa else (away if sa > sh else None)
             if winner:
                 records[(winner, year)]["stage_rank"] = 6
@@ -109,8 +111,13 @@ def build_heatmap() -> dict:
         if rec["stage_rank"] == 6:
             title_counts[team] = title_counts.get(team, 0) + 1
 
+    if confederation and confederation.upper() != "ALL":
+        filtered_teams = {t for t in qualified_teams if team_confederation.get(t) == confederation}
+    else:
+        filtered_teams = qualified_teams
+
     all_years = sorted({y for (_, y) in records})
-    all_teams = sorted(qualified_teams, key=lambda t: (-title_counts.get(t, 0), t))
+    all_teams = sorted(filtered_teams, key=lambda t: (-title_counts.get(t, 0), t))
 
     RANK_TO_LABEL = {0: "DNQ", 1: "Groups", 2: "R16", 3: "QF", 4: "SF", 5: "Final", 6: "Winner"}
 
@@ -123,6 +130,7 @@ def build_heatmap() -> dict:
                 "team": team,
                 "year": year,
                 "stage": RANK_TO_LABEL[rank],
+                "titles": title_counts.get(team, 0),
                 "w": rec.get("w", 0),
                 "d": rec.get("d", 0),
                 "l": rec.get("l", 0),
@@ -135,6 +143,8 @@ def build_heatmap() -> dict:
         range=[STAGE_COLORS[s] for s in STAGE_ORDER],
     )
 
+    n_teams = len(all_teams)
+    conf_label = confederation if confederation and confederation.upper() != "ALL" else "All Confederations"
     chart = (
         alt.Chart(df)
         .mark_rect()
@@ -149,16 +159,17 @@ def build_heatmap() -> dict:
             tooltip=[
                 alt.Tooltip("team:N", title="Team"),
                 alt.Tooltip("year:O", title="Year"),
-                alt.Tooltip("stage:N", title="Stage"),
-                alt.Tooltip("w:Q", title="Wins"),
-                alt.Tooltip("d:Q", title="Draws"),
-                alt.Tooltip("l:Q", title="Losses"),
+                alt.Tooltip("stage:N", title="Stage reached"),
+                alt.Tooltip("titles:Q", title="Total WC titles"),
+                alt.Tooltip("w:Q", title="Wins that year"),
+                alt.Tooltip("d:Q", title="Draws that year"),
+                alt.Tooltip("l:Q", title="Losses that year"),
             ],
         )
         .properties(
-            title="World Cup Participation Heatmap (1930–2022)",
+            title=f"World Cup Performance — 2026 Qualified Nations · {conf_label} (1930–2022)",
             width=900,
-            height=max(300, len(all_teams) * 14),
+            height=max(200, n_teams * 16),
         )
     )
     return chart.to_dict()

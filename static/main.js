@@ -338,6 +338,17 @@ function loadSquadTable(squad) {
     </tr>`).join('');
 }
 
+// ── 5a. Heatmap confederation filter ─────────────────────────────────────────
+window.filterHeatmap = function (btn) {
+  document.querySelectorAll('#heatmap-filters .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const conf = btn.dataset.conf;
+  const endpoint = conf === 'all'
+    ? '/charts/heatmap'
+    : `/charts/heatmap?confederation=${encodeURIComponent(conf)}`;
+  loadChart('chart-heatmap', endpoint);
+};
+
 // ── 5. Squad position filter ──────────────────────────────────────────────────
 window.filterSquad = function (btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
