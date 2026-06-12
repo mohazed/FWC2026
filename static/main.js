@@ -121,15 +121,18 @@ async function loadScorers() {
     const scorers = await fetch('/api/scorers').then(r => r.json());
     const container = document.getElementById('live-scorers');
     if (!container || !Array.isArray(scorers) || scorers.length === 0) return;
-    const rows = scorers.slice(0, 10).map((s, i) => `
-      <tr>
+    const rows = scorers.slice(0, 10).map((s, i) => {
+      const rowBg = (i % 2 === 1) ? 'background:rgba(255,255,255,0.07);' : 'background:transparent;';
+      return `
+      <tr style="${rowBg}">
         <td style="color:var(--muted);font-size:11px;background:transparent;">${i + 1}</td>
         <td style="font-weight:500;background:transparent;">${s.player}</td>
         <td style="font-size:12px;background:transparent;">${getFlag(s.team)} ${s.team}</td>
         <td style="font-family:var(--font-data);text-align:center;font-weight:700;color:var(--trophy-gold);background:transparent;">${s.goals}</td>
         <td style="font-family:var(--font-data);text-align:center;background:transparent;">—</td>
         <td style="font-family:var(--font-data);text-align:center;background:transparent;">—</td>
-      </tr>`).join('');
+      </tr>`;
+    }).join('');
     container.innerHTML = `
       <table class="data-table" style="color:rgba(255,255,255,0.9);background:transparent;">
         <thead><tr>
