@@ -328,6 +328,13 @@ nav {
   white-space: nowrap;
 }
 
+.flag-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+}
+
 .flag-icon {
   display: inline-block;
   vertical-align: middle;

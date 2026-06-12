@@ -1,44 +1,6 @@
 'use strict';
 
-// ── Flag images (cross-platform; Unicode flag emoji breaks on Windows) ─────────
-const FLAG_CODES = {
-  'Algeria': 'dz', 'Argentina': 'ar', 'Australia': 'au', 'Austria': 'at',
-  'Belgium': 'be', 'Bosnia and Herzegovina': 'ba', 'Brazil': 'br', 'Canada': 'ca',
-  'Cape Verde': 'cv', 'Colombia': 'co', 'Croatia': 'hr', 'Curaçao': 'cw',
-  'Czechia': 'cz', 'DR Congo': 'cd', 'Ecuador': 'ec', 'Egypt': 'eg',
-  'England': 'gb-eng', 'France': 'fr', 'Germany': 'de', 'Ghana': 'gh',
-  'Haiti': 'ht', 'Iran': 'ir', 'Iraq': 'iq', 'Ivory Coast': 'ci',
-  'Japan': 'jp', 'Jordan': 'jo', 'Mexico': 'mx', 'Morocco': 'ma',
-  'Netherlands': 'nl', 'New Zealand': 'nz', 'Norway': 'no', 'Panama': 'pa',
-  'Paraguay': 'py', 'Portugal': 'pt', 'Qatar': 'qa', 'Saudi Arabia': 'sa',
-  'Scotland': 'gb-sct', 'Senegal': 'sn', 'South Africa': 'za', 'South Korea': 'kr',
-  'Spain': 'es', 'Sweden': 'se', 'Switzerland': 'ch', 'Tunisia': 'tn',
-  'Turkey': 'tr', 'United States': 'us', 'Uruguay': 'uy', 'Uzbekistan': 'uz',
-};
-
 let _allTeams = [];
-
-function flagCodeFor(name) {
-  const team = _allTeams.find(t => t.name === name);
-  if (team && team.flag_code) return team.flag_code;
-  return FLAG_CODES[name] || 'un';
-}
-
-function renderFlag(name, size = 'sm') {
-  if (!name) return '';
-  const code = flagCodeFor(name);
-  const px = { sm: 20, md: 32, lg: 48 }[size] || 20;
-  const srcW = px * 2;
-  const h = Math.round(px * 0.75);
-  const fallback = `https://flagcdn.com/w${srcW}/un.png`;
-  const src = `https://flagcdn.com/w${srcW}/${code}.png`;
-  return `<img class="flag-icon flag-icon--${size}" src="${src}" alt="" width="${px}" height="${h}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${fallback}';">`;
-}
-
-function setFlagElement(el, name, size = 'lg') {
-  if (!el) return;
-  el.innerHTML = name ? renderFlag(name, size) : '';
-}
 
 // ── HTML escaping for any dynamic string injected via innerHTML ───────────────
 function escapeHtml(value) {
@@ -229,7 +191,7 @@ async function loadScorers() {
       <tr style="${rowBg}">
         <td style="color:var(--muted);font-size:11px;background:transparent;">${i + 1}</td>
         <td style="font-weight:500;background:transparent;">${escapeHtml(s.player)}</td>
-        <td style="font-size:12px;background:transparent;">${renderFlag(s.team, 'sm')} ${escapeHtml(s.team)}</td>
+        <td style="font-size:12px;background:transparent;">${Flags.renderHtml(s.team, 'sm')} ${escapeHtml(s.team)}</td>
         <td style="font-family:var(--font-data);text-align:center;font-weight:700;color:var(--trophy-gold);background:transparent;">${escapeHtml(s.goals)}</td>
         <td style="font-family:var(--font-data);text-align:center;background:transparent;">—</td>
         <td style="font-family:var(--font-data);text-align:center;background:transparent;">—</td>
@@ -290,7 +252,7 @@ async function loadOverview() {
         if (played.length > 0) {
           strip.innerHTML = played.slice(-10).reverse().map(m =>
             `<span class="badge badge-green" style="font-size:12px;padding:6px 12px;border-radius:var(--radius);white-space:nowrap;">
-              ${renderFlag(m.home, 'sm')} ${escapeHtml(m.home)} ${escapeHtml(m.score_h)}–${escapeHtml(m.score_a)} ${escapeHtml(m.away)} ${renderFlag(m.away, 'sm')}
+              ${Flags.renderHtml(m.home, 'sm')} ${escapeHtml(m.home)} ${escapeHtml(m.score_h)}–${escapeHtml(m.score_a)} ${escapeHtml(m.away)} ${Flags.renderHtml(m.away, 'sm')}
               · ${m.group ? 'Group ' + escapeHtml(m.group) : escapeHtml(m.stage || '')}
             </span>`
           ).join('');
@@ -326,7 +288,7 @@ function renderStandings(groups) {
       const played = (t.w || 0) + (t.d || 0) + (t.l || 0);
       const name = escapeHtml(t.name);
       return `<tr ${trStyle}>
-        <td class="team-cell"><div class="team-cell-inner"><span class="team-flag">${renderFlag(t.name, 'sm')}</span><span class="team-name" title="${name}">${name}</span></div></td>
+        <td class="team-cell"><div class="team-cell-inner"><span class="team-flag">${Flags.renderHtml(t.name, 'sm')}</span><span class="team-name" title="${name}">${name}</span></div></td>
         <td style="text-align:center;font-family:var(--font-data);">${played}</td>
         <td style="text-align:center;font-family:var(--font-data);">${gd}</td>
         <td style="text-align:center;font-family:var(--font-data);font-weight:700;">${t.pts}</td>
@@ -354,7 +316,7 @@ function renderLiveResults(played) {
     liveResults.innerHTML = played.slice(-8).reverse().map(m =>
       `<div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius);padding:var(--sp-md);margin-bottom:var(--sp-sm);">
         <div style="font-family:var(--font-display);font-size:20px;letter-spacing:0.05em;margin-bottom:4px;">
-          ${renderFlag(m.home, 'sm')} ${escapeHtml(m.home)}  ${escapeHtml(m.score_h ?? '?')}–${escapeHtml(m.score_a ?? '?')}  ${escapeHtml(m.away)} ${renderFlag(m.away, 'sm')}
+          ${Flags.renderHtml(m.home, 'sm')} ${escapeHtml(m.home)}  ${escapeHtml(m.score_h ?? '?')}–${escapeHtml(m.score_a ?? '?')}  ${escapeHtml(m.away)} ${Flags.renderHtml(m.away, 'sm')}
         </div>
         <div style="font-size:11px;color:rgba(255,255,255,0.4);">${m.group ? 'Group ' + escapeHtml(m.group) : escapeHtml(m.stage || '')} · ${escapeHtml(m.date || '')}</div>
       </div>`
@@ -385,7 +347,7 @@ async function loadTeam(country) {
   // Update profile card
   const flagEl = document.getElementById('team-flag');
   const nameEl = document.getElementById('team-name');
-  if (flagEl) setFlagElement(flagEl, country, 'lg');
+  if (flagEl) Flags.setElement(flagEl, country, 'lg');
   if (nameEl) nameEl.textContent = country;
 
   const confBadge = document.getElementById('badge-confederation');
@@ -500,22 +462,45 @@ function bindH2H() {
   selB.addEventListener('change', update);
 }
 
+function updateH2HFlags(a, b) {
+  Flags.setElement(document.getElementById('h2h-flag-a'), a || '', 'lg');
+  Flags.setElement(document.getElementById('h2h-flag-b'), b || '', 'lg');
+}
+
 async function loadH2H(a, b) {
-  if (!a || !b || a === b) return;
+  updateH2HFlags(a, b);
 
-  const teamA = _allTeams.find(t => t.name === a) || {};
-  const teamB = _allTeams.find(t => t.name === b) || {};
+  const teamA = a ? (_allTeams.find(t => t.name === a) || {}) : {};
+  const teamB = b ? (_allTeams.find(t => t.name === b) || {}) : {};
 
-  // Update header cards
   const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-  setFlagElement(document.getElementById('h2h-flag-a'), a, 'lg');
-  setText('h2h-name-a', a);
-  setFlagElement(document.getElementById('h2h-flag-b'), b, 'lg');
-  setText('h2h-name-b', b);
+  setText('h2h-name-a', a || 'Team A');
+  setText('h2h-name-b', b || 'Team B');
+
   const confA = document.getElementById('h2h-conf-a');
   const confB = document.getElementById('h2h-conf-b');
-  if (confA) { confA.textContent = teamA.confederation || '—'; confA.className = `badge ${confBadgeClass(teamA.confederation)}`; }
-  if (confB) { confB.textContent = teamB.confederation || '—'; confB.className = `badge ${confBadgeClass(teamB.confederation)}`; }
+  if (confA) {
+    confA.textContent = teamA.confederation || '—';
+    confA.className = `badge ${confBadgeClass(teamA.confederation)}`;
+  }
+  if (confB) {
+    confB.textContent = teamB.confederation || '—';
+    confB.className = `badge ${confBadgeClass(teamB.confederation)}`;
+  }
+
+  if (!a || !b || a === b) {
+    const el = document.getElementById('chart-h2h');
+    if (el && (!a || !b)) {
+      el.innerHTML = `<p style="color:var(--muted);font-size:13px;padding:var(--sp-xl);text-align:center;margin:0;">
+        Select two teams above to see their World Cup history
+      </p>`;
+    } else if (el && a === b) {
+      el.innerHTML = `<p style="color:var(--muted);font-size:13px;padding:var(--sp-xl);text-align:center;margin:0;">
+        Choose two different teams to compare
+      </p>`;
+    }
+    return;
+  }
 
   // Win probability
   try {
@@ -636,8 +621,8 @@ function renderH2HHistory(matches, nameA, nameB) {
 
   el.innerHTML = `
     <div class="card" style="overflow-x:auto;">
-      <div style="font-family:var(--font-display);font-size:20px;color:var(--pitch-night);margin-bottom:var(--sp-sm);">
-        World Cup History · ${escapeHtml(nameA)} vs ${escapeHtml(nameB)}
+      <div style="font-family:var(--font-display);font-size:20px;color:var(--pitch-night);margin-bottom:var(--sp-sm);display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;">
+        World Cup History · ${Flags.renderHtml(nameA, 'sm')} ${escapeHtml(nameA)} vs ${Flags.renderHtml(nameB, 'sm')} ${escapeHtml(nameB)}
       </div>
       <div style="display:flex;gap:var(--sp-lg);margin-bottom:var(--sp-md);align-items:center;">
         <span style="font-family:var(--font-display);font-size:28px;color:var(--data-teal);">${wA}</span>
@@ -893,6 +878,8 @@ function renderCredibilityInsights(teams) {
 
 // ── Bootstrap ─────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
+  await Flags.ensureReady();
+
   // Fire all static chart loads immediately (no dependencies)
   loadAllCharts();
 
@@ -902,12 +889,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Populate dropdowns and store team list
   _allTeams = await populateDropdowns();
+  Flags.init(_allTeams);
 
   // Default Team Explorer selection + flag on first load
   const teamSel = document.getElementById('team-selector');
   if (teamSel && _allTeams.length > 0) {
     if (!teamSel.value) teamSel.value = 'France';
     if (teamSel.value) loadTeam(teamSel.value);
+  }
+
+  // Default H2H matchup (matches radar defaults)
+  const h2hA = document.getElementById('h2h-team-a');
+  const h2hB = document.getElementById('h2h-team-b');
+  if (h2hA && h2hB && _allTeams.length > 0) {
+    h2hA.value = 'France';
+    h2hB.value = 'Spain';
+    loadH2H('France', 'Spain');
   }
 
   // Wire up all interactive sections

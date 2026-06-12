@@ -48,6 +48,14 @@ class TestFlagAssets(unittest.TestCase):
         self.assertEqual(flag_code_for("Czech Republic"), "cz")
         self.assertEqual(resolve_team_name("USA"), "United States")
 
+    def test_flag_codes_json_matches_python(self):
+        json_path = ROOT / "static" / "data" / "flag-codes.json"
+        self.assertTrue(json_path.exists(), "static/data/flag-codes.json missing — run collectors/teams.py")
+        with open(json_path, encoding="utf-8") as f:
+            exported = json.load(f)
+        self.assertEqual(exported, TEAM_FLAG_CODES)
+        self.assertEqual(len(exported), 48)
+
 
 if __name__ == "__main__":
     unittest.main()

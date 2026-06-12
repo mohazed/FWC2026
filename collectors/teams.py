@@ -6,7 +6,13 @@ import pandas as pd
 
 BASE_DIR = Path(__file__).parent.parent
 sys.path.insert(0, str(BASE_DIR))
-from api.names import SQUAD_VALUES_M, flag_asset_url, flag_code_for, implied_prob_normalized
+from api.names import (
+    SQUAD_VALUES_M,
+    TEAM_FLAG_CODES,
+    flag_asset_url,
+    flag_code_for,
+    implied_prob_normalized,
+)
 
 
 WC_TEAMS_2026 = [
@@ -71,6 +77,12 @@ def main():
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(teams, f, indent=2, ensure_ascii=False)
     print(f"✓ Saved master_teams.json ({len(teams)} teams)")
+
+    flag_json_path = BASE_DIR / "static" / "data" / "flag-codes.json"
+    flag_json_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(flag_json_path, "w", encoding="utf-8") as f:
+        json.dump(TEAM_FLAG_CODES, f, indent=2, ensure_ascii=False)
+    print(f"✓ Saved flag-codes.json ({len(TEAM_FLAG_CODES)} teams)")
 
 
 if __name__ == "__main__":

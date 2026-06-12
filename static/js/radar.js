@@ -233,19 +233,42 @@
       });
     });
 
-    // ── Legend ────────────────────────────────────────────────────────────────
-    const lg = svg.append('g').attr('transform', 'translate(250,445)');
-    [[nameA, COLOR_A, -110], [nameB, COLOR_B, 10]].forEach(([name, color, dx]) => {
-      const row = lg.append('g').attr('transform', `translate(${dx},0)`);
-      row.append('rect').attr('width', 12).attr('height', 12).attr('rx', 2)
-        .attr('fill', color).attr('fill-opacity', 0.85);
-      row.append('text')
-        .attr('x', 17).attr('y', 10)
-        .attr('font-family', 'Inter, sans-serif')
-        .attr('font-size', 12)
-        .attr('fill', '#374151')
-        .text(name);
-    });
+    // ── Legend (HTML row with flags) ────────────────────────────────────────
+    if (window.Flags) {
+      const legendEl = document.createElement('div');
+      legendEl.style.cssText = [
+        'display:flex',
+        'justify-content:center',
+        'align-items:center',
+        'gap:24px',
+        'padding:8px 16px 12px',
+        'flex-wrap:wrap',
+      ].join(';');
+      legendEl.innerHTML = [
+        `<span style="display:inline-flex;align-items:center;gap:6px;">`,
+        `${Flags.renderHtml(nameA, 'sm')}`,
+        `<span style="font-family:Inter,sans-serif;font-size:12px;color:#374151;">${nameA}</span>`,
+        `</span>`,
+        `<span style="display:inline-flex;align-items:center;gap:6px;">`,
+        `${Flags.renderHtml(nameB, 'sm')}`,
+        `<span style="font-family:Inter,sans-serif;font-size:12px;color:#374151;">${nameB}</span>`,
+        `</span>`,
+      ].join('');
+      container.appendChild(legendEl);
+    } else {
+      const lg = svg.append('g').attr('transform', 'translate(250,445)');
+      [[nameA, COLOR_A, -110], [nameB, COLOR_B, 10]].forEach(([name, color, dx]) => {
+        const row = lg.append('g').attr('transform', `translate(${dx},0)`);
+        row.append('rect').attr('width', 12).attr('height', 12).attr('rx', 2)
+          .attr('fill', color).attr('fill-opacity', 0.85);
+        row.append('text')
+          .attr('x', 17).attr('y', 10)
+          .attr('font-family', 'Inter, sans-serif')
+          .attr('font-size', 12)
+          .attr('fill', '#374151')
+          .text(name);
+      });
+    }
   }
 
   // ── Public API ────────────────────────────────────────────────────────────
@@ -258,6 +281,8 @@
     container.innerHTML = '<p style="color:#9CA3AF;font-size:13px;padding:40px;text-align:center;">Loading radar…</p>';
 
     try {
+      if (window.Flags && Flags.ensureReady) await Flags.ensureReady();
+
       const [teamsData, squadA, squadB] = await Promise.all([
         fetch('/api/teams').then(r => r.json()),
         fetch(`/api/squads/${encodeURIComponent(teamA)}`).then(r => r.json()),

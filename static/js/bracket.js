@@ -24,6 +24,8 @@
 
     const N_SIMS = 2000;
     try {
+      if (window.Flags && Flags.ensureReady) await Flags.ensureReady();
+
       const resp = await fetch(`/api/montecarlo?n=${N_SIMS}`);
       if (!resp.ok) throw new Error(`${resp.status} ${resp.statusText}`);
       const data = await resp.json();
@@ -48,7 +50,9 @@
       // Dimensions
       const totalW = container.clientWidth || 520;
       const rowH   = 28;
-      const pad    = { top: 10, right: 90, bottom: 58, left: 140 };
+      const FLAG_W = 24;
+      const FLAG_H = 18;
+      const pad    = { top: 10, right: 90, bottom: 58, left: 164 };
       const innerW = Math.max(totalW - pad.left - pad.right, 120);
       const innerH = teams.length * rowH;
       const svgH   = innerH + pad.top + pad.bottom;
@@ -106,7 +110,20 @@
         .style('stroke', 'var(--trophy-gold)')
         .style('stroke-width', 1.5);
 
-      // Team name labels
+      // Flag thumbnails + team name labels
+      if (window.Flags) {
+        g.selectAll('.team-flag-img')
+          .data(teams)
+          .join('image')
+          .attr('class', 'team-flag-img')
+          .attr('href', d => Flags.urlFor(d.name, 48))
+          .attr('x', -FLAG_W - 10)
+          .attr('y', d => yScale(d.name) + (yScale.bandwidth() - FLAG_H) / 2)
+          .attr('width', FLAG_W)
+          .attr('height', FLAG_H)
+          .attr('preserveAspectRatio', 'xMidYMid slice');
+      }
+
       g.selectAll('.team-lbl')
         .data(teams)
         .join('text')
