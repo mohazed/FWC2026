@@ -1,8 +1,11 @@
+import os
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from typing import List
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 from api.teams import get_all_teams, get_squad, get_standings
 from api.matches import get_matches, get_h2h
@@ -28,12 +31,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 
 
 @app.get("/")
 def root():
-    return FileResponse("static/index.html")
+    return FileResponse(os.path.join(BASE_DIR, "static", "index.html"))
 
 
 @app.get("/health")
@@ -92,7 +95,7 @@ def api_predict(team_a: str, team_b: str):
 
 
 @app.get("/api/montecarlo")
-def api_montecarlo(n: int = Query(default=10000, ge=100, le=100000)):
+def api_montecarlo(n: int = Query(default=500, ge=100, le=2000)):
     try:
         return JSONResponse({"teams": run_montecarlo(n)})
     except Exception as e:

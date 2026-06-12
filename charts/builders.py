@@ -2,6 +2,9 @@ import json
 import pandas as pd
 import altair as alt
 import numpy as np
+from pathlib import Path
+
+DATA_DIR = Path(__file__).parent.parent / "data" / "processed"
 
 # Design token hex values (must match CSS custom properties)
 PITCH_NIGHT = "#0D2818"
@@ -32,16 +35,16 @@ STAGE_COLORS = {
 }
 
 
-def _load(path):
-    with open(path, encoding="utf-8") as f:
+def _load(filename):
+    with open(DATA_DIR / filename, encoding="utf-8") as f:
         return json.load(f)
 
 
 # ── 1. Historical heatmap ─────────────────────────────────────────────────────
 
 def build_heatmap() -> dict:
-    history = _load("data/processed/matches_history.json")
-    teams_data = _load("data/processed/master_teams.json")
+    history = _load("matches_history.json")
+    teams_data = _load("master_teams.json")
 
     qualified_teams = {t["name"] for t in teams_data}
 
@@ -164,7 +167,7 @@ def build_heatmap() -> dict:
 # ── 2. Elo trajectory ────────────────────────────────────────────────────────
 
 def build_elo_chart(teams: list) -> dict:
-    elo = _load("data/processed/elo_history.json")
+    elo = _load("elo_history.json")
     df = pd.DataFrame(elo)
     df = df[df["year"] >= 1930].copy()
 
@@ -202,8 +205,8 @@ def build_elo_chart(teams: list) -> dict:
 # ── 3. Squad strength (Elo bars) ─────────────────────────────────────────────
 
 def build_wealth_chart() -> dict:
-    teams = _load("data/processed/master_teams.json")
-    elo = _load("data/processed/elo_history.json")
+    teams = _load("master_teams.json")
+    elo = _load("elo_history.json")
 
     elo_2026 = {r["country"]: r["rating"] for r in elo if r["year"] == 2026}
 
@@ -248,7 +251,7 @@ def build_wealth_chart() -> dict:
 # ── 4. Age pyramid ───────────────────────────────────────────────────────────
 
 def build_age_pyramid(country: str) -> dict:
-    squads = _load("data/processed/master_squads.json")
+    squads = _load("master_squads.json")
     team = next((t for t in squads if t["country"].lower() == country.lower()), None)
     if not team:
         return {}
@@ -300,7 +303,7 @@ def build_age_pyramid(country: str) -> dict:
 # ── 5. League / club chart ───────────────────────────────────────────────────
 
 def build_league_chart(country: str) -> dict:
-    squads = _load("data/processed/master_squads.json")
+    squads = _load("master_squads.json")
     team = next((t for t in squads if t["country"].lower() == country.lower()), None)
     if not team:
         return {}
@@ -336,7 +339,7 @@ def build_league_chart(country: str) -> dict:
 # ── 6. Model vs market ───────────────────────────────────────────────────────
 
 def build_model_vs_market() -> dict:
-    teams = _load("data/processed/master_teams.json")
+    teams = _load("master_teams.json")
 
     elos = np.array([t["elo"] for t in teams], dtype=float)
     exp_elos = np.exp((elos - elos.max()) / 400)
@@ -404,8 +407,8 @@ def build_model_vs_market() -> dict:
 # ── 7. Upset tracker ─────────────────────────────────────────────────────────
 
 def build_upset_chart() -> dict:
-    fixtures = _load("data/processed/fixtures.json")
-    teams_data = _load("data/processed/master_teams.json")
+    fixtures = _load("fixtures.json")
+    teams_data = _load("master_teams.json")
     elo_map = {t["name"]: t["elo"] for t in teams_data}
 
     NAME_NORM = {
@@ -478,7 +481,7 @@ def build_fbref_chart() -> dict:
 
         headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"}
         url = "https://fbref.com/en/comps/1/stats/World-Cup-Stats"
-        resp = requests.get(url, headers=headers, timeout=15)
+        resp = requests.get(url, headers=headers, timeout=8)
         resp.raise_for_status()
 
         tables = pd.read_html(StringIO(resp.text))
@@ -617,7 +620,7 @@ def build_credibility_gap() -> dict:
     }
 
     # ── 1. Load master_teams.json ──────────────────────────────────────────
-    with open("data/processed/master_teams.json") as f:
+    with open(DATA_DIR / "master_teams.json") as f:
         teams = json.load(f)
     df = pd.DataFrame(teams)
 

@@ -1,17 +1,20 @@
 import json
+from pathlib import Path
+
+DATA_DIR = Path(__file__).parent.parent / "data" / "processed"
 
 
-def _load(path):
-    with open(path, encoding="utf-8") as f:
+def _load(filename):
+    with open(DATA_DIR / filename, encoding="utf-8") as f:
         return json.load(f)
 
 
 def get_all_teams():
-    return _load("data/processed/master_teams.json")
+    return _load("master_teams.json")
 
 
 def get_squad(country: str):
-    squads = _load("data/processed/master_squads.json")
+    squads = _load("master_squads.json")
     for team in squads:
         if team["country"].lower() == country.lower():
             return team["players"]
@@ -19,4 +22,4 @@ def get_squad(country: str):
 
 
 def get_standings():
-    return _load("data/processed/groups.json")
+    return _load("groups.json")

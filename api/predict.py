@@ -1,10 +1,13 @@
 import json
 import numpy as np
 from collections import defaultdict
+from pathlib import Path
+
+DATA_DIR = Path(__file__).parent.parent / "data" / "processed"
 
 
-def _load(path):
-    with open(path, encoding="utf-8") as f:
+def _load(filename):
+    with open(DATA_DIR / filename, encoding="utf-8") as f:
         return json.load(f)
 
 
@@ -26,7 +29,7 @@ def _get_team_elo(teams: list, name: str) -> float:
 
 
 def predict_match(team_a: str, team_b: str) -> dict:
-    teams = _load("data/processed/master_teams.json")
+    teams = _load("master_teams.json")
     elo_a = _get_team_elo(teams, team_a)
     elo_b = _get_team_elo(teams, team_b)
     probs = _elo_win_prob(elo_a, elo_b)
@@ -55,9 +58,9 @@ def _sim_knockout(elo_a: float, elo_b: float, rng: np.random.Generator) -> str:
     return "a" if rng.random() < expected_a else "b"
 
 
-def run_montecarlo(n: int = 10000) -> list:
-    teams_data = _load("data/processed/master_teams.json")
-    groups_data = _load("data/processed/groups.json")
+def run_montecarlo(n: int = 500) -> list:
+    teams_data = _load("master_teams.json")
+    groups_data = _load("groups.json")
 
     elo_map = {t["name"]: float(t["elo"]) for t in teams_data}
     group_map = {}

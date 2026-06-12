@@ -1,17 +1,20 @@
 import json
+from pathlib import Path
+
+DATA_DIR = Path(__file__).parent.parent / "data" / "processed"
 
 
-def _load(path):
-    with open(path, encoding="utf-8") as f:
+def _load(filename):
+    with open(DATA_DIR / filename, encoding="utf-8") as f:
         return json.load(f)
 
 
 def get_matches():
-    return _load("data/processed/fixtures.json")
+    return _load("fixtures.json")
 
 
 def get_h2h(team_a: str, team_b: str):
-    history = _load("data/processed/matches_history.json")
+    history = _load("matches_history.json")
     a, b = team_a.lower(), team_b.lower()
     results = []
     for m in history:
