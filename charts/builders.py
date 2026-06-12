@@ -786,9 +786,11 @@ def build_credibility_gap() -> dict:
     top_outliers = df.nlargest(2, "divergence_abs")["name"].tolist()
     outlier_str = " & ".join(top_outliers)
 
+    zoom = alt.selection_interval(bind='scales', name='zoom', encodings=['x', 'y'])
+
     chart = (
         shade_below + shade_above + diagonal + zone_labels + scatter + labels_above
-    ).properties(
+    ).add_params(zoom).properties(
         width=700,
         height=600,
         title=alt.TitleParams(
