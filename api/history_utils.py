@@ -4,19 +4,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from api.names import TEAM_ALIASES, resolve_team_name
+
 DATA_DIR = Path(__file__).parent.parent / "data" / "processed"
 
-# Historical names in datahub.io CSV → canonical names in master_teams.json
-HISTORY_TO_CANONICAL: dict[str, str] = {
-    "West Germany": "Germany",
-    "Czech Republic": "Czechia",
-    "Zaire": "DR Congo",
-    "Korea Republic": "South Korea",
-    "Côte d'Ivoire": "Ivory Coast",
-    "Congo DR": "DR Congo",
-    "Cape Verde Islands": "Cape Verde",
-    "Bosnia & Herzegovina": "Bosnia and Herzegovina",
-}
+# Kept for backwards compatibility; canonical source is api.names.TEAM_ALIASES.
+HISTORY_TO_CANONICAL: dict[str, str] = TEAM_ALIASES
 
 # Lowercase stage_name → numeric rank (higher = deeper run)
 STAGE_RANK: dict[str, int] = {
@@ -72,9 +65,7 @@ STAGE_COLORS: dict[str, str] = {
 
 def normalize_team_name(name: str | None) -> str:
     """Map a historical team name to the canonical 2026 roster name."""
-    if not name:
-        return ""
-    return HISTORY_TO_CANONICAL.get(name, name)
+    return resolve_team_name(name)
 
 
 def is_mens_world_cup_match(match: dict) -> bool:

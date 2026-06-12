@@ -1,8 +1,14 @@
 import json
+import os
 import re
+import tempfile
 import requests
 from pathlib import Path
 from collections import defaultdict
+
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from api.names import resolve_team_name
 
 BASE_DIR = Path(__file__).parent.parent
 FIXTURES_PATH = BASE_DIR / "data/processed/fixtures.json"
@@ -10,19 +16,38 @@ GROUPS_PATH   = BASE_DIR / "data/processed/groups.json"
 SCORERS_PATH  = BASE_DIR / "data/processed/scorers.json"
 API_URL       = "https://worldcup26.ir/get/games"
 
-# worldcup26.ir names → our fixtures.json canonical names
-NAME_MAP = {
-    "United States":                    "USA",
-    "Democratic Republic of the Congo": "DR Congo",
-    "Bosnia and Herzegovina":           "Bosnia & Herzegovina",
-}
 
 def _norm(name: str) -> str:
-    return NAME_MAP.get(name, name)
+    """Normalize a live-feed team name to our canonical roster name."""
+    return resolve_team_name(name)
+
+
+def _atomic_write_json(path: Path, data) -> None:
+    """Write JSON atomically so a crash mid-write cannot corrupt the file."""
+    fd, tmp = tempfile.mkstemp(dir=str(path.parent), suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+        os.replace(tmp, path)
+    except Exception:
+        if os.path.exists(tmp):
+            os.remove(tmp)
+        raise
+
+
+def _safe_int(value):
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
 
 
 def sync_live_scores() -> dict:
-    """Pull finished scores from worldcup26.ir and rewrite fixtures + groups JSON."""
+    """Pull finished scores from worldcup26.ir and rewrite fixtures + groups JSON.
+
+    Note: writes to disk. On read-only/serverless filesystems this will fail and
+    return an error dict; callers should treat that as a non-fatal no-op.
+    """
     try:
         resp = requests.get(API_URL, timeout=15)
         resp.raise_for_status()
@@ -38,36 +63,38 @@ def sync_live_scores() -> dict:
         if not home or not away:
             continue
         finished = g.get("finished", "FALSE") == "TRUE"
+        sh = _safe_int(g.get("home_score")) if finished else None
+        sa = _safe_int(g.get("away_score")) if finished else None
+        # Skip rows flagged finished but missing valid scores
+        if finished and (sh is None or sa is None):
+            continue
         api_lookup[(_norm(home), _norm(away))] = {
             "finished": finished,
-            "score_h":  int(g["home_score"]) if finished else None,
-            "score_a":  int(g["away_score"]) if finished else None,
+            "score_h":  sh,
+            "score_a":  sa,
         }
 
-    with open(FIXTURES_PATH) as f:
-        fixtures = json.load(f)
+    try:
+        with open(FIXTURES_PATH, encoding="utf-8") as f:
+            fixtures = json.load(f)
 
-    synced = 0
-    for match in fixtures:
-        key = (match["home"], match["away"])
-        live = api_lookup.get(key)
-        if live and live["finished"]:
-            if not match.get("played") or match["score_h"] != live["score_h"]:
-                match["score_h"] = live["score_h"]
-                match["score_a"] = live["score_a"]
-                match["played"]  = True
-                synced += 1
+        synced = 0
+        for match in fixtures:
+            key = (_norm(match["home"]), _norm(match["away"]))
+            live = api_lookup.get(key)
+            if live and live["finished"]:
+                if not match.get("played") or match["score_h"] != live["score_h"]:
+                    match["score_h"] = live["score_h"]
+                    match["score_a"] = live["score_a"]
+                    match["played"]  = True
+                    synced += 1
 
-    with open(FIXTURES_PATH, "w") as f:
-        json.dump(fixtures, f, indent=2)
-
-    groups = _compute_standings(fixtures)
-    with open(GROUPS_PATH, "w") as f:
-        json.dump(groups, f, indent=2)
-
-    scorers = _parse_scorers(api_games)
-    with open(SCORERS_PATH, "w") as f:
-        json.dump(scorers, f, indent=2)
+        _atomic_write_json(FIXTURES_PATH, fixtures)
+        _atomic_write_json(GROUPS_PATH, _compute_standings(fixtures))
+        _atomic_write_json(SCORERS_PATH, _parse_scorers(api_games))
+    except OSError as e:
+        return {"error": f"filesystem not writable: {e}", "synced": 0,
+                "matches_played": 0}
 
     played_total = sum(1 for m in fixtures if m.get("played"))
     return {"synced": synced, "matches_played": played_total}
@@ -124,14 +151,15 @@ def _compute_standings(fixtures: list) -> list:
         if m.get("stage") != "group" or not m.get("group"):
             continue
         g = m["group"]
-        group_teams[g].add(m["home"])
-        group_teams[g].add(m["away"])
+        home, away = _norm(m["home"]), _norm(m["away"])
+        group_teams[g].add(home)
+        group_teams[g].add(away)
 
         if not m.get("played"):
             continue
 
         sh, sa = m["score_h"], m["score_a"]
-        kh, ka = (g, m["home"]), (g, m["away"])
+        kh, ka = (g, home), (g, away)
 
         records[kh]["gf"] += sh;  records[kh]["ga"] += sa;  records[kh]["gd"] += sh - sa
         records[ka]["gf"] += sa;  records[ka]["ga"] += sh;  records[ka]["gd"] += sa - sh

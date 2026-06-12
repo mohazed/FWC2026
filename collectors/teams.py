@@ -1,5 +1,12 @@
 import json
+import sys
+from pathlib import Path
+
 import pandas as pd
+
+BASE_DIR = Path(__file__).parent.parent
+sys.path.insert(0, str(BASE_DIR))
+from api.names import SQUAD_VALUES_M, implied_prob_normalized
 
 
 WC_TEAMS_2026 = [
@@ -33,8 +40,10 @@ NAME_MAP = {
 
 def main():
     print("Building master_teams.json...")
-    df = pd.read_csv("data/raw/elo_ratings_wc2026.csv")
+    df = pd.read_csv(BASE_DIR / "data/raw/elo_ratings_wc2026.csv")
     df2026 = df[df["year"] == 2026].drop_duplicates(subset=["country"]).set_index("country")
+
+    implied = implied_prob_normalized()
 
     teams = []
     for name, confed, group in WC_TEAMS_2026:
@@ -52,12 +61,13 @@ def main():
             "group": group,
             "elo": elo,
             "fifa_rank": fifa_rank,
-            "squad_value_m": None,
+            "squad_value_m": float(SQUAD_VALUES_M[name]) if name in SQUAD_VALUES_M else None,
             "flag": "",
-            "implied_prob": None,
+            "implied_prob": round(implied[name], 6) if name in implied else None,
         })
 
-    with open("data/processed/master_teams.json", "w", encoding="utf-8") as f:
+    out_path = BASE_DIR / "data/processed/master_teams.json"
+    with open(out_path, "w", encoding="utf-8") as f:
         json.dump(teams, f, indent=2, ensure_ascii=False)
     print(f"✓ Saved master_teams.json ({len(teams)} teams)")
 

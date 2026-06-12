@@ -28,6 +28,14 @@ from charts.builders import (
 
 REFRESH_INTERVAL = 600  # seconds (10 minutes)
 
+# Live sync writes JSON to disk and runs a background loop — only safe on a
+# long-lived writable host (local uvicorn / a real server), NOT on serverless
+# read-only filesystems like Vercel. Gate it behind an explicit env flag.
+LIVE_SYNC_ENABLED = (
+    os.getenv("ENABLE_LIVE_SYNC", "").lower() in ("1", "true", "yes")
+    and not os.getenv("VERCEL")
+)
+
 
 async def _background_refresh():
     while True:
@@ -41,15 +49,19 @@ async def _background_refresh():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Sync on startup so data is fresh immediately
-    try:
-        result = await asyncio.to_thread(sync_live_scores)
-        print(f"[startup] live sync: {result}")
-    except Exception as e:
-        print(f"[startup] live sync failed: {e}")
-    task = asyncio.create_task(_background_refresh())
+    task = None
+    if LIVE_SYNC_ENABLED:
+        try:
+            result = await asyncio.to_thread(sync_live_scores)
+            print(f"[startup] live sync: {result}")
+        except Exception as e:
+            print(f"[startup] live sync failed: {e}")
+        task = asyncio.create_task(_background_refresh())
+    else:
+        print("[startup] live sync disabled (set ENABLE_LIVE_SYNC=1 on a writable host)")
     yield
-    task.cancel()
+    if task:
+        task.cancel()
 
 
 app = FastAPI(title="WC 2026 Analytics Dashboard", lifespan=lifespan)
@@ -134,11 +146,31 @@ def api_montecarlo(n: int = Query(default=500, ge=100, le=2000)):
 
 @app.post("/api/refresh")
 def api_refresh():
+    if not LIVE_SYNC_ENABLED:
+        return JSONResponse(
+            {"error": "Live sync is disabled on this deployment", "synced": 0},
+            status_code=503,
+        )
     try:
         result = sync_live_scores()
+        if isinstance(result, dict) and result.get("error"):
+            return JSONResponse(result, status_code=502)
+        _invalidate_data_caches()
         return JSONResponse(result)
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=500)
+
+
+def _invalidate_data_caches():
+    """Clear cached JSON so freshly synced files are picked up."""
+    import api.teams as _t
+    import api.matches as _m
+    import api.predict as _p
+    import charts.builders as _b
+    for mod in (_t, _m, _p, _b):
+        loader = getattr(mod, "_load", None)
+        if loader is not None and hasattr(loader, "cache_clear"):
+            loader.cache_clear()
 
 
 @app.get("/api/scorers")

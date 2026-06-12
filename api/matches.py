@@ -1,15 +1,13 @@
 import json
+from functools import lru_cache
 from pathlib import Path
 
-from api.history_utils import (
-    HISTORY_TO_CANONICAL,
-    is_mens_world_cup_match,
-    normalize_team_name,
-)
+from api.history_utils import is_mens_world_cup_match, normalize_team_name
 
 DATA_DIR = Path(__file__).parent.parent / "data" / "processed"
 
 
+@lru_cache(maxsize=None)
 def _load(filename):
     with open(DATA_DIR / filename, encoding="utf-8") as f:
         return json.load(f)
@@ -19,20 +17,10 @@ def get_matches():
     return _load("fixtures.json")
 
 
-def _canonical_lookup() -> dict[str, str]:
-    """Lowercase canonical name -> canonical name for exact H2H matching."""
-    teams = _load("master_teams.json")
-    lookup = {t["name"].lower(): t["name"] for t in teams}
-    for hist, canon in HISTORY_TO_CANONICAL.items():
-        lookup[hist.lower()] = canon
-    return lookup
-
-
 def get_h2h(team_a: str, team_b: str):
     history = _load("matches_history.json")
-    lookup = _canonical_lookup()
-    canon_a = lookup.get(team_a.lower(), team_a)
-    canon_b = lookup.get(team_b.lower(), team_b)
+    canon_a = normalize_team_name(team_a)
+    canon_b = normalize_team_name(team_b)
     results = []
 
     for m in history:

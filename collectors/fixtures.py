@@ -1,9 +1,15 @@
 import re
 import json
+import sys
 import requests
 import pandas as pd
 from io import StringIO
+from pathlib import Path
 from collections import defaultdict
+
+BASE_DIR = Path(__file__).parent.parent
+sys.path.insert(0, str(BASE_DIR))
+from api.names import resolve_team_name
 
 OPENFOOTBALL_URLS = [
     "https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json",
@@ -66,6 +72,8 @@ def parse_fixtures(data):
         team2 = match.get("team2", "")
         home = team1.get("name", "") if isinstance(team1, dict) else str(team1)
         away = team2.get("name", "") if isinstance(team2, dict) else str(team2)
+        home = resolve_team_name(home)
+        away = resolve_team_name(away)
 
         match_group = group
         if not match_group:
@@ -171,17 +179,18 @@ def main():
 
     groups = compute_standings(fixtures)
 
-    with open("data/processed/fixtures.json", "w") as f:
-        json.dump(fixtures, f, indent=2)
+    out_dir = BASE_DIR / "data" / "processed"
+    with open(out_dir / "fixtures.json", "w", encoding="utf-8") as f:
+        json.dump(fixtures, f, indent=2, ensure_ascii=False)
     print(f"✓ Saved fixtures.json ({len(fixtures)} matches)")
 
-    with open("data/processed/groups.json", "w") as f:
-        json.dump(groups, f, indent=2)
+    with open(out_dir / "groups.json", "w", encoding="utf-8") as f:
+        json.dump(groups, f, indent=2, ensure_ascii=False)
     print(f"✓ Saved groups.json ({len(groups)} groups)")
 
     history = fetch_history()
-    with open("data/processed/matches_history.json", "w") as f:
-        json.dump(history, f, indent=2)
+    with open(out_dir / "matches_history.json", "w", encoding="utf-8") as f:
+        json.dump(history, f, indent=2, ensure_ascii=False)
     print(f"✓ Saved matches_history.json ({len(history)} records)")
 
 

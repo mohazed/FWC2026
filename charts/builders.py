@@ -2,6 +2,7 @@ import json
 import pandas as pd
 import altair as alt
 import numpy as np
+from functools import lru_cache
 from pathlib import Path
 
 from api.history_utils import (
@@ -11,6 +12,12 @@ from api.history_utils import (
     iter_mens_matches,
     normalize_team_name,
     stage_rank,
+)
+from api.names import (
+    AMERICAN_ODDS,
+    SQUAD_VALUES_M,
+    american_to_prob,
+    resolve_team_name,
 )
 
 DATA_DIR = Path(__file__).parent.parent / "data" / "processed"
@@ -32,6 +39,7 @@ CONFED_COLORS = {
     "OFC": MUTED,
 }
 
+@lru_cache(maxsize=None)
 def _load(filename):
     with open(DATA_DIR / filename, encoding="utf-8") as f:
         return json.load(f)
@@ -406,12 +414,6 @@ def build_upset_chart() -> dict:
     teams_data = _load("master_teams.json")
     elo_map = {t["name"]: t["elo"] for t in teams_data}
 
-    NAME_NORM = {
-        "Czech Republic": "Czechia",
-        "Bosnia & Herzegovina": "Bosnia and Herzegovina",
-        "Korea Republic": "South Korea",
-    }
-
     played = [m for m in fixtures if m.get("played")]
 
     if not played:
@@ -426,8 +428,8 @@ def build_upset_chart() -> dict:
 
     rows = []
     for i, m in enumerate(played):
-        home = NAME_NORM.get(m["home"], m["home"])
-        away = NAME_NORM.get(m["away"], m["away"])
+        home = resolve_team_name(m["home"])
+        away = resolve_team_name(m["away"])
         eh = elo_map.get(home, 1600)
         ea = elo_map.get(away, 1600)
         gap = abs(eh - ea)
@@ -485,8 +487,8 @@ def build_fbref_chart() -> dict:
         team_stats: dict = {}
         for m in played:
             for team, gf, ga in [
-                (m["home"], m.get("score_h", 0), m.get("score_a", 0)),
-                (m["away"], m.get("score_a", 0), m.get("score_h", 0)),
+                (resolve_team_name(m["home"]), m.get("score_h", 0), m.get("score_a", 0)),
+                (resolve_team_name(m["away"]), m.get("score_a", 0), m.get("score_h", 0)),
             ]:
                 if team not in team_stats:
                     team_stats[team] = {"gf": 0, "ga": 0, "played": 0, "elo": elo_map.get(team, 1700)}
@@ -533,7 +535,7 @@ def build_fbref_chart() -> dict:
                     alt.Tooltip("value:Q", title="Value", format=".0f"),
                 ],
             )
-            .properties(title="Team Stats — Group Stage", width=650, height=max(200, len(rows) * 56))
+            .properties(title="Goals For / Against — Matches Played", width=650, height=max(200, len(rows) * 56))
         )
         return chart.to_dict()
 
@@ -548,7 +550,7 @@ def build_fbref_chart() -> dict:
                 y=alt.Y("y:Q", axis=None, scale=alt.Scale(domain=[0, 1])),
                 text="msg:N",
             )
-            .properties(title="Team Stats — Group Stage", width=650, height=300)
+            .properties(title="Goals For / Against — Matches Played", width=650, height=300)
         )
         return chart.to_dict()
 
@@ -561,53 +563,11 @@ def build_credibility_gap() -> dict:
     One dot per team. Diagonal = perfect agreement.
     Outliers labeled. Rubric-compliant: position encoding, honest axes, source cited.
     """
-    import json, numpy as np, pandas as pd, altair as alt
-
-    # Realistic pre-tournament American odds for all 48 qualifiers
-    # Source: CBS Sports / Oddspedia opening lines (frozen at tournament start)
-    AMERICAN_ODDS = {
-        "Argentina":    -150,  "France":        +400,  "Brazil":         +450,
-        "England":      +600,  "Spain":         +700,  "Germany":       +1000,
-        "Portugal":    +1400,  "Netherlands":   +2000,  "United States": +2500,
-        "Uruguay":     +2500,  "Colombia":      +3000,  "Morocco":       +3000,
-        "Belgium":     +3500,  "Mexico":        +3500,  "Japan":         +5000,
-        "Croatia":     +5000,  "Canada":        +4500,  "Turkey":        +8000,
-        "Austria":     +8000,  "Switzerland":   +8000,  "South Korea":  +10000,
-        "Ecuador":    +10000,  "Senegal":       +8000,  "Ivory Coast":  +12000,
-        "Norway":     +15000,  "Sweden":       +12000,  "Algeria":      +20000,
-        "Ghana":      +20000,  "Scotland":     +25000,  "Tunisia":      +25000,
-        "Egypt":      +20000,  "Paraguay":     +30000,  "Czechia":      +20000,
-        "Bosnia and Herzegovina": +25000,
-        "Iran":       +30000,  "Saudi Arabia": +35000,  "Australia":    +25000,
-        "DR Congo":   +40000,  "South Africa": +50000,  "Panama":       +50000,
-        "Cape Verde": +50000,  "Iraq":         +60000,  "New Zealand":  +75000,
-        "Uzbekistan": +75000,  "Jordan":       +75000,  "Qatar":        +75000,
-        "Curaçao":   +100000,  "Haiti":       +150000,
-    }
-
-    # Squad market values (€M) from Transfermarkt estimates
-    SQUAD_VALUES_M = {
-        "England": 1150, "France": 1100, "Spain": 1000, "Germany": 850,
-        "Brazil": 900, "Portugal": 850, "Netherlands": 650, "Argentina": 700,
-        "Belgium": 500, "Uruguay": 400, "Colombia": 350, "United States": 350,
-        "Morocco": 300, "Turkey": 350, "Croatia": 280, "Switzerland": 300,
-        "Austria": 250, "Mexico": 250, "Norway": 350, "Sweden": 220,
-        "Japan": 200, "South Korea": 200, "Senegal": 200, "Ivory Coast": 200,
-        "Scotland": 180, "Canada": 150, "Ecuador": 120, "Czechia": 200,
-        "Algeria": 100, "Egypt": 130, "Bosnia and Herzegovina": 100,
-        "Ghana": 80, "Tunisia": 60, "Iran": 30, "Saudi Arabia": 50,
-        "Australia": 100, "Paraguay": 50, "DR Congo": 40, "South Africa": 40,
-        "Panama": 20, "Cape Verde": 30, "Iraq": 20, "New Zealand": 20,
-        "Uzbekistan": 30, "Jordan": 15, "Qatar": 40, "Haiti": 10,
-        "Curaçao": 15,
-    }
-
     # ── 1. Load master_teams.json ──────────────────────────────────────────
-    with open(DATA_DIR / "master_teams.json") as f:
-        teams = json.load(f)
+    teams = _load("master_teams.json")
     df = pd.DataFrame(teams)
 
-    # Fill squad values from hardcoded dict if missing in data
+    # Fill squad values from shared estimates if missing in data
     df["squad_value_m"] = df.apply(
         lambda r: r["squad_value_m"] if pd.notna(r.get("squad_value_m"))
                   else float(SQUAD_VALUES_M.get(r["name"], max(5.0, (float(r["elo"]) - 1500) * 0.15))),
@@ -620,24 +580,22 @@ def build_credibility_gap() -> dict:
     exp_elo = np.exp((elo - elo.mean()) / temperature)
     df["elo_prob"] = (exp_elo / exp_elo.sum() * 100).round(2)
 
-    # ── 3. Bookmaker implied probability (normalized to remove vig) ────────
-    def american_to_prob(odds):
-        if odds >= 0:
-            return 100 / (odds + 100)
-        else:
-            return abs(odds) / (abs(odds) + 100)
-
-    df["raw_implied"] = df["name"].apply(
-        lambda n: american_to_prob(AMERICAN_ODDS.get(n, 10000)) * 100
-    )
-    df["bookmaker_prob"] = (df["raw_implied"] / df["raw_implied"].sum() * 100).round(2)
+    # ── 3. Bookmaker implied probability (prefer data, fall back to odds) ──
+    if df["implied_prob"].notna().all():
+        df["bookmaker_prob"] = (df["implied_prob"].astype(float) * 100).round(2)
+    else:
+        df["raw_implied"] = df["name"].apply(
+            lambda n: american_to_prob(AMERICAN_ODDS.get(n, 10000)) * 100
+        )
+        df["bookmaker_prob"] = (df["raw_implied"] / df["raw_implied"].sum() * 100).round(2)
 
     # ── 4. Divergence and outlier labeling ────────────────────────────────
     df["divergence"] = (df["elo_prob"] - df["bookmaker_prob"]).round(2)
     df["divergence_abs"] = df["divergence"].abs()
     threshold = df["divergence_abs"].nlargest(6).min()
-    df["show_label"] = True
-    df["label"] = df["name"]
+    # Only label the clearest outliers to avoid an unreadable cloud of 48 names.
+    df["show_label"] = df["divergence_abs"] >= threshold
+    df["label"] = df.apply(lambda r: r["name"] if r["show_label"] else "", axis=1)
     df["market_view"] = df["divergence"].apply(
         lambda d: f"Model +{d:.1f}pp vs market" if d > 0 else f"Market +{abs(d):.1f}pp vs model"
     )
@@ -662,8 +620,10 @@ def build_credibility_gap() -> dict:
     zone_above = pd.DataFrame({"x": [0, axis_max], "y1": [0, axis_max], "y2": [axis_max, axis_max]})
     zone_below = pd.DataFrame({"x": [0, axis_max], "y1": [0, 0],        "y2": [0, axis_max]})
 
-    sqrt_scale_x = alt.Scale(type="sqrt", domain=[0, axis_max], nice=False)
-    sqrt_scale_y = alt.Scale(type="sqrt", domain=[0, axis_max], nice=False)
+    # Linear scales so the diagonal is the true equality line and distance from
+    # it reads as real percentage-point divergence.
+    sqrt_scale_x = alt.Scale(type="linear", domain=[0, axis_max], nice=False)
+    sqrt_scale_y = alt.Scale(type="linear", domain=[0, axis_max], nice=False)
 
     shade_above = alt.Chart(zone_above).mark_area(
         opacity=0.04, color="#0F766E"
@@ -720,14 +680,14 @@ def build_credibility_gap() -> dict:
         x=alt.X(
             "bookmaker_prob:Q",
             title="Bookmaker implied probability (%)",
-            scale=alt.Scale(type="sqrt", domain=[0, axis_max], nice=False),
+            scale=alt.Scale(type="linear", domain=[0, axis_max], nice=False),
             axis=alt.Axis(tickCount=7, labelExpr='format(datum.value, ".1f") + "%"',
                           grid=True, gridColor="#F0F0EE", gridOpacity=0.8),
         ),
         y=alt.Y(
             "elo_prob:Q",
             title="Elo-based win probability (%)",
-            scale=alt.Scale(type="sqrt", domain=[0, axis_max], nice=False),
+            scale=alt.Scale(type="linear", domain=[0, axis_max], nice=False),
             axis=alt.Axis(tickCount=7, labelExpr='format(datum.value, ".1f") + "%"',
                           grid=True, gridColor="#F0F0EE", gridOpacity=0.8),
         ),
@@ -832,12 +792,6 @@ def build_performance_chart() -> dict:
 
     elo_map = {t["name"]: t["elo"] for t in teams_data}
 
-    NAME_NORM = {
-        "Czech Republic":       "Czechia",
-        "Bosnia & Herzegovina": "Bosnia and Herzegovina",
-        "USA":                  "United States",
-    }
-
     def _elo_expected_pts(elo_a, elo_b):
         win_a = (1 / (1 + 10 ** ((elo_b - elo_a) / 400))) * 0.75
         win_b = (1 / (1 + 10 ** ((elo_a - elo_b) / 400))) * 0.75
@@ -847,9 +801,10 @@ def build_performance_chart() -> dict:
     expected: dict = {}
     played_fixtures = [m for m in fixtures if m.get("played") and m.get("stage") == "group"]
     for m in played_fixtures:
-        home = m["home"]; away = m["away"]
-        elo_h = elo_map.get(NAME_NORM.get(home, home), 1700)
-        elo_a = elo_map.get(NAME_NORM.get(away, away), 1700)
+        home = resolve_team_name(m["home"])
+        away = resolve_team_name(m["away"])
+        elo_h = elo_map.get(home, 1700)
+        elo_a = elo_map.get(away, 1700)
         exp_h, exp_a = _elo_expected_pts(elo_h, elo_a)
         expected[home] = expected.get(home, 0) + exp_h
         expected[away] = expected.get(away, 0) + exp_a
@@ -860,9 +815,10 @@ def build_performance_chart() -> dict:
             played = t["w"] + t["d"] + t["l"]
             if played == 0:
                 continue
-            exp = round(expected.get(t["name"], 0), 2)
+            name = resolve_team_name(t["name"])
+            exp = round(expected.get(name, 0), 2)
             rows.append({
-                "team":         t["name"],
+                "team":         name,
                 "actual_pts":   float(t["pts"]),
                 "expected_pts": exp,
                 "diff":         round(t["pts"] - exp, 2),
@@ -889,11 +845,13 @@ def build_performance_chart() -> dict:
         "expected_pts": "Expected (Elo)",
     })
 
+    pts_max = max(1.0, float(melted["pts"].max())) * 1.1
+
     chart = (
         alt.Chart(melted)
         .mark_bar(opacity=0.85)
         .encode(
-            x=alt.X("pts:Q", title="Points", scale=alt.Scale(domain=[0, 3.5])),
+            x=alt.X("pts:Q", title="Points", scale=alt.Scale(domain=[0, pts_max], nice=True)),
             y=alt.Y("team:N", title=None, sort=list(df["team"])),
             color=alt.Color(
                 "type_label:N",

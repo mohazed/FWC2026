@@ -1,11 +1,15 @@
 import json
 import numpy as np
 from collections import defaultdict
+from functools import lru_cache
 from pathlib import Path
+
+from api.names import AMERICAN_ODDS, american_to_prob, resolve_team_name
 
 DATA_DIR = Path(__file__).parent.parent / "data" / "processed"
 
 
+@lru_cache(maxsize=None)
 def _load(filename):
     with open(DATA_DIR / filename, encoding="utf-8") as f:
         return json.load(f)
@@ -21,11 +25,26 @@ def _elo_win_prob(elo_a: float, elo_b: float) -> dict:
 
 
 def _get_team_elo(teams: list, name: str) -> float:
-    name_l = name.lower()
+    canon = resolve_team_name(name).lower()
     for t in teams:
-        if t["name"].lower() == name_l:
+        if t["name"].lower() == canon:
             return float(t["elo"])
     return 1600.0
+
+
+def _bookmaker_h2h(team_a: str, team_b: str) -> dict:
+    """Head-to-head win share implied by tournament-winner odds (vig removed)."""
+    canon_a = resolve_team_name(team_a)
+    canon_b = resolve_team_name(team_b)
+    odds_a = AMERICAN_ODDS.get(canon_a)
+    odds_b = AMERICAN_ODDS.get(canon_b)
+    if odds_a is None or odds_b is None:
+        return {"bookie_a": None, "bookie_b": None}
+    pa, pb = american_to_prob(odds_a), american_to_prob(odds_b)
+    total = pa + pb
+    if total <= 0:
+        return {"bookie_a": None, "bookie_b": None}
+    return {"bookie_a": round(pa / total, 3), "bookie_b": round(pb / total, 3)}
 
 
 def predict_match(team_a: str, team_b: str) -> dict:
@@ -39,6 +58,7 @@ def predict_match(team_a: str, team_b: str) -> dict:
         "elo_a": elo_a,
         "elo_b": elo_b,
         **probs,
+        **_bookmaker_h2h(team_a, team_b),
     }
 
 
@@ -65,7 +85,7 @@ def run_montecarlo(n: int = 500) -> list:
     elo_map = {t["name"]: float(t["elo"]) for t in teams_data}
     group_map = {}
     for g in groups_data:
-        group_map[g["group"]] = [t["name"] for t in g["teams"]]
+        group_map[g["group"]] = [resolve_team_name(t["name"]) for t in g["teams"]]
 
     rng = np.random.default_rng(42)
     win_counts = defaultdict(int)

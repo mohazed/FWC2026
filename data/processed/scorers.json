@@ -1,11 +1,11 @@
 [
   {
-    "player": "J. Qui\u00f1ones",
+    "player": "J. Quiñones",
     "team": "Mexico",
     "goals": 1
   },
   {
-    "player": "R. Jim\u00e9nez",
+    "player": "R. Jiménez",
     "team": "Mexico",
     "goals": 1
   },
@@ -20,8 +20,18 @@
     "goals": 1
   },
   {
-    "player": "L. Krej\u010d\u00ed",
-    "team": "Czech Republic",
+    "player": "L. Krejčí",
+    "team": "Czechia",
+    "goals": 1
+  },
+  {
+    "player": "C. Larin",
+    "team": "Canada",
+    "goals": 1
+  },
+  {
+    "player": "Jovo Lukić",
+    "team": "Bosnia and Herzegovina",
     "goals": 1
   }
 ]

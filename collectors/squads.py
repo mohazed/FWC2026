@@ -1,9 +1,15 @@
 import re
 import json
+import sys
 import requests
 import pandas as pd
 from io import StringIO
+from pathlib import Path
 from bs4 import BeautifulSoup
+
+BASE_DIR = Path(__file__).parent.parent
+sys.path.insert(0, str(BASE_DIR))
+from api.names import resolve_team_name
 
 POSITION_MAP = {
     "GK": "GK", "G": "GK",
@@ -142,8 +148,9 @@ def scrape_squads():
                 })
 
             if len(players) >= 11:
-                squads.append({"country": current_country, "players": players})
-                print(f"  ✓ {current_country}: {len(players)} players")
+                canon = resolve_team_name(current_country)
+                squads.append({"country": canon, "players": players})
+                print(f"  ✓ {canon}: {len(players)} players")
                 current_country = None
 
     return squads
@@ -154,7 +161,8 @@ def main():
     squads = scrape_squads()
     print(f"\nFound {len(squads)} national teams")
 
-    with open("data/processed/master_squads.json", "w", encoding="utf-8") as f:
+    out_path = BASE_DIR / "data/processed/master_squads.json"
+    with open(out_path, "w", encoding="utf-8") as f:
         json.dump(squads, f, indent=2, ensure_ascii=False)
     print(f"✓ Saved master_squads.json ({len(squads)} teams)")
 

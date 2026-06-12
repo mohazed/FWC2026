@@ -34,7 +34,7 @@
         "w": 0,
         "d": 0,
         "l": 1,
-        "name": "Czech Republic",
+        "name": "Czechia",
         "form": "",
         "status": ""
       },
@@ -56,6 +56,30 @@
     "group": "B",
     "teams": [
       {
+        "pts": 1,
+        "gd": 0,
+        "gf": 1,
+        "ga": 1,
+        "w": 0,
+        "d": 1,
+        "l": 0,
+        "name": "Bosnia and Herzegovina",
+        "form": "",
+        "status": ""
+      },
+      {
+        "pts": 1,
+        "gd": 0,
+        "gf": 1,
+        "ga": 1,
+        "w": 0,
+        "d": 1,
+        "l": 0,
+        "name": "Canada",
+        "form": "",
+        "status": ""
+      },
+      {
         "pts": 0,
         "gd": 0,
         "gf": 0,
@@ -75,31 +99,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Canada",
-        "form": "",
-        "status": ""
-      },
-      {
-        "pts": 0,
-        "gd": 0,
-        "gf": 0,
-        "ga": 0,
-        "w": 0,
-        "d": 0,
-        "l": 0,
         "name": "Qatar",
-        "form": "",
-        "status": ""
-      },
-      {
-        "pts": 0,
-        "gd": 0,
-        "gf": 0,
-        "ga": 0,
-        "w": 0,
-        "d": 0,
-        "l": 0,
-        "name": "Bosnia & Herzegovina",
         "form": "",
         "status": ""
       }
@@ -116,7 +116,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Brazil",
+        "name": "Morocco",
         "form": "",
         "status": ""
       },
@@ -128,7 +128,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Morocco",
+        "name": "Brazil",
         "form": "",
         "status": ""
       },
@@ -169,7 +169,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Paraguay",
+        "name": "United States",
         "form": "",
         "status": ""
       },
@@ -193,7 +193,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Turkey",
+        "name": "Paraguay",
         "form": "",
         "status": ""
       },
@@ -205,7 +205,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "USA",
+        "name": "Turkey",
         "form": "",
         "status": ""
       }
@@ -214,18 +214,6 @@
   {
     "group": "E",
     "teams": [
-      {
-        "pts": 0,
-        "gd": 0,
-        "gf": 0,
-        "ga": 0,
-        "w": 0,
-        "d": 0,
-        "l": 0,
-        "name": "Ivory Coast",
-        "form": "",
-        "status": ""
-      },
       {
         "pts": 0,
         "gd": 0,
@@ -246,7 +234,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Ecuador",
+        "name": "Ivory Coast",
         "form": "",
         "status": ""
       },
@@ -258,7 +246,19 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Cura\u00e7ao",
+        "name": "Curaçao",
+        "form": "",
+        "status": ""
+      },
+      {
+        "pts": 0,
+        "gd": 0,
+        "gf": 0,
+        "ga": 0,
+        "w": 0,
+        "d": 0,
+        "l": 0,
+        "name": "Ecuador",
         "form": "",
         "status": ""
       }
@@ -275,19 +275,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Tunisia",
-        "form": "",
-        "status": ""
-      },
-      {
-        "pts": 0,
-        "gd": 0,
-        "gf": 0,
-        "ga": 0,
-        "w": 0,
-        "d": 0,
-        "l": 0,
-        "name": "Japan",
+        "name": "Netherlands",
         "form": "",
         "status": ""
       },
@@ -311,7 +299,19 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Netherlands",
+        "name": "Japan",
+        "form": "",
+        "status": ""
+      },
+      {
+        "pts": 0,
+        "gd": 0,
+        "gf": 0,
+        "ga": 0,
+        "w": 0,
+        "d": 0,
+        "l": 0,
+        "name": "Tunisia",
         "form": "",
         "status": ""
       }
@@ -328,7 +328,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Belgium",
+        "name": "Iran",
         "form": "",
         "status": ""
       },
@@ -352,7 +352,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Iran",
+        "name": "Belgium",
         "form": "",
         "status": ""
       },
@@ -393,7 +393,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Uruguay",
+        "name": "Saudi Arabia",
         "form": "",
         "status": ""
       },
@@ -405,7 +405,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Saudi Arabia",
+        "name": "Uruguay",
         "form": "",
         "status": ""
       },
@@ -434,19 +434,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Iraq",
-        "form": "",
-        "status": ""
-      },
-      {
-        "pts": 0,
-        "gd": 0,
-        "gf": 0,
-        "ga": 0,
-        "w": 0,
-        "d": 0,
-        "l": 0,
-        "name": "France",
+        "name": "Norway",
         "form": "",
         "status": ""
       },
@@ -470,7 +458,19 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Norway",
+        "name": "Iraq",
+        "form": "",
+        "status": ""
+      },
+      {
+        "pts": 0,
+        "gd": 0,
+        "gf": 0,
+        "ga": 0,
+        "w": 0,
+        "d": 0,
+        "l": 0,
+        "name": "France",
         "form": "",
         "status": ""
       }
@@ -479,6 +479,18 @@
   {
     "group": "J",
     "teams": [
+      {
+        "pts": 0,
+        "gd": 0,
+        "gf": 0,
+        "ga": 0,
+        "w": 0,
+        "d": 0,
+        "l": 0,
+        "name": "Austria",
+        "form": "",
+        "status": ""
+      },
       {
         "pts": 0,
         "gd": 0,
@@ -511,18 +523,6 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Austria",
-        "form": "",
-        "status": ""
-      },
-      {
-        "pts": 0,
-        "gd": 0,
-        "gf": 0,
-        "ga": 0,
-        "w": 0,
-        "d": 0,
-        "l": 0,
         "name": "Algeria",
         "form": "",
         "status": ""
@@ -540,7 +540,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Uzbekistan",
+        "name": "Portugal",
         "form": "",
         "status": ""
       },
@@ -576,7 +576,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Portugal",
+        "name": "Uzbekistan",
         "form": "",
         "status": ""
       }
@@ -585,18 +585,6 @@
   {
     "group": "L",
     "teams": [
-      {
-        "pts": 0,
-        "gd": 0,
-        "gf": 0,
-        "ga": 0,
-        "w": 0,
-        "d": 0,
-        "l": 0,
-        "name": "Croatia",
-        "form": "",
-        "status": ""
-      },
       {
         "pts": 0,
         "gd": 0,
@@ -630,6 +618,18 @@
         "d": 0,
         "l": 0,
         "name": "Panama",
+        "form": "",
+        "status": ""
+      },
+      {
+        "pts": 0,
+        "gd": 0,
+        "gf": 0,
+        "ga": 0,
+        "w": 0,
+        "d": 0,
+        "l": 0,
+        "name": "Croatia",
         "form": "",
         "status": ""
       }

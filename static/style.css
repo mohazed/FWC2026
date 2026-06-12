@@ -671,10 +671,47 @@ nav {
   border-radius: var(--radius);
 }
 
+/* ─── Accessibility helpers ──────────────────────────────────────────────────── */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Keep section headers clear of the fixed nav when scrolled to via anchor links. */
+section[id] {
+  scroll-margin-top: 56px;
+}
+
 /* ─── Focus Chart Section ────────────────────────────────────────────────────── */
 
 #focus-chart {
   scroll-margin-top: 56px; /* nav height */
+}
+
+/* Credibility chart can be wider than small viewports — allow horizontal scroll
+   instead of overflowing the page. */
+#chart-credibility {
+  overflow-x: auto;
+}
+
+/* Respect users who prefer reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 #credibility-insights .card:hover {

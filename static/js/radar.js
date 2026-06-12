@@ -281,24 +281,7 @@
     }
   };
 
-  // Wire up Team Explorer selector → updates Team A slot in radar
-  function bindTeamSelector() {
-    const sel = document.getElementById('team-selector');
-    if (!sel) return;
-    sel.addEventListener('change', () => {
-      if (sel.value) window.initRadar(sel.value, _currentB);
-    });
-  }
-
-  // Initialise after DOM + all scripts are ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      window.initRadar();
-      bindTeamSelector();
-    });
-  } else {
-    window.initRadar();
-    bindTeamSelector();
-  }
+  // NOTE: bootstrap (initial render + #team-selector wiring) is owned by
+  // static/main.js to avoid double initialisation and duplicate fetches.
 
 }());

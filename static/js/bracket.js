@@ -22,8 +22,10 @@
     cleanupTooltip();
     container.innerHTML = '<div class="skeleton-shimmer" style="min-height:380px;"></div>';
 
+    const N_SIMS = 2000;
     try {
-      const resp = await fetch('/api/montecarlo');
+      const resp = await fetch(`/api/montecarlo?n=${N_SIMS}`);
+      if (!resp.ok) throw new Error(`${resp.status} ${resp.statusText}`);
       const data = await resp.json();
       if (data.error) throw new Error(data.error);
 
@@ -39,7 +41,7 @@
           Monte Carlo — Tournament Probability
         </div>
         <div style="font-size:11px;color:var(--muted);padding:0 16px 10px;font-family:var(--font-body);">
-          10,000 simulations · Top 16 contenders by win probability
+          ${N_SIMS.toLocaleString()} simulations · Top 16 contenders by win probability
         </div>`;
       container.appendChild(header);
 
@@ -196,10 +198,6 @@
     }
   };
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => window.initBracket());
-  } else {
-    window.initBracket();
-  }
+  // NOTE: bootstrap is owned by static/main.js to avoid double initialisation.
 
 }());

@@ -5,9 +5,9 @@
     "group": "E",
     "elo": 1743,
     "fifa_rank": 35,
-    "squad_value_m": null,
+    "squad_value_m": 100.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.002664
   },
   {
     "name": "Argentina",
@@ -15,9 +15,9 @@
     "group": "G",
     "elo": 2113,
     "fifa_rank": 2,
-    "squad_value_m": null,
+    "squad_value_m": 700.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.321264
   },
   {
     "name": "Australia",
@@ -25,9 +25,9 @@
     "group": "H",
     "elo": 1783,
     "fifa_rank": 26,
-    "squad_value_m": null,
+    "squad_value_m": 100.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.002133
   },
   {
     "name": "Austria",
@@ -35,9 +35,9 @@
     "group": "D",
     "elo": 1827,
     "fifa_rank": 23,
-    "squad_value_m": null,
+    "squad_value_m": 250.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.00661
   },
   {
     "name": "Belgium",
@@ -45,9 +45,9 @@
     "group": "J",
     "elo": 1867,
     "fifa_rank": 19,
-    "squad_value_m": null,
+    "squad_value_m": 500.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.014873
   },
   {
     "name": "Bosnia and Herzegovina",
@@ -55,9 +55,9 @@
     "group": "B",
     "elo": 1594,
     "fifa_rank": 66,
-    "squad_value_m": null,
+    "squad_value_m": 100.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.002133
   },
   {
     "name": "Brazil",
@@ -65,9 +65,9 @@
     "group": "F",
     "elo": 1984,
     "fifa_rank": 5,
-    "squad_value_m": null,
+    "squad_value_m": 900.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.097353
   },
   {
     "name": "Canada",
@@ -75,9 +75,9 @@
     "group": "B",
     "elo": 1784,
     "fifa_rank": 25,
-    "squad_value_m": null,
+    "squad_value_m": 150.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.01164
   },
   {
     "name": "Cape Verde",
@@ -85,9 +85,9 @@
     "group": "I",
     "elo": 1549,
     "fifa_rank": 72,
-    "squad_value_m": null,
+    "squad_value_m": 30.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.001069
   },
   {
     "name": "Colombia",
@@ -95,9 +95,9 @@
     "group": "L",
     "elo": 1975,
     "fifa_rank": 7,
-    "squad_value_m": null,
+    "squad_value_m": 350.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.017272
   },
   {
     "name": "Croatia",
@@ -105,9 +105,9 @@
     "group": "D",
     "elo": 1930,
     "fifa_rank": 10,
-    "squad_value_m": null,
+    "squad_value_m": 280.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.010499
   },
   {
     "name": "Curaçao",
@@ -115,9 +115,9 @@
     "group": "K",
     "elo": 1436,
     "fifa_rank": 90,
-    "squad_value_m": null,
+    "squad_value_m": 15.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.000535
   },
   {
     "name": "Czechia",
@@ -125,9 +125,9 @@
     "group": "A",
     "elo": 1726,
     "fifa_rank": 40,
-    "squad_value_m": null,
+    "squad_value_m": 200.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.002664
   },
   {
     "name": "DR Congo",
@@ -135,9 +135,9 @@
     "group": "H",
     "elo": 1655,
     "fifa_rank": 54,
-    "squad_value_m": null,
+    "squad_value_m": 40.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.001335
   },
   {
     "name": "Ecuador",
@@ -145,9 +145,9 @@
     "group": "C",
     "elo": 1933,
     "fifa_rank": 9,
-    "squad_value_m": null,
+    "squad_value_m": 120.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.005301
   },
   {
     "name": "Egypt",
@@ -155,9 +155,9 @@
     "group": "F",
     "elo": 1689,
     "fifa_rank": 51,
-    "squad_value_m": null,
+    "squad_value_m": 130.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.002664
   },
   {
     "name": "England",
@@ -165,9 +165,9 @@
     "group": "L",
     "elo": 2020,
     "fifa_rank": 4,
-    "squad_value_m": null,
+    "squad_value_m": 1150.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.076491
   },
   {
     "name": "France",
@@ -175,9 +175,9 @@
     "group": "J",
     "elo": 2081,
     "fifa_rank": 3,
-    "squad_value_m": null,
+    "squad_value_m": 1100.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.107088
   },
   {
     "name": "Germany",
@@ -185,9 +185,9 @@
     "group": "C",
     "elo": 1923,
     "fifa_rank": 11,
-    "squad_value_m": null,
+    "squad_value_m": 850.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.048676
   },
   {
     "name": "Ghana",
@@ -195,9 +195,9 @@
     "group": "K",
     "elo": 1503,
     "fifa_rank": 82,
-    "squad_value_m": null,
+    "squad_value_m": 80.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.002664
   },
   {
     "name": "Haiti",
@@ -205,9 +205,9 @@
     "group": "G",
     "elo": 1532,
     "fifa_rank": 77,
-    "squad_value_m": null,
+    "squad_value_m": 10.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.000357
   },
   {
     "name": "Iran",
@@ -215,9 +215,9 @@
     "group": "E",
     "elo": 1760,
     "fifa_rank": 31,
-    "squad_value_m": null,
+    "squad_value_m": 30.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.001779
   },
   {
     "name": "Iraq",
@@ -225,9 +225,9 @@
     "group": "I",
     "elo": 1607,
     "fifa_rank": 63,
-    "squad_value_m": null,
+    "squad_value_m": 20.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.000891
   },
   {
     "name": "Ivory Coast",
@@ -235,9 +235,9 @@
     "group": "G",
     "elo": 1676,
     "fifa_rank": 52,
-    "squad_value_m": null,
+    "squad_value_m": 200.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.004425
   },
   {
     "name": "Japan",
@@ -245,9 +245,9 @@
     "group": "C",
     "elo": 1904,
     "fifa_rank": 13,
-    "squad_value_m": null,
+    "squad_value_m": 200.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.010499
   },
   {
     "name": "Jordan",
@@ -255,9 +255,9 @@
     "group": "D",
     "elo": 1690,
     "fifa_rank": 50,
-    "squad_value_m": null,
+    "squad_value_m": 15.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.000713
   },
   {
     "name": "Mexico",
@@ -265,9 +265,9 @@
     "group": "A",
     "elo": 1860,
     "fifa_rank": 20,
-    "squad_value_m": null,
+    "squad_value_m": 250.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.014873
   },
   {
     "name": "Morocco",
@@ -275,9 +275,9 @@
     "group": "B",
     "elo": 1822,
     "fifa_rank": 24,
-    "squad_value_m": null,
+    "squad_value_m": 300.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.017272
   },
   {
     "name": "Netherlands",
@@ -285,9 +285,9 @@
     "group": "E",
     "elo": 1961,
     "fifa_rank": 8,
-    "squad_value_m": null,
+    "squad_value_m": 650.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.025497
   },
   {
     "name": "New Zealand",
@@ -295,9 +295,9 @@
     "group": "K",
     "elo": 1585,
     "fifa_rank": 68,
-    "squad_value_m": null,
+    "squad_value_m": 20.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.000713
   },
   {
     "name": "Norway",
@@ -305,9 +305,9 @@
     "group": "F",
     "elo": 1912,
     "fifa_rank": 12,
-    "squad_value_m": null,
+    "squad_value_m": 350.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.003546
   },
   {
     "name": "Panama",
@@ -315,9 +315,9 @@
     "group": "I",
     "elo": 1737,
     "fifa_rank": 36,
-    "squad_value_m": null,
+    "squad_value_m": 20.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.001069
   },
   {
     "name": "Paraguay",
@@ -325,9 +325,9 @@
     "group": "H",
     "elo": 1833,
     "fifa_rank": 22,
-    "squad_value_m": null,
+    "squad_value_m": 50.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.001779
   },
   {
     "name": "Portugal",
@@ -335,9 +335,9 @@
     "group": "L",
     "elo": 1984,
     "fifa_rank": 5,
-    "squad_value_m": null,
+    "squad_value_m": 850.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.035696
   },
   {
     "name": "Qatar",
@@ -345,9 +345,9 @@
     "group": "B",
     "elo": 1425,
     "fifa_rank": 95,
-    "squad_value_m": null,
+    "squad_value_m": 40.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.000713
   },
   {
     "name": "Saudi Arabia",
@@ -355,9 +355,9 @@
     "group": "J",
     "elo": 1568,
     "fifa_rank": 71,
-    "squad_value_m": null,
+    "squad_value_m": 50.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.001525
   },
   {
     "name": "Scotland",
@@ -365,9 +365,9 @@
     "group": "C",
     "elo": 1767,
     "fifa_rank": 29,
-    "squad_value_m": null,
+    "squad_value_m": 180.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.002133
   },
   {
     "name": "Senegal",
@@ -375,9 +375,9 @@
     "group": "A",
     "elo": 1878,
     "fifa_rank": 17,
-    "squad_value_m": null,
+    "squad_value_m": 200.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.00661
   },
   {
     "name": "South Africa",
@@ -385,9 +385,9 @@
     "group": "A",
     "elo": 1524,
     "fifa_rank": 79,
-    "squad_value_m": null,
+    "squad_value_m": 40.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.001069
   },
   {
     "name": "South Korea",
@@ -395,9 +395,9 @@
     "group": "A",
     "elo": 1752,
     "fifa_rank": 33,
-    "squad_value_m": null,
+    "squad_value_m": 200.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.005301
   },
   {
     "name": "Spain",
@@ -405,9 +405,9 @@
     "group": "K",
     "elo": 2165,
     "fifa_rank": 1,
-    "squad_value_m": null,
+    "squad_value_m": 1000.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.06693
   },
   {
     "name": "Sweden",
@@ -415,9 +415,9 @@
     "group": "G",
     "elo": 1719,
     "fifa_rank": 43,
-    "squad_value_m": null,
+    "squad_value_m": 220.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.004425
   },
   {
     "name": "Switzerland",
@@ -425,9 +425,9 @@
     "group": "B",
     "elo": 1889,
     "fifa_rank": 16,
-    "squad_value_m": null,
+    "squad_value_m": 300.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.00661
   },
   {
     "name": "Tunisia",
@@ -435,9 +435,9 @@
     "group": "F",
     "elo": 1636,
     "fifa_rank": 58,
-    "squad_value_m": null,
+    "squad_value_m": 60.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.002133
   },
   {
     "name": "Turkey",
@@ -445,9 +445,9 @@
     "group": "E",
     "elo": 1902,
     "fifa_rank": 14,
-    "squad_value_m": null,
+    "squad_value_m": 350.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.00661
   },
   {
     "name": "United States",
@@ -455,9 +455,9 @@
     "group": "D",
     "elo": 1721,
     "fifa_rank": 41,
-    "squad_value_m": null,
+    "squad_value_m": 350.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.020594
   },
   {
     "name": "Uruguay",
@@ -465,9 +465,9 @@
     "group": "I",
     "elo": 1892,
     "fifa_rank": 15,
-    "squad_value_m": null,
+    "squad_value_m": 400.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.020594
   },
   {
     "name": "Uzbekistan",
@@ -475,8 +475,8 @@
     "group": "J",
     "elo": 1727,
     "fifa_rank": 38,
-    "squad_value_m": null,
+    "squad_value_m": 30.0,
     "flag": "",
-    "implied_prob": null
+    "implied_prob": 0.000713
   }
 ]

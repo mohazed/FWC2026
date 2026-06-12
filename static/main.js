@@ -34,6 +34,32 @@ function getFlag(name) {
   return FLAG_MAP[name] || '🏳️';
 }
 
+// ── HTML escaping for any dynamic string injected via innerHTML ───────────────
+function escapeHtml(value) {
+  if (value === null || value === undefined) return '';
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// ── Show a visible error banner when core bootstrap data fails to load ────────
+function showAppError(message) {
+  let banner = document.getElementById('app-error');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'app-error';
+    banner.setAttribute('role', 'alert');
+    banner.style.cssText =
+      'position:fixed;top:56px;left:0;right:0;z-index:2000;background:var(--red-card);' +
+      'color:#fff;padding:10px 16px;font-family:var(--font-body);font-size:13px;text-align:center;';
+    document.body.appendChild(banner);
+  }
+  banner.textContent = message;
+}
+
 // ── WC titles lookup ──────────────────────────────────────────────────────────
 const WC_TITLES = {
   'Brazil': 5, 'Germany': 4, 'Italy': 4, 'Argentina': 3,
@@ -56,7 +82,9 @@ async function loadChart(elementId, endpoint, opts = {}) {
   if (!el) return;
   el.innerHTML = '<div class="skeleton-shimmer"></div>';
   try {
-    const spec = await fetch(endpoint).then(r => r.json());
+    const r = await fetch(endpoint);
+    if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
+    const spec = await r.json();
     if (spec.error) throw new Error(spec.error);
     el.innerHTML = '';
     await vegaEmbed(`#${elementId}`, spec, {
@@ -74,8 +102,11 @@ async function loadChart(elementId, endpoint, opts = {}) {
 async function populateDropdowns() {
   let teams;
   try {
-    teams = await fetch('/api/teams').then(r => r.json());
-  } catch {
+    const r = await fetch('/api/teams');
+    if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
+    teams = await r.json();
+  } catch (err) {
+    showAppError(`Could not load team data (${err.message}). Some sections may be empty — try refreshing.`);
     return [];
   }
   if (!Array.isArray(teams)) return [];
@@ -126,9 +157,9 @@ async function loadScorers() {
       return `
       <tr style="${rowBg}">
         <td style="color:var(--muted);font-size:11px;background:transparent;">${i + 1}</td>
-        <td style="font-weight:500;background:transparent;">${s.player}</td>
-        <td style="font-size:12px;background:transparent;">${getFlag(s.team)} ${s.team}</td>
-        <td style="font-family:var(--font-data);text-align:center;font-weight:700;color:var(--trophy-gold);background:transparent;">${s.goals}</td>
+        <td style="font-weight:500;background:transparent;">${escapeHtml(s.player)}</td>
+        <td style="font-size:12px;background:transparent;">${getFlag(s.team)} ${escapeHtml(s.team)}</td>
+        <td style="font-family:var(--font-data);text-align:center;font-weight:700;color:var(--trophy-gold);background:transparent;">${escapeHtml(s.goals)}</td>
         <td style="font-family:var(--font-data);text-align:center;background:transparent;">—</td>
         <td style="font-family:var(--font-data);text-align:center;background:transparent;">—</td>
       </tr>`;
@@ -152,42 +183,20 @@ async function loadScorers() {
 async function loadOverview() {
   // Group standings
   try {
-    const groups = await fetch('/api/standings').then(r => r.json());
+    const r = await fetch('/api/standings');
+    if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
+    const groups = await r.json();
     const container = document.getElementById('groups-container');
     if (container && Array.isArray(groups) && groups.length > 0) {
-      container.innerHTML = '';
-      groups.forEach(g => {
-        const teams = g.teams || [];
-        const rows = teams.map((t, i) => {
-          let trStyle = '';
-          if (i < 2) trStyle = 'style="border-left:3px solid var(--data-teal);"';
-          else if (t.status === 'eliminated') trStyle = 'style="opacity:0.45;"';
-          const gd = (t.gd > 0 ? '+' : '') + t.gd;
-          const played = (t.w || 0) + (t.d || 0) + (t.l || 0);
-          return `<tr ${trStyle}>
-            <td class="team-cell"><div class="team-cell-inner"><span class="team-flag">${getFlag(t.name)}</span><span class="team-name" title="${t.name}">${t.name}</span></div></td>
-            <td style="text-align:center;font-family:var(--font-data);">${played}</td>
-            <td style="text-align:center;font-family:var(--font-data);">${gd}</td>
-            <td style="text-align:center;font-family:var(--font-data);font-weight:700;">${t.pts}</td>
-          </tr>`;
-        }).join('');
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <div style="font-family:var(--font-display);font-size:22px;color:var(--pitch-night);margin-bottom:var(--sp-sm);">Group ${g.group}</div>
-          <table class="data-table standings-table">
-            <thead><tr>
-              <th>Team</th>
-              <th style="text-align:center;">P</th>
-              <th style="text-align:center;">GD</th>
-              <th style="text-align:center;">Pts</th>
-            </tr></thead>
-            <tbody>${rows}</tbody>
-          </table>`;
-        container.appendChild(card);
-      });
+      container.innerHTML = renderStandings(groups);
+      const remaining = groups.reduce(
+        (n, g) => n + (g.teams || []).filter(t => t.status !== 'eliminated').length, 0);
+      const teamsEl = document.getElementById('stat-teams');
+      if (teamsEl) teamsEl.querySelector('.stat-number').textContent = remaining || 48;
     }
-  } catch {}
+  } catch (err) {
+    showAppError(`Could not load standings (${err.message}).`);
+  }
 
   // Match stats + results strip
   try {
@@ -203,15 +212,15 @@ async function loadOverview() {
       setStatNum('stat-goals',   goals);
       setStatNum('stat-matches', played.length);
       setStatNum('stat-teams',   48);
-      setStatNum('stat-xg', played.length > 0 ? (goals / played.length).toFixed(1) : '—');
+      setStatNum('stat-gpm', played.length > 0 ? (goals / played.length).toFixed(1) : '—');
 
       const strip = document.getElementById('results-strip');
       if (strip) {
         if (played.length > 0) {
           strip.innerHTML = played.slice(-10).reverse().map(m =>
             `<span class="badge badge-green" style="font-size:12px;padding:6px 12px;border-radius:var(--radius);white-space:nowrap;">
-              ${getFlag(m.home)} ${m.home} ${m.score_h}–${m.score_a} ${m.away} ${getFlag(m.away)}
-              · ${m.group ? 'Group ' + m.group : m.stage || ''}
+              ${getFlag(m.home)} ${escapeHtml(m.home)} ${escapeHtml(m.score_h)}–${escapeHtml(m.score_a)} ${escapeHtml(m.away)} ${getFlag(m.away)}
+              · ${m.group ? 'Group ' + escapeHtml(m.group) : escapeHtml(m.stage || '')}
             </span>`
           ).join('');
         } else {
@@ -221,11 +230,50 @@ async function loadOverview() {
 
       // Live results panel
       renderLiveResults(played);
+
+      // Only show LIVE badges once real results exist.
+      const isLive = played.length > 0;
+      const navBadge = document.getElementById('nav-live-badge');
+      const liveBadge = document.getElementById('live-section-badge');
+      if (navBadge) navBadge.style.display = isLive ? '' : 'none';
+      if (liveBadge) liveBadge.style.display = isLive ? '' : 'none';
     }
   } catch {}
 
   const lu = document.getElementById('last-updated');
   if (lu) lu.textContent = new Date().toLocaleTimeString();
+}
+
+function renderStandings(groups) {
+  return groups.map(g => {
+    const teams = g.teams || [];
+    const rows = teams.map((t, i) => {
+      let trStyle = '';
+      if (i < 2) trStyle = 'style="border-left:3px solid var(--data-teal);"';
+      else if (t.status === 'eliminated') trStyle = 'style="opacity:0.45;"';
+      const gd = (t.gd > 0 ? '+' : '') + t.gd;
+      const played = (t.w || 0) + (t.d || 0) + (t.l || 0);
+      const name = escapeHtml(t.name);
+      return `<tr ${trStyle}>
+        <td class="team-cell"><div class="team-cell-inner"><span class="team-flag">${getFlag(t.name)}</span><span class="team-name" title="${name}">${name}</span></div></td>
+        <td style="text-align:center;font-family:var(--font-data);">${played}</td>
+        <td style="text-align:center;font-family:var(--font-data);">${gd}</td>
+        <td style="text-align:center;font-family:var(--font-data);font-weight:700;">${t.pts}</td>
+      </tr>`;
+    }).join('');
+    return `<div class="card">
+      <div style="font-family:var(--font-display);font-size:22px;color:var(--pitch-night);margin-bottom:var(--sp-sm);">Group ${escapeHtml(g.group)}</div>
+      <table class="data-table standings-table">
+        <thead><tr>
+          <th>Team</th>
+          <th style="text-align:center;">P</th>
+          <th style="text-align:center;">GD</th>
+          <th style="text-align:center;">Pts</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+  }).join('');
 }
 
 function renderLiveResults(played) {
@@ -235,9 +283,9 @@ function renderLiveResults(played) {
     liveResults.innerHTML = played.slice(-8).reverse().map(m =>
       `<div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius);padding:var(--sp-md);margin-bottom:var(--sp-sm);">
         <div style="font-family:var(--font-display);font-size:20px;letter-spacing:0.05em;margin-bottom:4px;">
-          ${getFlag(m.home)} ${m.home}  ${m.score_h ?? '?'}–${m.score_a ?? '?'}  ${m.away} ${getFlag(m.away)}
+          ${getFlag(m.home)} ${escapeHtml(m.home)}  ${escapeHtml(m.score_h ?? '?')}–${escapeHtml(m.score_a ?? '?')}  ${escapeHtml(m.away)} ${getFlag(m.away)}
         </div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.4);">${m.group ? 'Group ' + m.group : m.stage || ''} · ${m.date || ''}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);">${m.group ? 'Group ' + escapeHtml(m.group) : escapeHtml(m.stage || '')} · ${escapeHtml(m.date || '')}</div>
       </div>`
     ).join('');
   } else {
@@ -330,12 +378,12 @@ function loadSquadTable(squad) {
   const tbody = document.getElementById('squad-tbody');
   if (!tbody) return;
   tbody.innerHTML = squad.map((p, i) => `
-    <tr data-pos="${p.pos || ''}">
+    <tr data-pos="${escapeHtml(p.pos || '')}">
       <td style="color:var(--muted);font-size:11px;">${i + 1}</td>
-      <td style="font-weight:500;">${p.name || '—'}</td>
-      <td><span class="badge badge-teal">${p.pos || '—'}</span></td>
-      <td style="font-family:var(--font-data);">${p.age || '—'}</td>
-      <td style="font-size:12px;color:var(--muted);">${p.club || '—'}</td>
+      <td style="font-weight:500;">${escapeHtml(p.name || '—')}</td>
+      <td><span class="badge badge-teal">${escapeHtml(p.pos || '—')}</span></td>
+      <td style="font-family:var(--font-data);">${escapeHtml(p.age || '—')}</td>
+      <td style="font-size:12px;color:var(--muted);">${escapeHtml(p.club || '—')}</td>
       <td style="font-family:var(--font-data);text-align:center;">${p.caps ?? '—'}</td>
       <td style="font-family:var(--font-data);text-align:center;">${p.goals ?? '—'}</td>
     </tr>`).join('');
@@ -343,8 +391,12 @@ function loadSquadTable(squad) {
 
 // ── 5a. Heatmap confederation filter ─────────────────────────────────────────
 window.filterHeatmap = function (btn) {
-  document.querySelectorAll('#heatmap-filters .filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#heatmap-filters .filter-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-pressed', 'false');
+  });
   btn.classList.add('active');
+  btn.setAttribute('aria-pressed', 'true');
   const conf = btn.dataset.conf;
   const endpoint = conf === 'all'
     ? '/charts/heatmap'
@@ -354,8 +406,14 @@ window.filterHeatmap = function (btn) {
 
 // ── 5. Squad position filter ──────────────────────────────────────────────────
 window.filterSquad = function (btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  // Scope to the squad filter group only, so heatmap filter state is untouched.
+  const group = btn.parentElement;
+  if (group) group.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-pressed', 'false');
+  });
   btn.classList.add('active');
+  btn.setAttribute('aria-pressed', 'true');
   const pos = btn.dataset.pos;
   document.querySelectorAll('#squad-tbody tr').forEach(row => {
     row.style.display = (pos === 'all' || row.dataset.pos === pos) ? '' : 'none';
@@ -461,7 +519,7 @@ function renderH2HHistory(matches, nameA, nameB) {
 
   if (!Array.isArray(matches) || matches.length === 0) {
     el.innerHTML = `<p style="color:var(--muted);font-size:13px;padding:var(--sp-xl);text-align:center;margin:0;">
-      No World Cup meetings between ${nameA} and ${nameB}
+      No World Cup meetings between ${escapeHtml(nameA)} and ${escapeHtml(nameB)}
     </p>`;
     return;
   }
@@ -492,16 +550,16 @@ function renderH2HHistory(matches, nameA, nameB) {
     const nsa = Number(sa), nsb = Number(sb);
     let resultHtml;
     if (!isNaN(nsa) && !isNaN(nsb)) {
-      if (nsa > nsb) resultHtml = `<span style="color:var(--data-teal);font-weight:700;">${nameA}</span>`;
-      else if (nsb > nsa) resultHtml = `<span style="color:var(--red-card);font-weight:700;">${nameB}</span>`;
+      if (nsa > nsb) resultHtml = `<span style="color:var(--data-teal);font-weight:700;">${escapeHtml(nameA)}</span>`;
+      else if (nsb > nsa) resultHtml = `<span style="color:var(--red-card);font-weight:700;">${escapeHtml(nameB)}</span>`;
       else resultHtml = `<span style="color:var(--muted);">Draw</span>`;
     } else {
       resultHtml = '<span style="color:var(--muted);">—</span>';
     }
     return `<tr>
-      <td style="font-family:var(--font-data);">${m.year || '?'}</td>
-      <td style="font-size:12px;color:var(--muted);">${m.stage || '—'}</td>
-      <td style="font-family:var(--font-display);font-size:18px;text-align:center;">${sa} – ${sb}</td>
+      <td style="font-family:var(--font-data);">${escapeHtml(m.year || '?')}</td>
+      <td style="font-size:12px;color:var(--muted);">${escapeHtml(m.stage || '—')}</td>
+      <td style="font-family:var(--font-display);font-size:18px;text-align:center;">${escapeHtml(sa)} – ${escapeHtml(sb)}</td>
       <td>${resultHtml}</td>
     </tr>`;
   }).join('');
@@ -509,7 +567,7 @@ function renderH2HHistory(matches, nameA, nameB) {
   el.innerHTML = `
     <div class="card" style="overflow-x:auto;">
       <div style="font-family:var(--font-display);font-size:20px;color:var(--pitch-night);margin-bottom:var(--sp-sm);">
-        World Cup History · ${nameA} vs ${nameB}
+        World Cup History · ${escapeHtml(nameA)} vs ${escapeHtml(nameB)}
       </div>
       <div style="display:flex;gap:var(--sp-lg);margin-bottom:var(--sp-md);align-items:center;">
         <span style="font-family:var(--font-display);font-size:28px;color:var(--data-teal);">${wA}</span>
@@ -548,7 +606,15 @@ function bindRefresh() {
     btn.textContent = 'Refreshing…';
     btn.disabled = true;
     try {
-      await fetch('/api/refresh', { method: 'POST' });
+      const refreshResp = await fetch('/api/refresh', { method: 'POST' });
+      if (!refreshResp.ok) {
+        // 503 = live sync disabled on this deployment; reload from static data anyway.
+        const info = await refreshResp.json().catch(() => ({}));
+        if (refreshResp.status !== 503) {
+          showAppError(`Live refresh failed (${info.error || refreshResp.status}).`);
+        }
+      }
+
       const matches = await fetch('/api/matches').then(r => r.json());
       if (Array.isArray(matches)) {
         const played = matches.filter(m => m.played);
@@ -560,50 +626,24 @@ function bindRefresh() {
         };
         setStatNum('stat-goals',   goals);
         setStatNum('stat-matches', played.length);
-        setStatNum('stat-xg', played.length > 0 ? (goals / played.length).toFixed(1) : '—');
+        setStatNum('stat-gpm', played.length > 0 ? (goals / played.length).toFixed(1) : '—');
       }
+
       const groups = await fetch('/api/standings').then(r => r.json());
       if (Array.isArray(groups)) {
         const container = document.getElementById('groups-container');
-        if (container) {
-          container.innerHTML = '';
-          groups.forEach(g => {
-            const teams = g.teams || [];
-            const rows = teams.map((t, i) => {
-              let trStyle = '';
-              if (i < 2) trStyle = 'style="border-left:3px solid var(--data-teal);"';
-              else if (t.status === 'eliminated') trStyle = 'style="opacity:0.45;"';
-              const gd = (t.gd > 0 ? '+' : '') + t.gd;
-              const played = (t.w || 0) + (t.d || 0) + (t.l || 0);
-              return `<tr ${trStyle}>
-                <td class="team-cell"><div class="team-cell-inner"><span class="team-flag">${getFlag(t.name)}</span><span class="team-name" title="${t.name}">${t.name}</span></div></td>
-                <td style="text-align:center;font-family:var(--font-data);">${played}</td>
-                <td style="text-align:center;font-family:var(--font-data);">${gd}</td>
-                <td style="text-align:center;font-family:var(--font-data);font-weight:700;">${t.pts}</td>
-              </tr>`;
-            }).join('');
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
-              <div style="font-family:var(--font-display);font-size:22px;color:var(--pitch-night);margin-bottom:var(--sp-sm);">Group ${g.group}</div>
-              <table class="data-table standings-table">
-                <thead><tr>
-                  <th>Team</th>
-                  <th style="text-align:center;">P</th>
-                  <th style="text-align:center;">GD</th>
-                  <th style="text-align:center;">Pts</th>
-                </tr></thead>
-                <tbody>${rows}</tbody>
-              </table>`;
-            container.appendChild(card);
-          });
-        }
+        if (container) container.innerHTML = renderStandings(groups);
       }
+
+      // Reload every live-dependent visual, not just the goals chart.
       loadChart('chart-fbref', '/charts/fbref');
+      loadChart('chart-performance', '/charts/performance');
+      loadScorers();
+
       const lu = document.getElementById('last-updated');
       if (lu) lu.textContent = new Date().toLocaleTimeString();
-    } catch {
-      // silently fail — error state already shown in chart containers
+    } catch (err) {
+      showAppError(`Refresh failed (${err.message}).`);
     } finally {
       btn.textContent = 'Refresh';
       btn.disabled = false;
@@ -699,7 +739,6 @@ async function loadCredibilityChart() {
           </p>
         </div>`
     }
-    console.error('Credibility chart error:', err)
   }
 }
 
@@ -707,28 +746,7 @@ function renderCredibilityInsights(teams) {
   const container = document.getElementById('credibility-insights')
   if (!container || teams.length === 0) return
 
-  // Same American odds as Python — hardcoded to match server-side computation
-  const AMERICAN_ODDS = {
-    'Argentina': -150, 'France': 400, 'Brazil': 450, 'England': 600,
-    'Spain': 700, 'Germany': 1000, 'Portugal': 1400, 'Netherlands': 2000,
-    'United States': 2500, 'Uruguay': 2500, 'Colombia': 3000, 'Morocco': 3000,
-    'Belgium': 3500, 'Mexico': 3500, 'Japan': 5000, 'Croatia': 5000,
-    'Canada': 4500, 'Turkey': 8000, 'Austria': 8000, 'Switzerland': 8000,
-    'South Korea': 10000, 'Ecuador': 10000, 'Senegal': 8000, 'Ivory Coast': 12000,
-    'Norway': 15000, 'Sweden': 12000, 'Algeria': 20000, 'Ghana': 20000,
-    'Scotland': 25000, 'Tunisia': 25000, 'Egypt': 20000, 'Paraguay': 30000,
-    'Czechia': 20000, 'Bosnia and Herzegovina': 25000, 'Iran': 30000,
-    'Saudi Arabia': 35000, 'Australia': 25000, 'DR Congo': 40000,
-    'South Africa': 50000, 'Panama': 50000, 'Cape Verde': 50000, 'Iraq': 60000,
-    'New Zealand': 75000, 'Uzbekistan': 75000, 'Jordan': 75000, 'Qatar': 75000,
-    'Curaçao': 100000, 'Haiti': 150000,
-  }
-
-  function americanToProb(odds) {
-    if (odds >= 0) return 100 / (odds + 100)
-    return Math.abs(odds) / (Math.abs(odds) + 100) * 100
-  }
-
+  // Elo softmax matches the server-side credibility chart.
   const elos = teams.map(t => t.elo || 1700)
   const meanElo = elos.reduce((s, v) => s + v, 0) / elos.length
   const temp = 350
@@ -736,8 +754,10 @@ function renderCredibilityInsights(teams) {
   const sumExp = expElos.reduce((s, v) => s + v, 0)
   const eloProbs = expElos.map(e => (e / sumExp) * 100)
 
-  const rawImplied = teams.map(t => americanToProb(AMERICAN_ODDS[t.name] ?? 10000))
-  const sumImplied = rawImplied.reduce((s, v) => s + v, 0)
+  // Bookmaker probabilities come straight from the API (master_teams.implied_prob),
+  // so there is a single source of truth shared with the server.
+  const rawImplied = teams.map(t => (t.implied_prob != null ? t.implied_prob : 0))
+  const sumImplied = rawImplied.reduce((s, v) => s + v, 0) || 1
   const bookieProbs = rawImplied.map(p => (p / sumImplied) * 100)
 
   const withDivergence = teams.map((t, i) => ({
@@ -785,16 +805,16 @@ function renderCredibilityInsights(teams) {
     <div class="card" style="background: ${card.bg}; border-left: 3px solid ${card.color}; padding: var(--sp-md);">
       <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
                   color: ${card.color}; margin-bottom: 4px; font-family: var(--font-body);">
-        ${card.label}
+        ${escapeHtml(card.label)}
       </div>
-      <div style="font-family: var(--font-display); font-size: 28px; color: #111; line-height: 1;">
-        ${card.team}
+      <div style="font-family: var(--font-display); font-size: 28px; color: var(--pitch-night); line-height: 1;">
+        ${escapeHtml(card.team)}
       </div>
       <div style="font-family: var(--font-data); font-size: 18px; color: ${card.color}; font-weight: 700; margin: 2px 0 6px;">
-        ${card.value}
+        ${escapeHtml(card.value)}
       </div>
-      <div style="font-size: 12px; color: #6B7280; line-height: 1.5; font-family: var(--font-body);">
-        ${card.desc}
+      <div style="font-size: 12px; color: var(--slate); line-height: 1.5; font-family: var(--font-body);">
+        ${escapeHtml(card.desc)}
       </div>
     </div>
   `).join('')

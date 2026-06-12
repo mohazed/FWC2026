@@ -21,7 +21,7 @@
       <a href="#teams"    class="nav-link">Teams</a>
       <a href="#predict"  class="nav-link">Predict</a>
       <a href="#live"     class="nav-link">Live</a>
-      <span class="nav-live">● LIVE</span>
+      <span class="nav-live" id="nav-live-badge" style="display:none;">● LIVE</span>
     </div>
   </nav>
 
@@ -72,7 +72,7 @@
         <h1 class="hero-title">48 NATIONS. ONE TROPHY.</h1>
         <p class="hero-sub">June 11 – July 19, 2026 · USA, Canada &amp; Mexico · 104 Matches</p>
 
-        <div class="grid-4" style="margin-top: var(--sp-xl);">
+        <div class="grid-4" style="margin-top: var(--sp-xl);" aria-live="polite">
           <div class="stat-block" id="stat-goals">
             <span class="stat-number">—</span>
             <div class="stat-label">Goals Scored</div>
@@ -85,9 +85,9 @@
             <span class="stat-number">—</span>
             <div class="stat-label">Matches Played</div>
           </div>
-          <div class="stat-block" id="stat-xg">
+          <div class="stat-block" id="stat-gpm">
             <span class="stat-number">—</span>
-            <div class="stat-label">Avg xG / Match</div>
+            <div class="stat-label">Avg Goals / Match</div>
           </div>
         </div>
       </div>
@@ -175,13 +175,13 @@
             <div>
               <div class="section-eyebrow">Performance across all editions · 2026 qualified nations only</div>
             </div>
-            <div style="display:flex; gap:var(--sp-xs); flex-wrap:wrap;" id="heatmap-filters">
-              <button class="filter-btn active" data-conf="all"      onclick="filterHeatmap(this)">All</button>
-              <button class="filter-btn"        data-conf="UEFA"     onclick="filterHeatmap(this)">UEFA</button>
-              <button class="filter-btn"        data-conf="CONMEBOL" onclick="filterHeatmap(this)">CONMEBOL</button>
-              <button class="filter-btn"        data-conf="CAF"      onclick="filterHeatmap(this)">CAF</button>
-              <button class="filter-btn"        data-conf="AFC"      onclick="filterHeatmap(this)">AFC</button>
-              <button class="filter-btn"        data-conf="CONCACAF" onclick="filterHeatmap(this)">CONCACAF</button>
+            <div style="display:flex; gap:var(--sp-xs); flex-wrap:wrap;" id="heatmap-filters" role="group" aria-label="Filter heatmap by confederation">
+              <button class="filter-btn active" data-conf="all"      aria-pressed="true"  onclick="filterHeatmap(this)">All</button>
+              <button class="filter-btn"        data-conf="UEFA"     aria-pressed="false" onclick="filterHeatmap(this)">UEFA</button>
+              <button class="filter-btn"        data-conf="CONMEBOL" aria-pressed="false" onclick="filterHeatmap(this)">CONMEBOL</button>
+              <button class="filter-btn"        data-conf="CAF"      aria-pressed="false" onclick="filterHeatmap(this)">CAF</button>
+              <button class="filter-btn"        data-conf="AFC"      aria-pressed="false" onclick="filterHeatmap(this)">AFC</button>
+              <button class="filter-btn"        data-conf="CONCACAF" aria-pressed="false" onclick="filterHeatmap(this)">CONCACAF</button>
             </div>
           </div>
           <div class="heatmap-scroll">
@@ -193,7 +193,8 @@
         <div class="card">
           <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:var(--sp-sm); flex-wrap:wrap; margin-bottom:var(--sp-sm);">
             <span style="font-family:var(--font-display); font-size:20px; color:var(--pitch-night);">Elo History</span>
-            <select id="elo-selector" multiple size="5" style="appearance:none; font-family:var(--font-body); font-size:12px; border:1px solid var(--border); border-radius:var(--radius); padding:var(--sp-xs) var(--sp-sm); min-width:160px; cursor:pointer;">
+            <label for="elo-selector" class="sr-only">Select teams for the Elo history chart</label>
+            <select id="elo-selector" multiple size="5" aria-label="Select teams for the Elo history chart" style="appearance:none; font-family:var(--font-body); font-size:12px; border:1px solid var(--border); border-radius:var(--radius); padding:var(--sp-xs) var(--sp-sm); min-width:160px; cursor:pointer;">
               <!-- populated by JS -->
             </select>
           </div>
@@ -374,7 +375,8 @@
         <!-- ── Left Panel ─────────────────────────────────────── -->
         <div style="display:flex; flex-direction:column; gap:var(--sp-md);">
 
-          <select class="team-select" id="team-selector">
+          <label for="team-selector" class="sr-only">Select a team to explore</label>
+          <select class="team-select" id="team-selector" aria-label="Select a team to explore">
             <option value="">Select a team...</option>
           </select>
 
@@ -459,12 +461,12 @@
           <div class="card" style="min-height:260px; grid-column: 1 / -1;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:var(--sp-xs);">
               <span style="font-family:var(--font-display); font-size:18px;">Squad — 26 Players</span>
-              <div style="display:flex; gap:var(--sp-xs);">
-                <button class="filter-btn active" data-pos="all" onclick="filterSquad(this)">All</button>
-                <button class="filter-btn" data-pos="GK"  onclick="filterSquad(this)">GK</button>
-                <button class="filter-btn" data-pos="DEF" onclick="filterSquad(this)">DEF</button>
-                <button class="filter-btn" data-pos="MID" onclick="filterSquad(this)">MID</button>
-                <button class="filter-btn" data-pos="FWD" onclick="filterSquad(this)">FWD</button>
+              <div style="display:flex; gap:var(--sp-xs);" role="group" aria-label="Filter squad by position">
+                <button class="filter-btn active" data-pos="all" aria-pressed="true"  onclick="filterSquad(this)">All</button>
+                <button class="filter-btn" data-pos="GK"  aria-pressed="false" onclick="filterSquad(this)">GK</button>
+                <button class="filter-btn" data-pos="DEF" aria-pressed="false" onclick="filterSquad(this)">DEF</button>
+                <button class="filter-btn" data-pos="MID" aria-pressed="false" onclick="filterSquad(this)">MID</button>
+                <button class="filter-btn" data-pos="FWD" aria-pressed="false" onclick="filterSquad(this)">FWD</button>
               </div>
             </div>
             <div style="max-height:320px; overflow-y:auto; overflow-x:auto;">
@@ -530,7 +532,8 @@
       <div class="h2h-selectors">
 
         <div class="card">
-          <select class="team-select" id="h2h-team-a">
+          <label for="h2h-team-a" class="sr-only">Select Team A</label>
+          <select class="team-select" id="h2h-team-a" aria-label="Select Team A">
             <option value="">Select Team A…</option>
           </select>
           <div style="text-align:center; margin-top:var(--sp-md);">
@@ -543,7 +546,8 @@
         <div class="vs-divider" style="font-size:64px;">VS</div>
 
         <div class="card">
-          <select class="team-select" id="h2h-team-b">
+          <label for="h2h-team-b" class="sr-only">Select Team B</label>
+          <select class="team-select" id="h2h-team-b" aria-label="Select Team B">
             <option value="">Select Team B…</option>
           </select>
           <div style="text-align:center; margin-top:var(--sp-md);">
@@ -641,7 +645,7 @@
 
       <!-- LIVE strip -->
       <div style="display:flex; align-items:center; gap:var(--sp-md); padding-bottom:var(--sp-lg); border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:var(--sp-lg);">
-        <span style="font-family:var(--font-data); font-size:13px; color:var(--red-card); font-weight:700;">🔴 LIVE</span>
+        <span id="live-section-badge" style="font-family:var(--font-data); font-size:13px; color:var(--red-card); font-weight:700; display:none;">🔴 LIVE</span>
         <span style="font-size:13px; color:rgba(255,255,255,0.5);">Last updated: <span id="last-updated">—</span></span>
         <button id="btn-refresh" style="border:1px solid rgba(255,255,255,0.4); color:white; background:transparent; padding:6px 16px; border-radius:var(--radius); cursor:pointer; font-size:12px; font-weight:600; margin-left:auto;">Refresh</button>
       </div>
