@@ -6,7 +6,7 @@ import pandas as pd
 
 BASE_DIR = Path(__file__).parent.parent
 sys.path.insert(0, str(BASE_DIR))
-from api.names import SQUAD_VALUES_M, implied_prob_normalized
+from api.names import SQUAD_VALUES_M, flag_asset_url, flag_code_for, implied_prob_normalized
 
 
 WC_TEAMS_2026 = [
@@ -62,7 +62,8 @@ def main():
             "elo": elo,
             "fifa_rank": fifa_rank,
             "squad_value_m": float(SQUAD_VALUES_M[name]) if name in SQUAD_VALUES_M else None,
-            "flag": "",
+            "flag": flag_asset_url(name),
+            "flag_code": flag_code_for(name),
             "implied_prob": round(implied[name], 6) if name in implied else None,
         })
 

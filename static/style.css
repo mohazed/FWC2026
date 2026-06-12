@@ -328,6 +328,27 @@ nav {
   white-space: nowrap;
 }
 
+.flag-icon {
+  display: inline-block;
+  vertical-align: middle;
+  object-fit: cover;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px var(--border);
+  flex-shrink: 0;
+}
+
+.flag-icon--sm { width: 20px; height: 15px; }
+.flag-icon--md { width: 32px; height: 24px; }
+.flag-icon--lg { width: 48px; height: 36px; }
+
+.flag-icon--fallback {
+  background: var(--pitch-mist);
+}
+
+.standings-table .team-flag .flag-icon {
+  display: block;
+}
+
 /* ─── Charts ─────────────────────────────────────────────────────────────────── */
 
 .chart-container {

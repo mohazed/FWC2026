@@ -1,37 +1,43 @@
 'use strict';
 
-// ── Flag emoji lookup ─────────────────────────────────────────────────────────
-const FLAG_MAP = {
-  'Algeria': '🇩🇿', 'Argentina': '🇦🇷', 'Australia': '🇦🇺', 'Austria': '🇦🇹',
-  'Belgium': '🇧🇪', 'Bolivia': '🇧🇴', 'Brazil': '🇧🇷', 'Cameroon': '🇨🇲',
-  'Canada': '🇨🇦', 'Chile': '🇨🇱', 'Colombia': '🇨🇴', 'Costa Rica': '🇨🇷',
-  'Croatia': '🇭🇷', 'Czech Republic': '🇨🇿', 'Denmark': '🇩🇰', 'Ecuador': '🇪🇨',
-  'Egypt': '🇪🇬', 'England': '🏴󠁧󠁢󠁥󠁮󠁧󠁿', 'France': '🇫🇷', 'Germany': '🇩🇪',
-  'Ghana': '🇬🇭', 'Hungary': '🇭🇺', 'Indonesia': '🇮🇩', 'Iran': '🇮🇷',
-  'Iraq': '🇮🇶', 'Italy': '🇮🇹', 'Ivory Coast': '🇨🇮', 'Jamaica': '🇯🇲',
-  'Japan': '🇯🇵', 'Jordan': '🇯🇴', 'Kenya': '🇰🇪', 'Mali': '🇲🇱',
-  'Mexico': '🇲🇽', 'Morocco': '🇲🇦', 'Netherlands': '🇳🇱', 'New Zealand': '🇳🇿',
-  'Nigeria': '🇳🇬', 'Norway': '🇳🇴', 'Panama': '🇵🇦', 'Paraguay': '🇵🇾',
-  'Peru': '🇵🇪', 'Poland': '🇵🇱', 'Portugal': '🇵🇹', 'Qatar': '🇶🇦',
-  'Republic of Ireland': '🇮🇪', 'Romania': '🇷🇴', 'Saudi Arabia': '🇸🇦',
-  'Scotland': '🏴󠁧󠁢󠁳󠁣󠁴󠁿', 'Senegal': '🇸🇳', 'Serbia': '🇷🇸', 'South Africa': '🇿🇦',
-  'South Korea': '🇰🇷', 'Spain': '🇪🇸', 'Sweden': '🇸🇪', 'Switzerland': '🇨🇭',
-  'Togo': '🇹🇬', 'Tunisia': '🇹🇳', 'Turkey': '🇹🇷', 'Ukraine': '🇺🇦',
-  'United States': '🇺🇸', 'Uruguay': '🇺🇾', 'Venezuela': '🇻🇪', 'Wales': '🏴󠁧󠁢󠁷󠁬󠁳󠁿',
-  'Cuba': '🇨🇺', 'Guatemala': '🇬🇹', 'Honduras': '🇭🇳', 'El Salvador': '🇸🇻',
-  'Paraguay': '🇵🇾', 'Uzbekistan': '🇺🇿', 'China': '🇨🇳', 'Philippines': '🇵🇭',
-  // WC 2026 teams missing from original map
-  'USA': '🇺🇸',
-  'Bosnia & Herzegovina': '🇧🇦', 'Bosnia and Herzegovina': '🇧🇦',
-  'Cape Verde': '🇨🇻',
-  'Curaçao': '🇨🇼',
-  'Czechia': '🇨🇿',
-  'DR Congo': '🇨🇩', 'Democratic Republic of the Congo': '🇨🇩',
-  'Haiti': '🇭🇹',
+// ── Flag images (cross-platform; Unicode flag emoji breaks on Windows) ─────────
+const FLAG_CODES = {
+  'Algeria': 'dz', 'Argentina': 'ar', 'Australia': 'au', 'Austria': 'at',
+  'Belgium': 'be', 'Bosnia and Herzegovina': 'ba', 'Brazil': 'br', 'Canada': 'ca',
+  'Cape Verde': 'cv', 'Colombia': 'co', 'Croatia': 'hr', 'Curaçao': 'cw',
+  'Czechia': 'cz', 'DR Congo': 'cd', 'Ecuador': 'ec', 'Egypt': 'eg',
+  'England': 'gb-eng', 'France': 'fr', 'Germany': 'de', 'Ghana': 'gh',
+  'Haiti': 'ht', 'Iran': 'ir', 'Iraq': 'iq', 'Ivory Coast': 'ci',
+  'Japan': 'jp', 'Jordan': 'jo', 'Mexico': 'mx', 'Morocco': 'ma',
+  'Netherlands': 'nl', 'New Zealand': 'nz', 'Norway': 'no', 'Panama': 'pa',
+  'Paraguay': 'py', 'Portugal': 'pt', 'Qatar': 'qa', 'Saudi Arabia': 'sa',
+  'Scotland': 'gb-sct', 'Senegal': 'sn', 'South Africa': 'za', 'South Korea': 'kr',
+  'Spain': 'es', 'Sweden': 'se', 'Switzerland': 'ch', 'Tunisia': 'tn',
+  'Turkey': 'tr', 'United States': 'us', 'Uruguay': 'uy', 'Uzbekistan': 'uz',
 };
 
-function getFlag(name) {
-  return FLAG_MAP[name] || '🏳️';
+let _allTeams = [];
+
+function flagCodeFor(name) {
+  const team = _allTeams.find(t => t.name === name);
+  if (team && team.flag_code) return team.flag_code;
+  return FLAG_CODES[name] || 'un';
+}
+
+function renderFlag(name, size = 'sm') {
+  if (!name) return '';
+  const code = flagCodeFor(name);
+  const px = { sm: 20, md: 32, lg: 48 }[size] || 20;
+  const srcW = px * 2;
+  const h = Math.round(px * 0.75);
+  const fallback = `https://flagcdn.com/w${srcW}/un.png`;
+  const src = `https://flagcdn.com/w${srcW}/${code}.png`;
+  return `<img class="flag-icon flag-icon--${size}" src="${src}" alt="" width="${px}" height="${h}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${fallback}';">`;
+}
+
+function setFlagElement(el, name, size = 'lg') {
+  if (!el) return;
+  el.innerHTML = name ? renderFlag(name, size) : '';
 }
 
 // ── HTML escaping for any dynamic string injected via innerHTML ───────────────
@@ -185,7 +191,7 @@ async function populateDropdowns() {
     teams.forEach(t => {
       const opt = document.createElement('option');
       opt.value = t.name;
-      opt.textContent = `${getFlag(t.name)} ${t.name}`;
+      opt.textContent = t.name;
       sel.appendChild(opt);
     });
   });
@@ -223,7 +229,7 @@ async function loadScorers() {
       <tr style="${rowBg}">
         <td style="color:var(--muted);font-size:11px;background:transparent;">${i + 1}</td>
         <td style="font-weight:500;background:transparent;">${escapeHtml(s.player)}</td>
-        <td style="font-size:12px;background:transparent;">${getFlag(s.team)} ${escapeHtml(s.team)}</td>
+        <td style="font-size:12px;background:transparent;">${renderFlag(s.team, 'sm')} ${escapeHtml(s.team)}</td>
         <td style="font-family:var(--font-data);text-align:center;font-weight:700;color:var(--trophy-gold);background:transparent;">${escapeHtml(s.goals)}</td>
         <td style="font-family:var(--font-data);text-align:center;background:transparent;">—</td>
         <td style="font-family:var(--font-data);text-align:center;background:transparent;">—</td>
@@ -284,7 +290,7 @@ async function loadOverview() {
         if (played.length > 0) {
           strip.innerHTML = played.slice(-10).reverse().map(m =>
             `<span class="badge badge-green" style="font-size:12px;padding:6px 12px;border-radius:var(--radius);white-space:nowrap;">
-              ${getFlag(m.home)} ${escapeHtml(m.home)} ${escapeHtml(m.score_h)}–${escapeHtml(m.score_a)} ${escapeHtml(m.away)} ${getFlag(m.away)}
+              ${renderFlag(m.home, 'sm')} ${escapeHtml(m.home)} ${escapeHtml(m.score_h)}–${escapeHtml(m.score_a)} ${escapeHtml(m.away)} ${renderFlag(m.away, 'sm')}
               · ${m.group ? 'Group ' + escapeHtml(m.group) : escapeHtml(m.stage || '')}
             </span>`
           ).join('');
@@ -320,7 +326,7 @@ function renderStandings(groups) {
       const played = (t.w || 0) + (t.d || 0) + (t.l || 0);
       const name = escapeHtml(t.name);
       return `<tr ${trStyle}>
-        <td class="team-cell"><div class="team-cell-inner"><span class="team-flag">${getFlag(t.name)}</span><span class="team-name" title="${name}">${name}</span></div></td>
+        <td class="team-cell"><div class="team-cell-inner"><span class="team-flag">${renderFlag(t.name, 'sm')}</span><span class="team-name" title="${name}">${name}</span></div></td>
         <td style="text-align:center;font-family:var(--font-data);">${played}</td>
         <td style="text-align:center;font-family:var(--font-data);">${gd}</td>
         <td style="text-align:center;font-family:var(--font-data);font-weight:700;">${t.pts}</td>
@@ -348,7 +354,7 @@ function renderLiveResults(played) {
     liveResults.innerHTML = played.slice(-8).reverse().map(m =>
       `<div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius);padding:var(--sp-md);margin-bottom:var(--sp-sm);">
         <div style="font-family:var(--font-display);font-size:20px;letter-spacing:0.05em;margin-bottom:4px;">
-          ${getFlag(m.home)} ${escapeHtml(m.home)}  ${escapeHtml(m.score_h ?? '?')}–${escapeHtml(m.score_a ?? '?')}  ${escapeHtml(m.away)} ${getFlag(m.away)}
+          ${renderFlag(m.home, 'sm')} ${escapeHtml(m.home)}  ${escapeHtml(m.score_h ?? '?')}–${escapeHtml(m.score_a ?? '?')}  ${escapeHtml(m.away)} ${renderFlag(m.away, 'sm')}
         </div>
         <div style="font-size:11px;color:rgba(255,255,255,0.4);">${m.group ? 'Group ' + escapeHtml(m.group) : escapeHtml(m.stage || '')} · ${escapeHtml(m.date || '')}</div>
       </div>`
@@ -362,7 +368,6 @@ function renderLiveResults(played) {
 }
 
 // ── 4. Team Explorer ──────────────────────────────────────────────────────────
-let _allTeams = [];
 
 function bindTeamExplorer() {
   const sel = document.getElementById('team-selector');
@@ -380,7 +385,7 @@ async function loadTeam(country) {
   // Update profile card
   const flagEl = document.getElementById('team-flag');
   const nameEl = document.getElementById('team-name');
-  if (flagEl) flagEl.textContent = getFlag(country);
+  if (flagEl) setFlagElement(flagEl, country, 'lg');
   if (nameEl) nameEl.textContent = country;
 
   const confBadge = document.getElementById('badge-confederation');
@@ -503,9 +508,9 @@ async function loadH2H(a, b) {
 
   // Update header cards
   const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-  setText('h2h-flag-a', getFlag(a));
+  setFlagElement(document.getElementById('h2h-flag-a'), a, 'lg');
   setText('h2h-name-a', a);
-  setText('h2h-flag-b', getFlag(b));
+  setFlagElement(document.getElementById('h2h-flag-b'), b, 'lg');
   setText('h2h-name-b', b);
   const confA = document.getElementById('h2h-conf-a');
   const confB = document.getElementById('h2h-conf-b');
@@ -897,6 +902,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Populate dropdowns and store team list
   _allTeams = await populateDropdowns();
+
+  // Default Team Explorer selection + flag on first load
+  const teamSel = document.getElementById('team-selector');
+  if (teamSel && _allTeams.length > 0) {
+    if (!teamSel.value) teamSel.value = 'France';
+    if (teamSel.value) loadTeam(teamSel.value);
+  }
 
   // Wire up all interactive sections
   bindTeamExplorer();

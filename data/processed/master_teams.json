@@ -6,7 +6,8 @@
     "elo": 1743,
     "fifa_rank": 35,
     "squad_value_m": 100.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/dz.png",
+    "flag_code": "dz",
     "implied_prob": 0.002664
   },
   {
@@ -16,7 +17,8 @@
     "elo": 2113,
     "fifa_rank": 2,
     "squad_value_m": 700.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/ar.png",
+    "flag_code": "ar",
     "implied_prob": 0.321264
   },
   {
@@ -26,7 +28,8 @@
     "elo": 1783,
     "fifa_rank": 26,
     "squad_value_m": 100.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/au.png",
+    "flag_code": "au",
     "implied_prob": 0.002133
   },
   {
@@ -36,7 +39,8 @@
     "elo": 1827,
     "fifa_rank": 23,
     "squad_value_m": 250.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/at.png",
+    "flag_code": "at",
     "implied_prob": 0.00661
   },
   {
@@ -46,7 +50,8 @@
     "elo": 1867,
     "fifa_rank": 19,
     "squad_value_m": 500.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/be.png",
+    "flag_code": "be",
     "implied_prob": 0.014873
   },
   {
@@ -56,7 +61,8 @@
     "elo": 1594,
     "fifa_rank": 66,
     "squad_value_m": 100.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/ba.png",
+    "flag_code": "ba",
     "implied_prob": 0.002133
   },
   {
@@ -66,7 +72,8 @@
     "elo": 1984,
     "fifa_rank": 5,
     "squad_value_m": 900.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/br.png",
+    "flag_code": "br",
     "implied_prob": 0.097353
   },
   {
@@ -76,7 +83,8 @@
     "elo": 1784,
     "fifa_rank": 25,
     "squad_value_m": 150.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/ca.png",
+    "flag_code": "ca",
     "implied_prob": 0.01164
   },
   {
@@ -86,7 +94,8 @@
     "elo": 1549,
     "fifa_rank": 72,
     "squad_value_m": 30.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/cv.png",
+    "flag_code": "cv",
     "implied_prob": 0.001069
   },
   {
@@ -96,7 +105,8 @@
     "elo": 1975,
     "fifa_rank": 7,
     "squad_value_m": 350.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/co.png",
+    "flag_code": "co",
     "implied_prob": 0.017272
   },
   {
@@ -106,7 +116,8 @@
     "elo": 1930,
     "fifa_rank": 10,
     "squad_value_m": 280.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/hr.png",
+    "flag_code": "hr",
     "implied_prob": 0.010499
   },
   {
@@ -116,7 +127,8 @@
     "elo": 1436,
     "fifa_rank": 90,
     "squad_value_m": 15.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/cw.png",
+    "flag_code": "cw",
     "implied_prob": 0.000535
   },
   {
@@ -126,7 +138,8 @@
     "elo": 1726,
     "fifa_rank": 40,
     "squad_value_m": 200.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/cz.png",
+    "flag_code": "cz",
     "implied_prob": 0.002664
   },
   {
@@ -136,7 +149,8 @@
     "elo": 1655,
     "fifa_rank": 54,
     "squad_value_m": 40.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/cd.png",
+    "flag_code": "cd",
     "implied_prob": 0.001335
   },
   {
@@ -146,7 +160,8 @@
     "elo": 1933,
     "fifa_rank": 9,
     "squad_value_m": 120.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/ec.png",
+    "flag_code": "ec",
     "implied_prob": 0.005301
   },
   {
@@ -156,7 +171,8 @@
     "elo": 1689,
     "fifa_rank": 51,
     "squad_value_m": 130.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/eg.png",
+    "flag_code": "eg",
     "implied_prob": 0.002664
   },
   {
@@ -166,7 +182,8 @@
     "elo": 2020,
     "fifa_rank": 4,
     "squad_value_m": 1150.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/gb-eng.png",
+    "flag_code": "gb-eng",
     "implied_prob": 0.076491
   },
   {
@@ -176,7 +193,8 @@
     "elo": 2081,
     "fifa_rank": 3,
     "squad_value_m": 1100.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/fr.png",
+    "flag_code": "fr",
     "implied_prob": 0.107088
   },
   {
@@ -186,7 +204,8 @@
     "elo": 1923,
     "fifa_rank": 11,
     "squad_value_m": 850.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/de.png",
+    "flag_code": "de",
     "implied_prob": 0.048676
   },
   {
@@ -196,7 +215,8 @@
     "elo": 1503,
     "fifa_rank": 82,
     "squad_value_m": 80.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/gh.png",
+    "flag_code": "gh",
     "implied_prob": 0.002664
   },
   {
@@ -206,7 +226,8 @@
     "elo": 1532,
     "fifa_rank": 77,
     "squad_value_m": 10.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/ht.png",
+    "flag_code": "ht",
     "implied_prob": 0.000357
   },
   {
@@ -216,7 +237,8 @@
     "elo": 1760,
     "fifa_rank": 31,
     "squad_value_m": 30.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/ir.png",
+    "flag_code": "ir",
     "implied_prob": 0.001779
   },
   {
@@ -226,7 +248,8 @@
     "elo": 1607,
     "fifa_rank": 63,
     "squad_value_m": 20.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/iq.png",
+    "flag_code": "iq",
     "implied_prob": 0.000891
   },
   {
@@ -236,7 +259,8 @@
     "elo": 1676,
     "fifa_rank": 52,
     "squad_value_m": 200.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/ci.png",
+    "flag_code": "ci",
     "implied_prob": 0.004425
   },
   {
@@ -246,7 +270,8 @@
     "elo": 1904,
     "fifa_rank": 13,
     "squad_value_m": 200.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/jp.png",
+    "flag_code": "jp",
     "implied_prob": 0.010499
   },
   {
@@ -256,7 +281,8 @@
     "elo": 1690,
     "fifa_rank": 50,
     "squad_value_m": 15.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/jo.png",
+    "flag_code": "jo",
     "implied_prob": 0.000713
   },
   {
@@ -266,7 +292,8 @@
     "elo": 1860,
     "fifa_rank": 20,
     "squad_value_m": 250.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/mx.png",
+    "flag_code": "mx",
     "implied_prob": 0.014873
   },
   {
@@ -276,7 +303,8 @@
     "elo": 1822,
     "fifa_rank": 24,
     "squad_value_m": 300.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/ma.png",
+    "flag_code": "ma",
     "implied_prob": 0.017272
   },
   {
@@ -286,7 +314,8 @@
     "elo": 1961,
     "fifa_rank": 8,
     "squad_value_m": 650.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/nl.png",
+    "flag_code": "nl",
     "implied_prob": 0.025497
   },
   {
@@ -296,7 +325,8 @@
     "elo": 1585,
     "fifa_rank": 68,
     "squad_value_m": 20.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/nz.png",
+    "flag_code": "nz",
     "implied_prob": 0.000713
   },
   {
@@ -306,7 +336,8 @@
     "elo": 1912,
     "fifa_rank": 12,
     "squad_value_m": 350.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/no.png",
+    "flag_code": "no",
     "implied_prob": 0.003546
   },
   {
@@ -316,7 +347,8 @@
     "elo": 1737,
     "fifa_rank": 36,
     "squad_value_m": 20.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/pa.png",
+    "flag_code": "pa",
     "implied_prob": 0.001069
   },
   {
@@ -326,7 +358,8 @@
     "elo": 1833,
     "fifa_rank": 22,
     "squad_value_m": 50.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/py.png",
+    "flag_code": "py",
     "implied_prob": 0.001779
   },
   {
@@ -336,7 +369,8 @@
     "elo": 1984,
     "fifa_rank": 5,
     "squad_value_m": 850.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/pt.png",
+    "flag_code": "pt",
     "implied_prob": 0.035696
   },
   {
@@ -346,7 +380,8 @@
     "elo": 1425,
     "fifa_rank": 95,
     "squad_value_m": 40.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/qa.png",
+    "flag_code": "qa",
     "implied_prob": 0.000713
   },
   {
@@ -356,7 +391,8 @@
     "elo": 1568,
     "fifa_rank": 71,
     "squad_value_m": 50.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/sa.png",
+    "flag_code": "sa",
     "implied_prob": 0.001525
   },
   {
@@ -366,7 +402,8 @@
     "elo": 1767,
     "fifa_rank": 29,
     "squad_value_m": 180.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/gb-sct.png",
+    "flag_code": "gb-sct",
     "implied_prob": 0.002133
   },
   {
@@ -376,7 +413,8 @@
     "elo": 1878,
     "fifa_rank": 17,
     "squad_value_m": 200.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/sn.png",
+    "flag_code": "sn",
     "implied_prob": 0.00661
   },
   {
@@ -386,7 +424,8 @@
     "elo": 1524,
     "fifa_rank": 79,
     "squad_value_m": 40.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/za.png",
+    "flag_code": "za",
     "implied_prob": 0.001069
   },
   {
@@ -396,7 +435,8 @@
     "elo": 1752,
     "fifa_rank": 33,
     "squad_value_m": 200.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/kr.png",
+    "flag_code": "kr",
     "implied_prob": 0.005301
   },
   {
@@ -406,7 +446,8 @@
     "elo": 2165,
     "fifa_rank": 1,
     "squad_value_m": 1000.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/es.png",
+    "flag_code": "es",
     "implied_prob": 0.06693
   },
   {
@@ -416,7 +457,8 @@
     "elo": 1719,
     "fifa_rank": 43,
     "squad_value_m": 220.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/se.png",
+    "flag_code": "se",
     "implied_prob": 0.004425
   },
   {
@@ -426,7 +468,8 @@
     "elo": 1889,
     "fifa_rank": 16,
     "squad_value_m": 300.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/ch.png",
+    "flag_code": "ch",
     "implied_prob": 0.00661
   },
   {
@@ -436,7 +479,8 @@
     "elo": 1636,
     "fifa_rank": 58,
     "squad_value_m": 60.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/tn.png",
+    "flag_code": "tn",
     "implied_prob": 0.002133
   },
   {
@@ -446,7 +490,8 @@
     "elo": 1902,
     "fifa_rank": 14,
     "squad_value_m": 350.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/tr.png",
+    "flag_code": "tr",
     "implied_prob": 0.00661
   },
   {
@@ -456,7 +501,8 @@
     "elo": 1721,
     "fifa_rank": 41,
     "squad_value_m": 350.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/us.png",
+    "flag_code": "us",
     "implied_prob": 0.020594
   },
   {
@@ -466,7 +512,8 @@
     "elo": 1892,
     "fifa_rank": 15,
     "squad_value_m": 400.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/uy.png",
+    "flag_code": "uy",
     "implied_prob": 0.020594
   },
   {
@@ -476,7 +523,8 @@
     "elo": 1727,
     "fifa_rank": 38,
     "squad_value_m": 30.0,
-    "flag": "",
+    "flag": "https://flagcdn.com/w40/uz.png",
+    "flag_code": "uz",
     "implied_prob": 0.000713
   }
 ]
