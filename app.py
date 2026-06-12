@@ -1,4 +1,6 @@
 import os
+import asyncio
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
@@ -10,6 +12,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 from api.teams import get_all_teams, get_squad, get_standings
 from api.matches import get_matches, get_h2h
 from api.predict import predict_match, run_montecarlo
+from collectors.live_scores import sync_live_scores
 
 from charts.builders import (
     build_heatmap,
@@ -20,9 +23,36 @@ from charts.builders import (
     build_model_vs_market,
     build_upset_chart,
     build_fbref_chart,
+    build_performance_chart,
 )
 
-app = FastAPI(title="WC 2026 Analytics Dashboard")
+REFRESH_INTERVAL = 600  # seconds (10 minutes)
+
+
+async def _background_refresh():
+    while True:
+        await asyncio.sleep(REFRESH_INTERVAL)
+        try:
+            result = await asyncio.to_thread(sync_live_scores)
+            print(f"[auto-refresh] {result}")
+        except Exception as e:
+            print(f"[auto-refresh] error: {e}")
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Sync on startup so data is fresh immediately
+    try:
+        result = await asyncio.to_thread(sync_live_scores)
+        print(f"[startup] live sync: {result}")
+    except Exception as e:
+        print(f"[startup] live sync failed: {e}")
+    task = asyncio.create_task(_background_refresh())
+    yield
+    task.cancel()
+
+
+app = FastAPI(title="WC 2026 Analytics Dashboard", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -98,6 +128,36 @@ def api_predict(team_a: str, team_b: str):
 def api_montecarlo(n: int = Query(default=500, ge=100, le=2000)):
     try:
         return JSONResponse({"teams": run_montecarlo(n)})
+    except Exception as e:
+        return JSONResponse({"error": str(e)}, status_code=500)
+
+
+@app.post("/api/refresh")
+def api_refresh():
+    try:
+        result = sync_live_scores()
+        return JSONResponse(result)
+    except Exception as e:
+        return JSONResponse({"error": str(e)}, status_code=500)
+
+
+@app.get("/api/scorers")
+def api_scorers():
+    try:
+        import json as _json
+        path = os.path.join(BASE_DIR, "data", "processed", "scorers.json")
+        if not os.path.exists(path):
+            return JSONResponse([])
+        with open(path) as f:
+            return JSONResponse(_json.load(f))
+    except Exception as e:
+        return JSONResponse({"error": str(e)}, status_code=500)
+
+
+@app.get("/charts/performance")
+def chart_performance():
+    try:
+        return JSONResponse(build_performance_chart())
     except Exception as e:
         return JSONResponse({"error": str(e)}, status_code=500)
 

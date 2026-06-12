@@ -20,6 +20,14 @@ const FLAG_MAP = {
   'United States': '🇺🇸', 'Uruguay': '🇺🇾', 'Venezuela': '🇻🇪', 'Wales': '🏴󠁧󠁢󠁷󠁬󠁳󠁿',
   'Cuba': '🇨🇺', 'Guatemala': '🇬🇹', 'Honduras': '🇭🇳', 'El Salvador': '🇸🇻',
   'Paraguay': '🇵🇾', 'Uzbekistan': '🇺🇿', 'China': '🇨🇳', 'Philippines': '🇵🇭',
+  // WC 2026 teams missing from original map
+  'USA': '🇺🇸',
+  'Bosnia & Herzegovina': '🇧🇦', 'Bosnia and Herzegovina': '🇧🇦',
+  'Cape Verde': '🇨🇻',
+  'Curaçao': '🇨🇼',
+  'Czechia': '🇨🇿',
+  'DR Congo': '🇨🇩', 'Democratic Republic of the Congo': '🇨🇩',
+  'Haiti': '🇭🇹',
 };
 
 function getFlag(name) {
@@ -104,6 +112,37 @@ async function populateDropdowns() {
 function loadAllCharts() {
   loadChart('chart-heatmap', '/charts/heatmap');
   loadChart('chart-fbref', '/charts/fbref');
+  loadChart('chart-performance', '/charts/performance');
+}
+
+// ── Top Scorers table ─────────────────────────────────────────────────────────
+async function loadScorers() {
+  try {
+    const scorers = await fetch('/api/scorers').then(r => r.json());
+    const container = document.getElementById('live-scorers');
+    if (!container || !Array.isArray(scorers) || scorers.length === 0) return;
+    const rows = scorers.slice(0, 10).map((s, i) => `
+      <tr>
+        <td style="color:var(--muted);font-size:11px;background:transparent;">${i + 1}</td>
+        <td style="font-weight:500;background:transparent;">${s.player}</td>
+        <td style="font-size:12px;background:transparent;">${getFlag(s.team)} ${s.team}</td>
+        <td style="font-family:var(--font-data);text-align:center;font-weight:700;color:var(--trophy-gold);background:transparent;">${s.goals}</td>
+        <td style="font-family:var(--font-data);text-align:center;background:transparent;">—</td>
+        <td style="font-family:var(--font-data);text-align:center;background:transparent;">—</td>
+      </tr>`).join('');
+    container.innerHTML = `
+      <table class="data-table" style="color:rgba(255,255,255,0.9);background:transparent;">
+        <thead><tr>
+          <th style="color:rgba(255,255,255,0.5);background:transparent;">#</th>
+          <th style="color:rgba(255,255,255,0.5);background:transparent;">Player</th>
+          <th style="color:rgba(255,255,255,0.5);background:transparent;">Team</th>
+          <th style="color:rgba(255,255,255,0.5);background:transparent;text-align:center;">G</th>
+          <th style="color:rgba(255,255,255,0.5);background:transparent;text-align:center;">A</th>
+          <th style="color:rgba(255,255,255,0.5);background:transparent;text-align:center;">xG</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  } catch {}
 }
 
 // ── 3. Overview: standings + match stats ───────────────────────────────────────
@@ -118,7 +157,7 @@ async function loadOverview() {
         const teams = g.teams || [];
         const rows = teams.map((t, i) => {
           let trStyle = '';
-          if (i < 2) trStyle = 'style="background:var(--pitch-mist);border-left:3px solid var(--data-teal);"';
+          if (i < 2) trStyle = 'style="border-left:3px solid var(--data-teal);"';
           else if (t.status === 'eliminated') trStyle = 'style="opacity:0.45;"';
           const gd = (t.gd > 0 ? '+' : '') + t.gd;
           const played = (t.w || 0) + (t.d || 0) + (t.l || 0);
@@ -495,9 +534,56 @@ function bindRefresh() {
     btn.textContent = 'Refreshing…';
     btn.disabled = true;
     try {
+      await fetch('/api/refresh', { method: 'POST' });
       const matches = await fetch('/api/matches').then(r => r.json());
       if (Array.isArray(matches)) {
-        renderLiveResults(matches.filter(m => m.played));
+        const played = matches.filter(m => m.played);
+        renderLiveResults(played);
+        const goals = played.reduce((s, m) => s + (m.score_h || 0) + (m.score_a || 0), 0);
+        const setStatNum = (id, val) => {
+          const el = document.getElementById(id);
+          if (el) el.querySelector('.stat-number').textContent = val;
+        };
+        setStatNum('stat-goals',   goals);
+        setStatNum('stat-matches', played.length);
+        setStatNum('stat-xg', played.length > 0 ? (goals / played.length).toFixed(1) : '—');
+      }
+      const groups = await fetch('/api/standings').then(r => r.json());
+      if (Array.isArray(groups)) {
+        const container = document.getElementById('groups-container');
+        if (container) {
+          container.innerHTML = '';
+          groups.forEach(g => {
+            const teams = g.teams || [];
+            const rows = teams.map((t, i) => {
+              let trStyle = '';
+              if (i < 2) trStyle = 'style="border-left:3px solid var(--data-teal);"';
+              else if (t.status === 'eliminated') trStyle = 'style="opacity:0.45;"';
+              const gd = (t.gd > 0 ? '+' : '') + t.gd;
+              const played = (t.w || 0) + (t.d || 0) + (t.l || 0);
+              return `<tr ${trStyle}>
+                <td class="team-cell"><div class="team-cell-inner"><span class="team-flag">${getFlag(t.name)}</span><span class="team-name" title="${t.name}">${t.name}</span></div></td>
+                <td style="text-align:center;font-family:var(--font-data);">${played}</td>
+                <td style="text-align:center;font-family:var(--font-data);">${gd}</td>
+                <td style="text-align:center;font-family:var(--font-data);font-weight:700;">${t.pts}</td>
+              </tr>`;
+            }).join('');
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+              <div style="font-family:var(--font-display);font-size:22px;color:var(--pitch-night);margin-bottom:var(--sp-sm);">Group ${g.group}</div>
+              <table class="data-table standings-table">
+                <thead><tr>
+                  <th>Team</th>
+                  <th style="text-align:center;">P</th>
+                  <th style="text-align:center;">GD</th>
+                  <th style="text-align:center;">Pts</th>
+                </tr></thead>
+                <tbody>${rows}</tbody>
+              </table>`;
+            container.appendChild(card);
+          });
+        }
       }
       loadChart('chart-fbref', '/charts/fbref');
       const lu = document.getElementById('last-updated');
@@ -707,6 +793,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Load overview data
   loadOverview();
+  loadScorers();
 
   // Populate dropdowns and store team list
   _allTeams = await populateDropdowns();

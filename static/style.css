@@ -274,6 +274,10 @@ nav {
   table-layout: fixed;
 }
 
+/* Standings stripe rows 1 & 3 instead of the default even-row striping */
+.standings-table tbody tr:nth-child(even) { background: var(--surface); }
+.standings-table tbody tr:nth-child(odd)  { background: var(--pitch-mist); }
+
 /* Identical column widths across every group table */
 .standings-table th:nth-child(1),
 .standings-table td:nth-child(1) { width: 64%; }

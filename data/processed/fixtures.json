@@ -5,9 +5,9 @@
     "group": "A",
     "home": "Mexico",
     "away": "South Africa",
-    "score_h": null,
-    "score_a": null,
-    "played": false
+    "score_h": 2,
+    "score_a": 0,
+    "played": true
   },
   {
     "date": "2026-06-11",
@@ -15,9 +15,9 @@
     "group": "A",
     "home": "South Korea",
     "away": "Czech Republic",
-    "score_h": null,
-    "score_a": null,
-    "played": false
+    "score_h": 2,
+    "score_a": 1,
+    "played": true
   },
   {
     "date": "2026-06-18",

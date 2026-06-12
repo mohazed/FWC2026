@@ -473,74 +473,61 @@ def build_upset_chart() -> dict:
 
 
 # ── 8. FBRef live stats ──────────────────────────────────────────────────────
+# FBRef blocks automated server-side requests (403). We serve stats derived
+# from our own fixtures + squads data instead.
 
 def build_fbref_chart() -> dict:
     try:
-        import requests
-        from io import StringIO
+        fixtures = _load("fixtures.json")
+        teams_data = _load("master_teams.json")
 
-        headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"}
-        url = "https://fbref.com/en/comps/1/stats/World-Cup-Stats"
-        resp = requests.get(url, headers=headers, timeout=8)
-        resp.raise_for_status()
+        elo_map = {t["name"]: t["elo"] for t in teams_data}
 
-        tables = pd.read_html(StringIO(resp.text))
-        df = next((t for t in tables if "Squad" in t.columns or
-                   any("Squad" in str(c) for c in (t.columns.get_level_values(0)
-                       if isinstance(t.columns, pd.MultiIndex) else t.columns))), None)
+        played = [m for m in fixtures if m.get("played")]
+        if not played:
+            raise ValueError("No matches played yet")
 
-        if df is None:
-            raise ValueError("Squad column not found")
+        team_stats: dict = {}
+        for m in played:
+            for team, gf, ga in [
+                (m["home"], m.get("score_h", 0), m.get("score_a", 0)),
+                (m["away"], m.get("score_a", 0), m.get("score_h", 0)),
+            ]:
+                if team not in team_stats:
+                    team_stats[team] = {"gf": 0, "ga": 0, "played": 0, "elo": elo_map.get(team, 1700)}
+                team_stats[team]["gf"] += gf
+                team_stats[team]["ga"] += ga
+                team_stats[team]["played"] += 1
 
-        if isinstance(df.columns, pd.MultiIndex):
-            df.columns = [
-                " ".join(str(c) for c in col if "Unnamed" not in str(c)).strip()
-                for col in df.columns
-            ]
+        rows = []
+        for team, s in team_stats.items():
+            if s["played"] == 0:
+                continue
+            rows.append({
+                "squad": team,
+                "Goals scored": float(s["gf"]),
+                "Goals conceded": float(s["ga"]),
+                "Goal difference": float(s["gf"] - s["ga"]),
+            })
 
-        df.columns = [str(c).strip() for c in df.columns]
+        if not rows:
+            raise ValueError("No team data available")
 
-        col_map = {}
-        for c in df.columns:
-            cl = c.lower()
-            if "squad" in cl and "squad" not in col_map:
-                col_map["squad"] = c
-            if cl in ("xg", "expected xg") or (cl.startswith("xg") and "a" not in cl):
-                col_map["xg"] = c
-            if "sot" in cl or "shots on" in cl:
-                col_map["sot"] = c
-            if "poss" in cl:
-                col_map["poss"] = c
-
-        if "squad" not in col_map:
-            raise ValueError("Could not find Squad column")
-
-        df = df.rename(columns={v: k for k, v in col_map.items()})
-        keep = ["squad"] + [k for k in ["xg", "sot", "poss"] if k in df.columns]
-        df = df[keep].dropna(subset=["squad"])
-        df = df[df["squad"] != "Squad"]
-
-        for col in ["xg", "sot", "poss"]:
-            if col in df.columns:
-                df[col] = pd.to_numeric(df[col], errors="coerce")
-
-        sort_col = next((c for c in ["xg", "sot", "poss"] if c in df.columns), None)
-        if sort_col:
-            df = df.dropna(subset=[sort_col]).sort_values(sort_col, ascending=True)
-
+        df = pd.DataFrame(rows).sort_values("Goals scored", ascending=True)
         melted = df.melt(id_vars=["squad"], var_name="metric", value_name="value").dropna()
 
         chart = (
             alt.Chart(melted)
             .mark_bar()
             .encode(
-                x=alt.X("value:Q", title="Value"),
+                x=alt.X("value:Q", title="Goals"),
                 y=alt.Y("squad:N", title=None, sort=list(df["squad"])),
+                yOffset=alt.YOffset("metric:N"),
                 color=alt.Color(
                     "metric:N",
                     scale=alt.Scale(
-                        domain=["xg", "sot", "poss"],
-                        range=[DATA_TEAL, PITCH_NIGHT, TROPHY_GOLD],
+                        domain=["Goals scored", "Goals conceded", "Goal difference"],
+                        range=[DATA_TEAL, RED_CARD, TROPHY_GOLD],
                     ),
                     title="Metric",
                     legend=alt.Legend(orient="bottom"),
@@ -548,15 +535,16 @@ def build_fbref_chart() -> dict:
                 tooltip=[
                     alt.Tooltip("squad:N", title="Team"),
                     alt.Tooltip("metric:N", title="Metric"),
-                    alt.Tooltip("value:Q", title="Value", format=".1f"),
+                    alt.Tooltip("value:Q", title="Value", format=".0f"),
                 ],
             )
-            .properties(title="Live Team Stats — FBRef", width=650, height=400)
+            .properties(title="Team Stats — Group Stage", width=650, height=max(200, len(rows) * 56))
         )
         return chart.to_dict()
 
     except Exception as e:
-        empty = pd.DataFrame({"x": [0.5], "y": [0.5], "msg": [f"Stats loading… ({e})"]})
+        msg = str(e) if "No matches" in str(e) or "No team" in str(e) else "Stats available once matches are played"
+        empty = pd.DataFrame({"x": [0.5], "y": [0.5], "msg": [msg]})
         chart = (
             alt.Chart(empty)
             .mark_text(fontSize=13, color=MUTED)
@@ -565,7 +553,7 @@ def build_fbref_chart() -> dict:
                 y=alt.Y("y:Q", axis=None, scale=alt.Scale(domain=[0, 1])),
                 text="msg:N",
             )
-            .properties(title="Live Team Stats (FBRef)", width=650, height=400)
+            .properties(title="Team Stats — Group Stage", width=650, height=300)
         )
         return chart.to_dict()
 
@@ -728,7 +716,6 @@ def build_credibility_gap() -> dict:
         on="click",
         clear="dblclick",
     )
-    zoom = alt.selection_interval(bind="scales", name="zoom")
 
     base = alt.Chart(df)
 
@@ -782,7 +769,7 @@ def build_credibility_gap() -> dict:
             alt.Tooltip("squad_value_m:Q",  title="Squad value (€M)",   format=".0f"),
             alt.Tooltip("market_view:N",    title="Summary"),
         ],
-    ).add_params(selection, zoom)
+    ).add_params(selection)
 
     _label_base = dict(
         align="left", dx=6,
@@ -794,14 +781,13 @@ def build_credibility_gap() -> dict:
         y="elo_prob:Q",
         text=alt.Text("label:N"),
     )
-    labels_below = alt.Chart(pd.DataFrame()).mark_text()  # empty layer kept for chart order
 
     # ── 7. Compose and style ──────────────────────────────────────────────
     top_outliers = df.nlargest(2, "divergence_abs")["name"].tolist()
     outlier_str = " & ".join(top_outliers)
 
     chart = (
-        shade_below + shade_above + diagonal + zone_labels + scatter + labels_above + labels_below
+        shade_below + shade_above + diagonal + zone_labels + scatter + labels_above
     ).properties(
         width=700,
         height=600,
@@ -837,4 +823,101 @@ def build_credibility_gap() -> dict:
         padding=8,
     )
 
+    return chart.to_dict()
+
+
+# ── 10. Performance vs Expectation ──────────────────────────────────────────
+
+def build_performance_chart() -> dict:
+    groups     = _load("groups.json")
+    teams_data = _load("master_teams.json")
+    fixtures   = _load("fixtures.json")
+
+    elo_map = {t["name"]: t["elo"] for t in teams_data}
+
+    NAME_NORM = {
+        "Czech Republic":       "Czechia",
+        "Bosnia & Herzegovina": "Bosnia and Herzegovina",
+        "USA":                  "United States",
+    }
+
+    def _elo_expected_pts(elo_a, elo_b):
+        win_a = (1 / (1 + 10 ** ((elo_b - elo_a) / 400))) * 0.75
+        win_b = (1 / (1 + 10 ** ((elo_a - elo_b) / 400))) * 0.75
+        draw  = 1.0 - win_a - win_b
+        return win_a * 3 + draw * 1, win_b * 3 + draw * 1
+
+    expected: dict = {}
+    played_fixtures = [m for m in fixtures if m.get("played") and m.get("stage") == "group"]
+    for m in played_fixtures:
+        home = m["home"]; away = m["away"]
+        elo_h = elo_map.get(NAME_NORM.get(home, home), 1700)
+        elo_a = elo_map.get(NAME_NORM.get(away, away), 1700)
+        exp_h, exp_a = _elo_expected_pts(elo_h, elo_a)
+        expected[home] = expected.get(home, 0) + exp_h
+        expected[away] = expected.get(away, 0) + exp_a
+
+    rows = []
+    for g in groups:
+        for t in g["teams"]:
+            played = t["w"] + t["d"] + t["l"]
+            if played == 0:
+                continue
+            exp = round(expected.get(t["name"], 0), 2)
+            rows.append({
+                "team":         t["name"],
+                "actual_pts":   float(t["pts"]),
+                "expected_pts": exp,
+                "diff":         round(t["pts"] - exp, 2),
+            })
+
+    if not rows:
+        empty = pd.DataFrame({"team": ["—"], "pts": [0.0], "type": ["Actual"]})
+        return (
+            alt.Chart(empty).mark_bar(opacity=0)
+            .encode(x="pts:Q", y="team:N")
+            .properties(title="Performance vs Expectation (no matches played yet)", width=700, height=160)
+            .to_dict()
+        )
+
+    df = pd.DataFrame(rows).sort_values("diff", ascending=False)
+
+    melted = df.melt(
+        id_vars=["team"],
+        value_vars=["actual_pts", "expected_pts"],
+        var_name="type", value_name="pts",
+    )
+    melted["type_label"] = melted["type"].map({
+        "actual_pts":   "Actual",
+        "expected_pts": "Expected (Elo)",
+    })
+
+    chart = (
+        alt.Chart(melted)
+        .mark_bar(opacity=0.85)
+        .encode(
+            x=alt.X("pts:Q", title="Points", scale=alt.Scale(domain=[0, 3.5])),
+            y=alt.Y("team:N", title=None, sort=list(df["team"])),
+            color=alt.Color(
+                "type_label:N",
+                scale=alt.Scale(
+                    domain=["Actual", "Expected (Elo)"],
+                    range=[DATA_TEAL, MUTED],
+                ),
+                title="Points",
+                legend=alt.Legend(orient="bottom"),
+            ),
+            yOffset=alt.YOffset("type_label:N"),
+            tooltip=[
+                alt.Tooltip("team:N",       title="Team"),
+                alt.Tooltip("type_label:N", title="Type"),
+                alt.Tooltip("pts:Q",        title="Points", format=".2f"),
+            ],
+        )
+        .properties(
+            title="Actual vs Elo-Expected Points — Group Stage",
+            width=700,
+            height=max(160, len(rows) * 52),
+        )
+    )
     return chart.to_dict()
