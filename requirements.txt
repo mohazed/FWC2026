@@ -1,5 +1,6 @@
 fastapi==0.111.0
 uvicorn[standard]==0.29.0
+# Pin Altair 5.x — generates Vega-Lite v5 specs (matches pinned CDN in static/index.html).
 altair==5.3.0
 pandas==2.2.2
 numpy==1.26.4

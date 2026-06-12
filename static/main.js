@@ -76,25 +76,90 @@ function confBadgeClass(conf) {
   return map[conf] || 'badge-green';
 }
 
-// ── Core chart loader ─────────────────────────────────────────────────────────
+// ── Vega embed pipeline (race-safe, version-preflight) ───────────────────────
+const chartLoadSeq = {};
+
+function vegaLibrariesReady() {
+  return typeof window.vega !== 'undefined'
+    && typeof window.vegaLite !== 'undefined'
+    && typeof window.vegaEmbed === 'function';
+}
+
+function finalizeVegaView(el) {
+  if (el && el.__vegaView) {
+    try { el.__vegaView.finalize(); } catch (_) { /* already torn down */ }
+    el.__vegaView = null;
+  }
+}
+
+function isValidChartSpec(spec) {
+  if (!spec || typeof spec !== 'object') return false;
+  if (spec.error) return false;
+  return Boolean(spec.$schema || spec.mark || spec.layer || spec.hconcat || spec.vconcat || spec.concat);
+}
+
+function showChartError(el, message, detail) {
+  if (!el) return;
+  finalizeVegaView(el);
+  const detailHtml = detail
+    ? `<p style="font-size:11px;margin-top:8px">${detail}</p>`
+    : '';
+  el.innerHTML = `<p class="chart-error">Chart unavailable: ${escapeHtml(message)}</p>${detailHtml}`;
+}
+
+async function fetchChartSpec(endpoint, retries = 1) {
+  let lastErr;
+  for (let attempt = 0; attempt <= retries; attempt += 1) {
+    try {
+      const r = await fetch(endpoint);
+      if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
+      const spec = await r.json();
+      if (spec.error) throw new Error(spec.error);
+      if (!isValidChartSpec(spec)) throw new Error('Invalid chart spec');
+      return spec;
+    } catch (err) {
+      lastErr = err;
+      if (attempt < retries) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+    }
+  }
+  throw lastErr;
+}
+
+async function embedChart(el, spec, opts = {}) {
+  if (!vegaLibrariesReady()) {
+    throw new Error('Vega libraries failed to load — check your network connection and refresh');
+  }
+  finalizeVegaView(el);
+  el.innerHTML = '';
+  const result = await window.vegaEmbed(el, spec, {
+    renderer: 'svg',
+    actions: false,
+    theme: 'none',
+    ...opts,
+  });
+  el.__vegaView = result.view;
+  return result;
+}
+
 async function loadChart(elementId, endpoint, opts = {}) {
   const el = document.getElementById(elementId);
   if (!el) return;
+
+  const seq = (chartLoadSeq[elementId] = (chartLoadSeq[elementId] || 0) + 1);
+  const mySeq = seq;
+
+  finalizeVegaView(el);
   el.innerHTML = '<div class="skeleton-shimmer"></div>';
+
   try {
-    const r = await fetch(endpoint);
-    if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
-    const spec = await r.json();
-    if (spec.error) throw new Error(spec.error);
-    el.innerHTML = '';
-    await vegaEmbed(`#${elementId}`, spec, {
-      renderer: 'svg',
-      actions: false,
-      theme: 'none',
-      ...opts,
-    });
+    const spec = await fetchChartSpec(endpoint);
+    if (mySeq !== chartLoadSeq[elementId]) return;
+    await embedChart(el, spec, opts);
   } catch (err) {
-    el.innerHTML = `<p class="chart-error">Chart unavailable: ${err.message}</p>`;
+    if (mySeq !== chartLoadSeq[elementId]) return;
+    showChartError(el, err.message);
   }
 }
 
@@ -682,63 +747,64 @@ function bindNav() {
 // ─── FOCUS CHART — The Credibility Gap ──────────────────────────────────────
 
 async function loadCredibilityChart() {
-  const container = document.getElementById('chart-credibility')
-  if (!container) return
+  const elementId = 'chart-credibility';
+  const container = document.getElementById(elementId);
+  if (!container) return;
+
+  const seq = (chartLoadSeq[elementId] = (chartLoadSeq[elementId] || 0) + 1);
+  const mySeq = seq;
+
+  finalizeVegaView(container);
+  container.textContent = 'Computing probabilities…';
 
   try {
-    container.textContent = 'Computing probabilities…'
+    const spec = await fetchChartSpec('/charts/credibility-gap');
+    if (mySeq !== chartLoadSeq[elementId]) return;
 
-    const spec = await fetch('/charts/credibility-gap').then(r => r.json())
-    if (spec.error) throw new Error(spec.error)
-
-    const result = await vegaEmbed('#chart-credibility', spec, {
-      renderer: 'svg',
-      actions: false,
-      theme: 'none',
+    const result = await embedChart(container, spec, {
       tooltip: { theme: 'light' },
-    })
+    });
+    if (mySeq !== chartLoadSeq[elementId]) return;
 
     // Purposeful interactivity: click dot → jump to Team Explorer
-    // Listen on _tuple signal which holds the most recently clicked datum
     result.view.addSignalListener('team_click_tuple', (_name, value) => {
-      const badge = document.getElementById('credibility-selected-team')
+      const badge = document.getElementById('credibility-selected-team');
       if (!value) {
-        if (badge) { badge.style.display = 'none'; badge.textContent = '' }
-        return
+        if (badge) { badge.style.display = 'none'; badge.textContent = ''; }
+        return;
       }
-      // values array contains selected field values in order of fields:["name"]
-      const selectedTeam = value.values && value.values[0]
-      if (!selectedTeam) return
+      const selectedTeam = value.values && value.values[0];
+      if (!selectedTeam) return;
 
-      if (badge) { badge.style.display = 'block'; badge.textContent = `Selected: ${selectedTeam}` }
+      if (badge) {
+        badge.style.display = 'block';
+        badge.textContent = `Selected: ${selectedTeam}`;
+      }
 
-      const teamSelector = document.getElementById('team-selector')
+      const teamSelector = document.getElementById('team-selector');
       if (teamSelector) {
-        teamSelector.value = selectedTeam
-        teamSelector.dispatchEvent(new Event('change'))
+        teamSelector.value = selectedTeam;
+        teamSelector.dispatchEvent(new Event('change'));
       }
 
       setTimeout(() => {
-        const teamsSection = document.getElementById('teams')
-        if (teamsSection) teamsSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }, 300)
-    })
+        const teamsSection = document.getElementById('teams');
+        if (teamsSection) teamsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+    });
 
-    // Render insight cards
-    const teams = await fetch('/api/teams').then(r => r.json())
-    if (teams && Array.isArray(teams)) renderCredibilityInsights(teams)
-
-  } catch (err) {
-    const el = document.getElementById('chart-credibility')
-    if (el) {
-      el.innerHTML = `
-        <div class="chart-error">
-          <p>⚠ Chart unavailable: ${err.message}</p>
-          <p style="font-size:11px; margin-top:8px">
-            Check that <code>/charts/credibility-gap</code> returns valid JSON.
-          </p>
-        </div>`
+    const teamsResp = await fetch('/api/teams');
+    if (teamsResp.ok) {
+      const teams = await teamsResp.json();
+      if (teams && Array.isArray(teams)) renderCredibilityInsights(teams);
     }
+  } catch (err) {
+    if (mySeq !== chartLoadSeq[elementId]) return;
+    showChartError(
+      container,
+      err.message,
+      'Check that <code>/charts/credibility-gap</code> returns valid JSON.',
+    );
   }
 }
 

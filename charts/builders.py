@@ -298,7 +298,7 @@ def build_age_pyramid(country: str) -> dict:
                 alt.Tooltip("count:Q", title="Players"),
             ],
         )
-        .properties(title=f"{country} — Squad Age Distribution", width="container", height=240)
+        .properties(title=f"{country} — Squad Age Distribution", width=400, height=240)
     )
     return chart.to_dict()
 
@@ -334,7 +334,7 @@ def build_league_chart(country: str) -> dict:
                 alt.Tooltip("count:Q", title="Players"),
             ],
         )
-        .properties(title=f"{country} — Players by Club", width="container", height=200)
+        .properties(title=f"{country} — Players by Club", width=400, height=200)
     )
     return chart.to_dict()
 
