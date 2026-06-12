@@ -4,6 +4,15 @@ import altair as alt
 import numpy as np
 from pathlib import Path
 
+from api.history_utils import (
+    RANK_TO_LABEL,
+    STAGE_COLORS,
+    STAGE_ORDER,
+    iter_mens_matches,
+    normalize_team_name,
+    stage_rank,
+)
+
 DATA_DIR = Path(__file__).parent.parent / "data" / "processed"
 
 # Design token hex values (must match CSS custom properties)
@@ -23,18 +32,6 @@ CONFED_COLORS = {
     "OFC": MUTED,
 }
 
-STAGE_ORDER = ["DNQ", "Groups", "R16", "QF", "SF", "Final", "Winner"]
-STAGE_COLORS = {
-    "DNQ": "#9CA3AF",
-    "Groups": "#E8F0EB",
-    "R16": "#A8D5BC",
-    "QF": "#5EC98A",
-    "SF": "#1E8A4A",
-    "Final": "#0D5C2E",
-    "Winner": "#D4A017",
-}
-
-
 def _load(filename):
     with open(DATA_DIR / filename, encoding="utf-8") as f:
         return json.load(f)
@@ -49,66 +46,53 @@ def build_heatmap(confederation: str = None) -> dict:
     qualified_teams = {t["name"] for t in teams_data}
     team_confederation = {t["name"]: t.get("confederation", "") for t in teams_data}
 
-    NAME_NORM = {
-        "West Germany": "Germany",
-        "Korea Republic": "South Korea",
-        "Côte d'Ivoire": "Ivory Coast",
-        "Congo DR": "DR Congo",
-        "Cape Verde Islands": "Cape Verde",
-        "Czech Republic": "Czechia",
-        "Bosnia & Herzegovina": "Bosnia and Herzegovina",
-    }
+    records: dict[tuple[str, int], dict] = {}
 
-    STAGE_RANK = {
-        "group stage": 1, "round of 16": 2, "round of 32": 2,
-        "quarter-final": 3, "quarter-finals": 3,
-        "semi-final": 4, "semi-finals": 4,
-        "third place": 4, "third-place play-off": 4,
-        "final": 5,
-    }
+    def _ensure(key: tuple[str, int]) -> dict:
+        if key not in records:
+            records[key] = {"stage_rank": 0, "w": 0, "d": 0, "l": 0, "matches": 0}
+        return records[key]
 
-    records = {}
-
-    def norm(name):
-        return NAME_NORM.get(name, name)
-
-    for m in history:
-        year = int((m.get("match_date") or "0")[:4])
-        if year < 1930:
-            continue
-        home = norm(m.get("home_team_name", ""))
-        away = norm(m.get("away_team_name", ""))
+    for m, year in iter_mens_matches(history):
+        home = normalize_team_name(m.get("home_team_name", ""))
+        away = normalize_team_name(m.get("away_team_name", ""))
         stage_raw = (m.get("stage_name") or "").lower().strip()
-        rank = STAGE_RANK.get(stage_raw, 1)
+        rank = stage_rank(m.get("stage_name"))
 
-        sh = m.get("home_team_score") or 0
-        sa = m.get("away_team_score") or 0
+        hw = int(m.get("home_team_win") or 0)
+        aw = int(m.get("away_team_win") or 0)
+        dr = int(m.get("draw") or 0)
 
-        for team, is_home in [(home, True), (away, False)]:
+        for team, is_home in ((home, True), (away, False)):
             if not team:
                 continue
-            key = (team, year)
-            if key not in records:
-                records[key] = {"stage_rank": 0, "w": 0, "d": 0, "l": 0}
-            records[key]["stage_rank"] = max(records[key]["stage_rank"], rank)
+            rec = _ensure((team, year))
+            rec["stage_rank"] = max(rec["stage_rank"], rank)
+            rec["matches"] += 1
 
-            gs, ga = (sh, sa) if is_home else (sa, sh)
-            if gs > ga:
-                records[key]["w"] += 1
-            elif gs < ga:
-                records[key]["l"] += 1
+            if is_home:
+                if hw:
+                    rec["w"] += 1
+                elif aw:
+                    rec["l"] += 1
+                elif dr:
+                    rec["d"] += 1
             else:
-                records[key]["d"] += 1
+                if aw:
+                    rec["w"] += 1
+                elif hw:
+                    rec["l"] += 1
+                elif dr:
+                    rec["d"] += 1
 
-        # Exact match prevents "semi-final" / "quarter-final" from triggering winner logic
         if stage_raw in ("final", "finals"):
-            winner = home if sh > sa else (away if sa > sh else None)
+            winner = home if hw else away if aw else None
             if winner:
-                records[(winner, year)]["stage_rank"] = 6
+                _ensure((winner, year))["stage_rank"] = 7
 
-    title_counts = {}
-    for (team, year), rec in records.items():
-        if rec["stage_rank"] == 6:
+    title_counts: dict[str, int] = {}
+    for (team, _year), rec in records.items():
+        if rec["stage_rank"] == 7:
             title_counts[team] = title_counts.get(team, 0) + 1
 
     if confederation and confederation.upper() != "ALL":
@@ -118,8 +102,6 @@ def build_heatmap(confederation: str = None) -> dict:
 
     all_years = sorted({y for (_, y) in records})
     all_teams = sorted(filtered_teams, key=lambda t: (-title_counts.get(t, 0), t))
-
-    RANK_TO_LABEL = {0: "DNQ", 1: "Groups", 2: "R16", 3: "QF", 4: "SF", 5: "Final", 6: "Winner"}
 
     rows = []
     for team in all_teams:
@@ -131,6 +113,7 @@ def build_heatmap(confederation: str = None) -> dict:
                 "year": year,
                 "stage": RANK_TO_LABEL[rank],
                 "titles": title_counts.get(team, 0),
+                "matches": rec.get("matches", 0),
                 "w": rec.get("w", 0),
                 "d": rec.get("d", 0),
                 "l": rec.get("l", 0),
@@ -160,6 +143,7 @@ def build_heatmap(confederation: str = None) -> dict:
                 alt.Tooltip("team:N", title="Team"),
                 alt.Tooltip("year:O", title="Year"),
                 alt.Tooltip("stage:N", title="Stage reached"),
+                alt.Tooltip("matches:Q", title="Matches played"),
                 alt.Tooltip("titles:Q", title="Total WC titles"),
                 alt.Tooltip("w:Q", title="Wins that year"),
                 alt.Tooltip("d:Q", title="Draws that year"),
