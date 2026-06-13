@@ -2,6 +2,8 @@
   'use strict';
 
   const SIZES = { sm: 20, md: 32, lg: 48 };
+  const VALID_W = [20, 40, 80, 160, 320, 640, 1280, 2560];
+  function snapW(w) { return VALID_W.find(vw => vw >= w) || 2560; }
 
   let _codes = {
     "Algeria":"dz","Argentina":"ar","Australia":"au","Austria":"at",
@@ -35,7 +37,7 @@
   }
 
   function urlFor(name, px) {
-    const width = px || 40;
+    const width = snapW(px || 40);
     return `https://flagcdn.com/w${width}/${codeFor(name)}.png`;
   }
 
@@ -43,7 +45,7 @@
     if (!name) return '';
     const sz = size || 'sm';
     const px = SIZES[sz] || 20;
-    const srcW = px * 2;
+    const srcW = snapW(px * 2);
     const h = Math.round(px * 0.75);
     const src = urlFor(name, srcW);
     const fallback = `https://flagcdn.com/w${srcW}/un.png`;
