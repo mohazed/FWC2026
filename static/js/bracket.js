@@ -15,6 +15,25 @@
     _tooltip = null;
   }
 
+  const LABEL_FONT = 11;
+  const FLAG_GAP = 8;
+  const LABEL_INSET = 16;
+  const BAR_GAP = 8;
+
+  /** Rough SVG text width estimate for Inter 11px (no canvas needed). */
+  function estimateTextWidth(text, fontSize = LABEL_FONT) {
+    return (text || '').length * fontSize * 0.52;
+  }
+
+  /** Shorten long team names so labels never collide with bars on narrow viewports. */
+  function truncateTeamLabel(name, maxWidth) {
+    if (!name || maxWidth <= 20) return name || '';
+    const maxChars = Math.floor(maxWidth / (LABEL_FONT * 0.52));
+    if (name.length <= maxChars) return name;
+    if (maxChars <= 2) return name.slice(0, maxChars);
+    return name.slice(0, maxChars - 1) + '\u2026';
+  }
+
   window.initBracket = async function () {
     const container = document.getElementById('chart-montecarlo');
     if (!container) return;
@@ -47,13 +66,27 @@
         </div>`;
       container.appendChild(header);
 
-      // Dimensions
+      // Dimensions — left padding sized for flag + longest team name in label lane
       const totalW = container.clientWidth || 520;
       const rowH   = 28;
       const FLAG_W = 24;
       const FLAG_H = 18;
-      const pad    = { top: 10, right: 90, bottom: 58, left: 164 };
+      const longestName = teams.reduce(
+        (s, t) => (t.name.length > s.length ? t.name : s), ''
+      );
+      const estLabelW = estimateTextWidth(longestName);
+      const padLeft = Math.max(
+        164,
+        LABEL_INSET + FLAG_W + FLAG_GAP + estLabelW + BAR_GAP
+      );
+      const pad = { top: 10, right: 90, bottom: 58, left: padLeft };
       const innerW = Math.max(totalW - pad.left - pad.right, 120);
+      const flagX = -pad.left + LABEL_INSET;
+      const labelX = flagX + FLAG_W + FLAG_GAP;
+      const labelMaxW = Math.max(
+        pad.left - LABEL_INSET - FLAG_W - FLAG_GAP - BAR_GAP,
+        60
+      );
       const innerH = teams.length * rowH;
       const svgH   = innerH + pad.top + pad.bottom;
 
@@ -110,35 +143,42 @@
         .style('stroke', 'var(--trophy-gold)')
         .style('stroke-width', 1.5);
 
-      // Flag thumbnails + team name labels
+      // Flag thumbnails + team name labels (flag → gap → name → gap → bar)
       if (window.Flags) {
         g.selectAll('.team-flag-img')
           .data(teams)
           .join('image')
           .attr('class', 'team-flag-img')
           .attr('href', d => Flags.urlFor(d.name, 48))
-          .attr('x', -FLAG_W - 10)
+          .attr('x', flagX)
           .attr('y', d => yScale(d.name) + (yScale.bandwidth() - FLAG_H) / 2)
           .attr('width', FLAG_W)
           .attr('height', FLAG_H)
           .attr('preserveAspectRatio', 'xMidYMid slice');
       }
 
-      g.selectAll('.team-lbl')
+      const labelSel = g.selectAll('.team-lbl')
         .data(teams)
         .join('text')
         .attr('class', 'team-lbl')
-        .attr('x', -8)
+        .attr('x', labelX)
         .attr('y', d => yScale(d.name) + yScale.bandwidth() / 2)
-        .attr('text-anchor', 'end')
+        .attr('text-anchor', 'start')
         .attr('dominant-baseline', 'middle')
         .attr('font-family', 'Inter, sans-serif')
-        .attr('font-size', 11)
+        .attr('font-size', LABEL_FONT)
         .attr('font-weight', (d, i) => i === 0 ? 700 : 400)
         .style('fill', (d, i) => i === 0 ? 'var(--trophy-gold)' : 'var(--slate)');
 
-      // Set text separately (D3 .text() doesn't accept CSS vars for fill)
-      g.selectAll('.team-lbl').text(d => d.name);
+      labelSel.each(function (d) {
+        const el = d3.select(this);
+        const display = truncateTeamLabel(d.name, labelMaxW);
+        el.text(display);
+        el.selectAll('title').remove();
+        if (display !== d.name) {
+          el.append('title').text(d.name);
+        }
+      });
 
       // Win % labels at right edge
       g.selectAll('.win-pct')
