@@ -75,9 +75,9 @@
     "group": "B",
     "home": "Qatar",
     "away": "Switzerland",
-    "score_h": null,
-    "score_a": null,
-    "played": false
+    "score_h": 1,
+    "score_a": 1,
+    "played": true
   },
   {
     "date": "2026-06-18",
@@ -125,9 +125,9 @@
     "group": "C",
     "home": "Brazil",
     "away": "Morocco",
-    "score_h": null,
-    "score_a": null,
-    "played": false
+    "score_h": 1,
+    "score_a": 1,
+    "played": true
   },
   {
     "date": "2026-06-13",
@@ -185,9 +185,9 @@
     "group": "D",
     "home": "United States",
     "away": "Paraguay",
-    "score_h": null,
-    "score_a": null,
-    "played": false
+    "score_h": 4,
+    "score_a": 1,
+    "played": true
   },
   {
     "date": "2026-06-13",

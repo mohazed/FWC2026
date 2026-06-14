@@ -63,7 +63,7 @@
         "w": 0,
         "d": 1,
         "l": 0,
-        "name": "Bosnia and Herzegovina",
+        "name": "Canada",
         "form": "",
         "status": ""
       },
@@ -75,31 +75,31 @@
         "w": 0,
         "d": 1,
         "l": 0,
-        "name": "Canada",
-        "form": "",
-        "status": ""
-      },
-      {
-        "pts": 0,
-        "gd": 0,
-        "gf": 0,
-        "ga": 0,
-        "w": 0,
-        "d": 0,
-        "l": 0,
         "name": "Switzerland",
         "form": "",
         "status": ""
       },
       {
-        "pts": 0,
+        "pts": 1,
         "gd": 0,
-        "gf": 0,
-        "ga": 0,
+        "gf": 1,
+        "ga": 1,
         "w": 0,
-        "d": 0,
+        "d": 1,
         "l": 0,
         "name": "Qatar",
+        "form": "",
+        "status": ""
+      },
+      {
+        "pts": 1,
+        "gd": 0,
+        "gf": 1,
+        "ga": 1,
+        "w": 0,
+        "d": 1,
+        "l": 0,
+        "name": "Bosnia and Herzegovina",
         "form": "",
         "status": ""
       }
@@ -109,24 +109,24 @@
     "group": "C",
     "teams": [
       {
-        "pts": 0,
+        "pts": 1,
         "gd": 0,
-        "gf": 0,
-        "ga": 0,
+        "gf": 1,
+        "ga": 1,
         "w": 0,
-        "d": 0,
+        "d": 1,
         "l": 0,
         "name": "Morocco",
         "form": "",
         "status": ""
       },
       {
-        "pts": 0,
+        "pts": 1,
         "gd": 0,
-        "gf": 0,
-        "ga": 0,
+        "gf": 1,
+        "ga": 1,
         "w": 0,
-        "d": 0,
+        "d": 1,
         "l": 0,
         "name": "Brazil",
         "form": "",
@@ -162,6 +162,18 @@
     "group": "D",
     "teams": [
       {
+        "pts": 3,
+        "gd": 3,
+        "gf": 4,
+        "ga": 1,
+        "w": 1,
+        "d": 0,
+        "l": 0,
+        "name": "United States",
+        "form": "",
+        "status": ""
+      },
+      {
         "pts": 0,
         "gd": 0,
         "gf": 0,
@@ -169,7 +181,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "United States",
+        "name": "Turkey",
         "form": "",
         "status": ""
       },
@@ -187,25 +199,13 @@
       },
       {
         "pts": 0,
-        "gd": 0,
-        "gf": 0,
-        "ga": 0,
+        "gd": -3,
+        "gf": 1,
+        "ga": 4,
         "w": 0,
         "d": 0,
-        "l": 0,
+        "l": 1,
         "name": "Paraguay",
-        "form": "",
-        "status": ""
-      },
-      {
-        "pts": 0,
-        "gd": 0,
-        "gf": 0,
-        "ga": 0,
-        "w": 0,
-        "d": 0,
-        "l": 0,
-        "name": "Turkey",
         "form": "",
         "status": ""
       }
@@ -222,7 +222,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Germany",
+        "name": "Ecuador",
         "form": "",
         "status": ""
       },
@@ -234,7 +234,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Ivory Coast",
+        "name": "Germany",
         "form": "",
         "status": ""
       },
@@ -258,7 +258,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Ecuador",
+        "name": "Ivory Coast",
         "form": "",
         "status": ""
       }
@@ -275,7 +275,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Netherlands",
+        "name": "Sweden",
         "form": "",
         "status": ""
       },
@@ -287,7 +287,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Sweden",
+        "name": "Netherlands",
         "form": "",
         "status": ""
       },
@@ -328,7 +328,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Iran",
+        "name": "Egypt",
         "form": "",
         "status": ""
       },
@@ -340,7 +340,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Egypt",
+        "name": "New Zealand",
         "form": "",
         "status": ""
       },
@@ -364,7 +364,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "New Zealand",
+        "name": "Iran",
         "form": "",
         "status": ""
       }
@@ -373,18 +373,6 @@
   {
     "group": "H",
     "teams": [
-      {
-        "pts": 0,
-        "gd": 0,
-        "gf": 0,
-        "ga": 0,
-        "w": 0,
-        "d": 0,
-        "l": 0,
-        "name": "Cape Verde",
-        "form": "",
-        "status": ""
-      },
       {
         "pts": 0,
         "gd": 0,
@@ -417,6 +405,18 @@
         "w": 0,
         "d": 0,
         "l": 0,
+        "name": "Cape Verde",
+        "form": "",
+        "status": ""
+      },
+      {
+        "pts": 0,
+        "gd": 0,
+        "gf": 0,
+        "ga": 0,
+        "w": 0,
+        "d": 0,
+        "l": 0,
         "name": "Spain",
         "form": "",
         "status": ""
@@ -426,30 +426,6 @@
   {
     "group": "I",
     "teams": [
-      {
-        "pts": 0,
-        "gd": 0,
-        "gf": 0,
-        "ga": 0,
-        "w": 0,
-        "d": 0,
-        "l": 0,
-        "name": "Norway",
-        "form": "",
-        "status": ""
-      },
-      {
-        "pts": 0,
-        "gd": 0,
-        "gf": 0,
-        "ga": 0,
-        "w": 0,
-        "d": 0,
-        "l": 0,
-        "name": "Senegal",
-        "form": "",
-        "status": ""
-      },
       {
         "pts": 0,
         "gd": 0,
@@ -470,15 +446,10 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "France",
+        "name": "Norway",
         "form": "",
         "status": ""
-      }
-    ]
-  },
-  {
-    "group": "J",
-    "teams": [
+      },
       {
         "pts": 0,
         "gd": 0,
@@ -487,10 +458,27 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Austria",
+        "name": "France",
         "form": "",
         "status": ""
       },
+      {
+        "pts": 0,
+        "gd": 0,
+        "gf": 0,
+        "ga": 0,
+        "w": 0,
+        "d": 0,
+        "l": 0,
+        "name": "Senegal",
+        "form": "",
+        "status": ""
+      }
+    ]
+  },
+  {
+    "group": "J",
+    "teams": [
       {
         "pts": 0,
         "gd": 0,
@@ -523,6 +511,18 @@
         "w": 0,
         "d": 0,
         "l": 0,
+        "name": "Austria",
+        "form": "",
+        "status": ""
+      },
+      {
+        "pts": 0,
+        "gd": 0,
+        "gf": 0,
+        "ga": 0,
+        "w": 0,
+        "d": 0,
+        "l": 0,
         "name": "Algeria",
         "form": "",
         "status": ""
@@ -540,19 +540,7 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Portugal",
-        "form": "",
-        "status": ""
-      },
-      {
-        "pts": 0,
-        "gd": 0,
-        "gf": 0,
-        "ga": 0,
-        "w": 0,
-        "d": 0,
-        "l": 0,
-        "name": "Colombia",
+        "name": "Uzbekistan",
         "form": "",
         "status": ""
       },
@@ -576,7 +564,19 @@
         "w": 0,
         "d": 0,
         "l": 0,
-        "name": "Uzbekistan",
+        "name": "Colombia",
+        "form": "",
+        "status": ""
+      },
+      {
+        "pts": 0,
+        "gd": 0,
+        "gf": 0,
+        "ga": 0,
+        "w": 0,
+        "d": 0,
+        "l": 0,
+        "name": "Portugal",
         "form": "",
         "status": ""
       }
